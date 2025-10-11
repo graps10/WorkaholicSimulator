@@ -33,69 +33,8 @@ MonoBehaviour:
     referenceMode: 2
     serializationDepthLimit: 64
     assemblyNames:
-    - AllIn1VfxAssmebly
-    - AllIn1VfxDemoScriptAssemblies
-    - AllIn1VfxTexDemoAssembly
     - Assembly-CSharp
     - Assembly-CSharp-firstpass
-    - Autodesk.Fbx
-    - BakeryRuntimeAssembly
-    - CFXRDemo
-    - CFXRRuntime
-    - CW.Common
-    - DamageNumbersPro
-    - DistantLands.Cozy.Blocks.Runtime
-    - DistantLands.Cozy.Runtime
-    - FbxBuildTestAssets
-    - Febucci.Attributes.Runtime
-    - Febucci.TextAnimator.Demo.Runtime
-    - Febucci.TextAnimator.Runtime
-    - Febucci.TextAnimator.TMP.Runtime
-    - FronkonGames.Artistic.TiltShift
-    - GPUInstancerPro.Core
-    - GPUInstancerPro.CrowdAnimations
-    - GPUInstancerPro.Prefab
-    - GPUInstancerPro.TerrainModule
-    - Heathen.Core
-    - Heathen.UX
-    - HeathenEngineering
-    - LeanCommon
-    - LeanGUI
-    - LeanTransition
-    - Linework
-    - Lofelt.NiceVibrations
-    - Lofelt.NiceVibrations.Demo
-    - MicroWorld
-    - MK.Toon
-    - MK.Toon.URP
-    - MoreMountains.Tools
-    - NWH.Common
-    - NWH.WheelController
-    - Obi
-    - ProjectDawn.ContinuumCrowds
-    - ProjectDawn.CozyBuilder
-    - ProjectDawn.LocalAvoidance
-    - ProjectDawn.Navigation
-    - ProjectDawn.Navigation.Astar
-    - ProjectDawn.Navigation.Hybrid
-    - ProjectDawn.Navigation.Sample.BoardDefense
-    - ProjectDawn.Navigation.Sample.Mass
-    - ProjectDawn.Navigation.Samples.Scenarios
-    - ProjectDawn.Navigation.Samples.Zerg
-    - ProjectDawn.ReciprocalAvoidance
-    - Rukhanka.DebugDrawer
-    - Rukhanka.Hybrid
-    - Rukhanka.Runtime
-    - Rukhanka.Toolbox
-    - SeeThrough
-    - SingularityGroup.HotReload.Runtime
-    - SingularityGroup.HotReload.Runtime.Public
-    - SoundsGood.Application
-    - SoundsGood.Domain
-    - SoundsGood.Editor
-    - UltimateEditorEnhancer
-    - UXExamplesAssembly
-    - WorldAlchemyCommon
     showAdvancedSettings: 1
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1
@@ -105,8 +44,7 @@ MonoBehaviour:
   updateReferencesWhenSceneChanges: 1
   updateReferencesWhenSceneIsSaved: 1
   updateReferencesWhenSceneIsOpened: 1
-  referenceFolders:
-  - Assets/Resources/ScriptableObjects/ActorMolds/Equipment
+  referenceFolders: []
   logDebugInfo: 0
   logWarnings: 1
   logErrors: 1
