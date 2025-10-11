@@ -35,6 +35,9 @@ MonoBehaviour:
     assemblyNames:
     - Assembly-CSharp
     - Assembly-CSharp-firstpass
+    - SoundsGood.Application
+    - SoundsGood.Domain
+    - SoundsGood.Editor
     showAdvancedSettings: 1
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1
