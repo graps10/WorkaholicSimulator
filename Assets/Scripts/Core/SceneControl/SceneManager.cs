@@ -1,23 +1,23 @@
 ﻿using Core.Utilities;
 using System;
 using System.Collections.Generic;
-//using Entities.Constructors;
-//using Components.Camera;
-//using Regions;
+using Core.SaveSystem;
+using Entities.Constructors;
 using Transition;
-//using UI.Canvas;
-//using Core.SaveSystem;
+using UnityEngine;
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-using UnityEngine;
+
 
 namespace Core
 {
     [ExecuteAlways]
     public class SceneManager : MonoBehaviour
     {
+        private const string Scene_Configs_Container_Name = "SceneConfig.json";
+        
         #region Public Events and Properties
         public static event Action OnTransitionEnd;
         public static event Action OnSceneChangeTriggered_BeforeAnimation_Event;
@@ -37,8 +37,7 @@ namespace Core
             private set => currentSceneConfig = value; 
         }
         public static TransitionManager.LoadMode CurrentLoadMode;
-
-        // public lists of actions amongst the private fields... Use events instead. Please never do this again...
+        
         public static Action AlwaysOnBeforeNewSceneLoaded_ActionList;  
         public static Action OnBeforeNewSceneLoaded_ActionList;
 
@@ -51,7 +50,6 @@ namespace Core
         #endregion
 
         #region Private Fields
-        //private static CanvasManager canvasManager;
         private static bool cameraAndCanvasInitialized;
         private static SceneConfig currentSceneConfig;
         
@@ -68,7 +66,7 @@ namespace Core
             EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
 #endif
             UninitializeCameraAndCanvas();
-            UnsubscribeAsyncActorConstructors();
+            UnsubscribeAsyncEntityConstructor();
         }
         #endregion
 
@@ -81,33 +79,33 @@ namespace Core
 #endif
         #endregion
 
-        #region Scene Management Methods
+        #region Scene Management
         public static void LoadScene(int sceneIndex, TransitionManager.LoadMode loadMode, List<Action> postSceneLoadActions = null)
         {
             CurrentLoadMode = loadMode;
             CurrentSceneConfig = LoadSceneConfig(sceneIndex);
             InitializeCameraAndCanvas();
-            SubscribeAsyncActorConstructors();
+            SubscribeAsyncEntityConstructor();
             if (SceneLoadOperation != null) return;
 
             SceneLoadOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneIndex);
-            SceneLoadOperation.allowSceneActivation = false;
-
-            OnSceneChangeTriggered_BeforeAnimation_Event?.Invoke();
-
-            if (loadMode == TransitionManager.LoadMode.None)
+            if (SceneLoadOperation != null)
             {
-                //RegionManager.Regions.Clear();
-                SceneLoadOperation.allowSceneActivation = true;
-                SceneLoadOperation = null; 
-                postSceneLoadActions?.ForEach(action => action?.Invoke());
-                OnTransitionEnd?.Invoke();
-                return;
+                SceneLoadOperation.allowSceneActivation = false;
+
+                OnSceneChangeTriggered_BeforeAnimation_Event?.Invoke();
+
+                if (loadMode == TransitionManager.LoadMode.None)
+                {
+                    SceneLoadOperation.allowSceneActivation = true;
+                    SceneLoadOperation = null;
+                    postSceneLoadActions?.ForEach(action => action?.Invoke());
+                    OnTransitionEnd?.Invoke();
+                    return;
+                }
             }
-            if (postSceneLoadActions == null)
-            {
-                postSceneLoadActions = new List<Action>();
-            }
+
+            postSceneLoadActions ??= new List<Action>();
             postSceneLoadActions.Add(ExecuteAfterEndTransition);
 
             ExecuteBeforeTransitionAnimation();
@@ -148,9 +146,8 @@ namespace Core
 
             OnBeforeNewSceneLoaded_ActionList?.Invoke();
             OnBeforeNewSceneLoaded_ActionList = null;
-
-            //CanvasManager.Instance.LoadingText.SetActive(true);
-            //SaveManager.SaveProgress();
+            
+            SaveManager.SaveProgress();
 
             IsTransitioning = true;
         }
@@ -164,43 +161,38 @@ namespace Core
 
                 OnAfterEnterAnimationEnded_ActionList?.Invoke();
                 OnAfterEnterAnimationEnded_ActionList = null;
-
-                //CanvasManager.Instance.LoadingText.SetActive(false);
             }, true);
         }
 
         private static void InitializeCameraAndCanvas()
         {
             if (cameraAndCanvasInitialized) return;
-            //canvasManager = FindObjectOfType<CanvasManager>();
-
-            //if (canvasManager == null) Debug.LogError("CanvasManager not found in the scene. Please add it to the scene.");
-
-            //OnSceneChangeTriggered_BeforeAnimation_Event += CameraManager.Initialize;
             cameraAndCanvasInitialized = true;
         }
-        
-        public static void UninitializeCameraAndCanvas()
+
+        private static void UninitializeCameraAndCanvas()
         {
-            //OnSceneChangeTriggered_BeforeAnimation_Event -= CameraManager.Initialize;
             cameraAndCanvasInitialized = false;
         }
         
-        private static void SubscribeAsyncActorConstructors()
+        private static void SubscribeAsyncEntityConstructor()
         {
-            //OnSceneChangeTriggered_BeforeAnimation_Event += EntityConstructor.Instance.ClearActorLoadQueue;
+            OnSceneChangeTriggered_BeforeAnimation_Event += EntityConstructor.Instance.ClearActorLoadQueue;
+        }
+
+        private static void UnsubscribeAsyncEntityConstructor()
+        {
+            OnSceneChangeTriggered_BeforeAnimation_Event -= EntityConstructor.Instance.ClearActorLoadQueue;
         }
         
-        public static void UnsubscribeAsyncActorConstructors()
-        {
-            //OnSceneChangeTriggered_BeforeAnimation_Event -= EntityConstructor.Instance.ClearActorLoadQueue;
-        }
         #endregion
 
         #region Scene Configuration Loading
+        
         private static SceneConfig LoadSceneConfig(int sceneIndex)
         {
-            /*SceneConfigsContainer sceneConfigs = JSONParser.Load<SceneConfigsContainer>("SceneConfig.json");
+            SceneConfigsContainer sceneConfigs = 
+                JSONParser.Load<SceneConfigsContainer>(Scene_Configs_Container_Name);
 
             if (sceneConfigs != null && sceneConfigs.SceneConfig != null)
             {
@@ -212,9 +204,11 @@ namespace Core
                     }
                 }
             }
-            Debug.LogWarning($"Scene with index {sceneIndex} not found.");*/
+            
+            Debug.LogWarning($"Scene with index {sceneIndex} not found.");
             return null;
         }
+        
         #endregion
     }
 }

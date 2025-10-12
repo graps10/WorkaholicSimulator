@@ -1,5 +1,4 @@
-﻿//using Core.SceneControl;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 namespace Core.Utilities
@@ -22,8 +21,6 @@ namespace Core.Utilities
         #if UNITY_EDITOR
         public static void DrawBounds(Bounds b, float delay = 0)
         {
-            //if(SceneBaker.IsBaking) return;
-
             // bottom
             var p1 = new Vector3(b.min.x, b.min.y, b.min.z);
             var p2 = new Vector3(b.max.x, b.min.y, b.min.z);

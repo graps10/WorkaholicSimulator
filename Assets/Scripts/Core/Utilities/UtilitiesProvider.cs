@@ -163,8 +163,6 @@ namespace Core.Utilities
         }
 #endif
 
-        //public static int GetIndex(this UnityLayers layer) => (int)Mathf.Log((int)layer, 2);
-
         public static bool IsConstantZero(this AnimationCurve curve)
         {
             if (curve == null || curve.length == 0) return true;
@@ -246,15 +244,6 @@ namespace Core.Utilities
 
             return searchComponent;
         }
-
-
-        /*public static void PlayFromCamera(this Sound sound)
-        {
-            if (Camera.main == null) return;
-
-            sound.SetPosition(Camera.main.transform.position + Camera.main.transform.forward);
-            sound.Play();
-        }*/
     }
 
     [Flags]

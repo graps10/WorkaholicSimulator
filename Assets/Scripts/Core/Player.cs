@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Core.Enums;
 using Core.Interfaces;
+using Core.ObjectPool;
 using Entities;
+using Transition;
 using UnityEngine;
 
 namespace Core
@@ -9,6 +12,8 @@ namespace Core
     public sealed class Player : MonoBehaviour
     {
         public static Player Instance { get; private set; }
+        
+        private static bool isPlayerLoaded;
         
         public PlayerEntity PlayerEntityGameObject
         {
@@ -31,6 +36,36 @@ namespace Core
         private readonly List<IFixedUpdatable> _fixedUpdatableList = new();
         
         private PlayerEntity _playerEntityGameObject;
+
+        private void Awake()
+        {
+            if (!isPlayerLoaded)
+            {
+                SceneManager.LoadScene((int)UnityScenes.mainMenu, TransitionManager.LoadMode.None);
+                isPlayerLoaded = true;
+                return;
+            }
+            
+            if (!InitializeGameObject())
+                return;
+
+            // SpawnCamera
+            TransitionManager.Initialize();
+        }
+        
+        private bool InitializeGameObject()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                ObjectPooler.ClearPooler();
+                return false;
+            }
+
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+            return true;
+        }
 
         #region Update and FixedUpdate
 
