@@ -13,7 +13,7 @@ using UnityEditor;
 
 namespace Core.Utilities
 {
-    public static class UtilitiesProvider
+    public static class UtilsProvider
     {
         #region Wait and run a function 
 

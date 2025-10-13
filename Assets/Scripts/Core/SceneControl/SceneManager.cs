@@ -156,7 +156,7 @@ namespace Core
         {
             SceneLoadOperation.allowSceneActivation = true;
 
-            UtilitiesProvider.WaitAndRun(() =>
+            UtilsProvider.WaitAndRun(() =>
             {
 
                 OnAfterEnterAnimationEnded_ActionList?.Invoke();

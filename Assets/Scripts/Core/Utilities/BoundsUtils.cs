@@ -3,15 +3,15 @@
 
 namespace Core.Utilities
 {
-    public static class BoundsUtilities
+    public static class BoundsUtils
     {
         private static Color boundsLineColor = Color.yellow;
         
         public static Bounds GetValidBounds(GameObject gameObject)
         {
-            if (UtilitiesProvider.TrySearchComponentInObject(gameObject, out Renderer renderer))
+            if (UtilsProvider.TrySearchComponentInObject(gameObject, out Renderer renderer))
                 return renderer.bounds;
-            else if (UtilitiesProvider.TrySearchComponentInObject(gameObject, out Collider objectCollider))
+            else if (UtilsProvider.TrySearchComponentInObject(gameObject, out Collider objectCollider))
                 return objectCollider.bounds;
             else if (gameObject.transform.childCount == 0)
                 return new Bounds(gameObject.transform.position, Vector3.one);

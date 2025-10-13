@@ -4,6 +4,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace Entities.Constructors.Editor
 {
     [ExecuteInEditMode] // Attribute for exicuting in editor mode
