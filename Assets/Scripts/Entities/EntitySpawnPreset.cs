@@ -33,12 +33,12 @@ namespace Entities
         /// </summary>
         public bool IsQuestEntity { get; private set; }
 
-        public void SetSpawnOptions(bool enableLogic = true, bool allowMultipleEntitiesInSingleParent = false, bool fromCompletedQuest = false, bool isQuestActor = false)
+        public void SetSpawnOptions(bool enableLogic = true, bool allowMultipleEntitiesInSingleParent = false, bool fromCompletedQuest = false, bool isQuestEntity = false)
         {
             EnableLogic = enableLogic;
             AllowMultipleEntitiesInSingleParent = allowMultipleEntitiesInSingleParent;
             FromCompletedQuest = fromCompletedQuest;
-            IsQuestEntity = isQuestActor;
+            IsQuestEntity = isQuestEntity;
         }
         
         public bool Equals(EntitySpawnPreset obj)

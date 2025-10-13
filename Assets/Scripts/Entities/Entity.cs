@@ -19,7 +19,7 @@ namespace Entities
         
         public event Action OnDispose;
 
-        public virtual void LoadEntity(Mold actorMold) { }
+        public virtual void LoadEntity(Mold entityMold) { }
 
         public virtual void ExternalActivation(bool value)
         {

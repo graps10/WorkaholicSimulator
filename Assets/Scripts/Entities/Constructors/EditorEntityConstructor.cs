@@ -13,7 +13,7 @@ namespace Entities.Constructors.Editor
     [ExecuteInEditMode] // Attribute for exicuting in editor mode
     public class EditorEntityConstructor : ObjectConstructor<GameObject, Mold>
     {
-        private const string POSTFIX_FOR_EDITOR = "_EDITOR-ACTOR";
+        private const string POSTFIX_FOR_EDITOR = "_EDITOR-Entity";
 
         private static List<System.Type> _requiredComponentsTypes = new()
         {

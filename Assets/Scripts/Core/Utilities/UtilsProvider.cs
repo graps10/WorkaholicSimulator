@@ -179,9 +179,9 @@ namespace Core.Utilities
 
         private static readonly List<string> transformsWithChangedState = new();
 
-        public static void StateSetChanged(this Entity actor)
+        public static void StateSetChanged(this Entity entity)
         {
-            var transformPath = GetGameObjectPath(actor.transform.parent.gameObject);
+            var transformPath = GetGameObjectPath(entity.transform.parent.gameObject);
 
             if (!transformsWithChangedState.Contains(transformPath)) 
                 transformsWithChangedState.Add(transformPath);

@@ -177,12 +177,12 @@ namespace Core
         
         private static void SubscribeAsyncEntityConstructor()
         {
-            OnSceneChangeTriggered_BeforeAnimation_Event += EntityConstructor.Instance.ClearActorLoadQueue;
+            OnSceneChangeTriggered_BeforeAnimation_Event += EntityConstructor.Instance.ClearEntityLoadQueue;
         }
 
         private static void UnsubscribeAsyncEntityConstructor()
         {
-            OnSceneChangeTriggered_BeforeAnimation_Event -= EntityConstructor.Instance.ClearActorLoadQueue;
+            OnSceneChangeTriggered_BeforeAnimation_Event -= EntityConstructor.Instance.ClearEntityLoadQueue;
         }
         
         #endregion

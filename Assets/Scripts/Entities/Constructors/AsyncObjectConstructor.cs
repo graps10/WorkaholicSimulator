@@ -9,37 +9,37 @@ namespace Entities.Constructors
 {
     public class AsyncObjectConstructor<TReturnT, TConfigT> : ObjectConstructor<TReturnT, TConfigT> where TReturnT : Entity where TConfigT : Mold
     {
-        protected const int Actor_Load_Batch_Size = 2;
+        protected const int Entity_Load_Batch_Size = 2;
     
-        protected static Queue<Action> actorLoadQueue = new();
+        protected static Queue<Action> entityLoadQueue = new();
         private static Coroutine loadCoroutine;
 
         public override void LoadImmediately<T>(TConfigT entityMold, Transform transform, out T result) => result = null;
 
-        public void EnqueueActorLoad(TConfigT actorMold, Transform parentToSet, 
+        public void EnqueueEntityLoad(TConfigT entityMold, Transform parentToSet, 
             Action<TReturnT> onComplete = null, Func<bool> loadCondition = null)
         {
-            actorLoadQueue.Enqueue(() =>
+            entityLoadQueue.Enqueue(() =>
             {
                 if (loadCondition!=null && !loadCondition.Invoke()) return;
-                LoadImmediately(actorMold, parentToSet, out TReturnT actor);
-                onComplete?.Invoke(actor);
+                LoadImmediately(entityMold, parentToSet, out TReturnT entity);
+                onComplete?.Invoke(entity);
             });
 
             StartLoadCoroutine();
         }
 
         protected void StartLoadCoroutine() 
-            => loadCoroutine ??= Player.Instance.StartCoroutine(SpawnActorBatches());
+            => loadCoroutine ??= Player.Instance.StartCoroutine(SpawnEntityBatches());
 
-        private IEnumerator SpawnActorBatches()
+        private IEnumerator SpawnEntityBatches()
         {
-            while (actorLoadQueue.Count > 0)
+            while (entityLoadQueue.Count > 0)
             {
-                var createCount = actorLoadQueue.Count < Actor_Load_Batch_Size ? actorLoadQueue.Count : Actor_Load_Batch_Size;
+                var createCount = entityLoadQueue.Count < Entity_Load_Batch_Size ? entityLoadQueue.Count : Entity_Load_Batch_Size;
 
                 for (int i = 0; i < createCount; i++)
-                    actorLoadQueue.Dequeue()?.Invoke();
+                    entityLoadQueue.Dequeue()?.Invoke();
 
                 yield return new WaitForEndOfFrame();
             }
@@ -47,9 +47,9 @@ namespace Entities.Constructors
             loadCoroutine = null;
         }
     
-        public void ClearActorLoadQueue()
+        public void ClearEntityLoadQueue()
         {
-            actorLoadQueue.Clear();
+            entityLoadQueue.Clear();
         
             if (loadCoroutine != null && Player.Instance != null)
             {
