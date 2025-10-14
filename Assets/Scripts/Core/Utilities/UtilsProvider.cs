@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Object = UnityEngine.Object;
 using System.Text;
+using Core.Enums;
 using Entities;
 
 #if UNITY_EDITOR
@@ -162,7 +163,8 @@ namespace Core.Utilities
             }
         }
 #endif
-
+        public static int GetIndex(this UnityLayers layer) => (int)Mathf.Log((int)layer, 2);
+        
         public static bool IsConstantZero(this AnimationCurve curve)
         {
             if (curve == null || curve.length == 0) return true;

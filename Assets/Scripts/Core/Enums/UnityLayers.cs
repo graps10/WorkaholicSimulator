@@ -2,6 +2,6 @@
 {
     public enum UnityLayers
     {
-        
+        Bounds = 1 << 1
     }
 }
