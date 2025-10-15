@@ -70,6 +70,7 @@ namespace Region.BoundsInEditor
             return createdBoundsSceneElement;
         }
         
+        public MeshFilter GetMeshFilter() => myMeshFilter;
         public MeshRenderer GetMeshRenderer() => _myMeshRenderer;
     }
 }
