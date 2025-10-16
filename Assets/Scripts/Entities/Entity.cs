@@ -41,7 +41,7 @@ namespace Entities
                 OnDisableLogic?.Invoke();
         }
 
-        public void ToggleRenderersEnabled(bool stateToSet)
+        public void SwitchGraphics(bool stateToSet)
         {
             if (renderers == null)
                 return;
@@ -52,7 +52,7 @@ namespace Entities
         
         public override void ReturnToPool() // Unload entity into basic assets
         {
-            ToggleRenderersEnabled(false);
+            SwitchGraphics(false);
             ToggleLogic(false);
             
             OnDispose?.Invoke();

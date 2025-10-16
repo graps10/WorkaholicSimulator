@@ -5,6 +5,7 @@ using System.Linq;
 using Core.Extensions;
 using Core.Utilities;
 using Entities;
+using QuestSystem.Base;
 using Region.BoundsInEditor;
 using UnityEngine;
 
@@ -246,11 +247,11 @@ namespace Region
 
         public virtual void Dispose() // Unload location assets
         {
-            /*var entitiesList = new QuestEntitiesList();
+            var entitiesList = new QuestEntitiesList();
             foreach (var entity in _entitiesDictionary.Values)
                 entitiesList.Add(entity);
             
-            this.UnloadEntities(entitiesList);*/
+            this.UnloadEntities(entitiesList);
 
             RemoveSectorSwitchLogicEvent(SwitchLogic);
             CancelDelayedHiding();
@@ -442,6 +443,8 @@ namespace Region
 
         #endregion
 
+        public Dictionary<Transform, Entity> GetEntitiesDictionary() => _entitiesDictionary;
+        public Dictionary<string, Pose> GetSavedEntityPoses() => _savedEntityPoses;
         public void ClearOnSwitchLogicEvent() => OnSwitchLogic = null;
     }
 }

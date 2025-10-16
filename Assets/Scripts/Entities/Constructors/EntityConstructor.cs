@@ -21,7 +21,7 @@ namespace Entities.Constructors
             
             if (pooledObject != null)
             {
-                pooledObject.ToggleRenderersEnabled(false); 
+                pooledObject.SwitchGraphics(false); 
                 pooledObject.ToggleLogic(false);  
             }
 
