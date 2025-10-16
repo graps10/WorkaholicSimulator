@@ -18,7 +18,7 @@ namespace Region
             
         private static Color boundsColor = new(0.5f, 0.5f, 0.5f, 0.5f);
         
-        //=-- Serialized in editor --=//
+        /// Serialized in editor
         [SerializeField] protected Transform environmentParent;
         
         [SerializeField] private List<EntitySpawnPreset> entityPresets = new();
@@ -373,7 +373,7 @@ namespace Region
                 Material material = new Material(boundsMaterial);
                 material.color = boundsColor;
                 
-                //LocationBounds = BoundsSceneElement.Create<LocationBounds>(gameObject.name, this, material, transform);
+                locationBounds = BoundsSceneElement.Create<LocationBounds>(this, material, transform);
             }
 
             if (locationBounds != null && environmentParent.childCount != 0)

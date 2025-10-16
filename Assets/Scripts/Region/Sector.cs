@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Core.Utilities;
+using Region.BoundsInEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -44,7 +45,7 @@ namespace Region
 
             if (locationBounds == null)
             {
-                //LocationBounds = BoundsSceneElement.Create<SectorBounds>(gameObject.name, this, boundsMaterial, transform);
+                locationBounds = BoundsSceneElement.Create<SectorBounds>(this, boundsMaterial, transform);
                 locationBounds.CreateMeshBounds();
             }
             
@@ -127,7 +128,7 @@ namespace Region
             AssetUtils.TryLoadUnityAsset(MaterialPath, out boundsMaterial);
 #endif
             if (locationBounds == null)
-                //LocationBounds = BoundsSceneElement.Create<SectorBounds>(gameObject.name, this, boundsMaterial, transform);
+                locationBounds = BoundsSceneElement.Create<SectorBounds>(this, boundsMaterial, transform);
             
             if (locationBounds == null || environmentParent.childCount == 0 && locations.Count == 0) return;
             
