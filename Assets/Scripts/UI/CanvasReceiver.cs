@@ -1,0 +1,33 @@
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+namespace UI
+{
+    public abstract class CanvasReceiver : System.IDisposable
+    {
+        public abstract GameObject Canvas { get; }
+
+        private readonly List<CanvasCommand> _commands = new List<CanvasCommand>();
+
+        public void RegisterCanvasCommand(CanvasCommand command)
+        {
+            if (!command.IsDisposed && !_commands.Contains(command))
+                _commands.Add(command);
+        }
+        
+        public void UnregisterCanvasCommand(CanvasCommand command)
+        {
+            if (!command.IsDisposed && _commands.Contains(command))
+                _commands.Remove(command);
+        }
+
+        public void ForceUpdateCommands()
+        {
+            foreach (var command in _commands)
+                command.OnUpdate();
+        }
+
+        public virtual void Dispose() { }
+    }
+
+}
