@@ -5,6 +5,7 @@ using Components;
 using Core.SaveSystem;
 using Entities.Constructors;
 using Transition;
+using UI;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -53,6 +54,7 @@ namespace Core
 
         #region Private Fields
         
+        private static CanvasManager canvasManager;
         private static bool cameraAndCanvasInitialized;
         private static SceneConfig currentSceneConfig;
         
@@ -168,6 +170,11 @@ namespace Core
         private static void InitializeCameraAndCanvas()
         {
             if (cameraAndCanvasInitialized) return;
+            canvasManager = FindObjectOfType<CanvasManager>();
+
+            if (canvasManager == null) Debug.LogError("CanvasManager not found in the scene. Please add it to the scene.");
+
+            OnSceneChangeTriggered_BeforeAnimation_Event += CameraManager.Initialize;
             cameraAndCanvasInitialized = true;
         }
         
