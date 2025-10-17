@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Components;
 using Core.Enums;
 using Core.Interfaces;
 using Core.ObjectPool;
 using Entities;
+using Region;
 using Transition;
 using UnityEngine;
 
@@ -49,9 +51,38 @@ namespace Core
             if (!InitializeGameObject())
                 return;
 
-            // SpawnCamera
+            SpawnCamera();
             TransitionManager.Initialize();
+
+            SceneManager.OnBeforeNewSceneLoaded_ActionList += RemoveAllRegions;
+            SceneManager.AlwaysOnBeforeNewSceneLoaded_ActionList += VisibleEntitiesManager.ClearMovingEntitiesDictionary;
+
+            SceneManager.AlwaysOnAfterNewSceneLoaded_ActionList += SpawnCamera;
+            
+            SceneManager.OnAfterEnterAnimationEnded_ActionList += LoadOnPlayerPosition;
+
+            InputManager.InputManager.Initialize();
+
+            OnUpdateEvent += RegionCoordinator.FindCurrentPlayerLocation;
+            OnUpdateEvent += RegionManager.UpdatePlayerPositionWithRepositionDelay;
         }
+        
+        private void OnApplicationQuit()
+        {
+            if (this != null)
+            {
+                StopAllCoroutines();
+                
+                _updatableList.Clear();
+                _fixedUpdatableList.Clear();
+                
+                SceneManager.UninitializeCameraAndCanvas();
+                SceneManager.UnsubscribeAsyncEntityConstructor();
+            }
+        }
+
+        private void SpawnCamera() 
+            => CameraManager.SetCameraBySceneIndex(GameObject.Find("Cameras").transform);
         
         private bool InitializeGameObject()
         {
@@ -65,6 +96,17 @@ namespace Core
             Instance = this;
             DontDestroyOnLoad(gameObject);
             return true;
+        }
+        
+        private void RemoveAllRegions()
+        {
+            RegionManager.Regions.Clear();
+        }
+
+        private void LoadOnPlayerPosition()
+        {
+            if (PlayerEntityGameObject != null) 
+                RegionManager.LoadLocationOnPosition(Instance.PlayerEntityGameObject.transform.position);
         }
 
         #region Update and FixedUpdate

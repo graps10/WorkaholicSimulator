@@ -1,6 +1,7 @@
 ﻿using Core.Utilities;
 using System;
 using System.Collections.Generic;
+using Components;
 using Core.SaveSystem;
 using Entities.Constructors;
 using Transition;
@@ -47,9 +48,11 @@ namespace Core
         public static Action OnAfterNewSceneLoaded_ActionList;
         
         public static Action OnNewSceneLoaded_AnimationFinished_ActionList;
+        
         #endregion
 
         #region Private Fields
+        
         private static bool cameraAndCanvasInitialized;
         private static SceneConfig currentSceneConfig;
         
@@ -125,7 +128,6 @@ namespace Core
             AlwaysOnAfterNewSceneLoaded_ActionList?.Invoke();
 
             OnAfterNewSceneLoaded_ActionList?.Invoke();
-
             OnAfterNewSceneLoaded_ActionList = null;
         }
 
@@ -158,7 +160,6 @@ namespace Core
 
             UtilsProvider.WaitAndRun(() =>
             {
-
                 OnAfterEnterAnimationEnded_ActionList?.Invoke();
                 OnAfterEnterAnimationEnded_ActionList = null;
             }, true);
@@ -169,9 +170,10 @@ namespace Core
             if (cameraAndCanvasInitialized) return;
             cameraAndCanvasInitialized = true;
         }
-
-        private static void UninitializeCameraAndCanvas()
+        
+        public static void UninitializeCameraAndCanvas()
         {
+            OnSceneChangeTriggered_BeforeAnimation_Event -= CameraManager.Initialize;
             cameraAndCanvasInitialized = false;
         }
         
@@ -180,7 +182,7 @@ namespace Core
             OnSceneChangeTriggered_BeforeAnimation_Event += EntityConstructor.Instance.ClearEntityLoadQueue;
         }
 
-        private static void UnsubscribeAsyncEntityConstructor()
+        public static void UnsubscribeAsyncEntityConstructor()
         {
             OnSceneChangeTriggered_BeforeAnimation_Event -= EntityConstructor.Instance.ClearEntityLoadQueue;
         }
@@ -197,12 +199,8 @@ namespace Core
             if (sceneConfigs != null && sceneConfigs.SceneConfig != null)
             {
                 foreach (var config in sceneConfigs.SceneConfig)
-                {
                     if (config.SceneIndex == sceneIndex)
-                    {
                         return config;
-                    }
-                }
             }
             
             Debug.LogWarning($"Scene with index {sceneIndex} not found.");
