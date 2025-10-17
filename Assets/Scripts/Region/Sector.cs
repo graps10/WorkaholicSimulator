@@ -63,6 +63,11 @@ namespace Region
         
         public List<Location> GetLocations() => locations;
 
+        public void InitializeNewLocationsList()
+        {
+            locations = new List<Location>();
+        }
+
         protected internal override void Load()
         {
             if (IsLoaded)

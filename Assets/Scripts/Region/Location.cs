@@ -15,8 +15,6 @@ namespace Region
     {
         private const string Entities_Parent_Name = "Entities";
         private const string Environment_Parent_Name = "Environment";
-            
-        private static Color boundsColor = new(0.5f, 0.5f, 0.5f, 0.5f);
         
         /// Serialized in editor
         [SerializeField] protected Transform environmentParent;
@@ -24,7 +22,8 @@ namespace Region
         [SerializeField] private List<EntitySpawnPreset> entityPresets = new();
         [SerializeField] protected Material boundsMaterial;
         [SerializeField] protected BoundsSceneElement locationBounds;
-
+        [SerializeField] private Color boundsColor = new(0.5f, 0.5f, 0.5f, 0.5f);
+        
         private readonly List<EntitySpawnPreset> _lastEntityPresets = new();
         private Transform _lastEnvironment;
 
@@ -445,6 +444,9 @@ namespace Region
 
         public Dictionary<Transform, Entity> GetEntitiesDictionary() => _entitiesDictionary;
         public Dictionary<string, Pose> GetSavedEntityPoses() => _savedEntityPoses;
+        
+        public Color GetBoundsColor() => boundsColor;
+        
         public void ClearOnSwitchLogicEvent() => OnSwitchLogic = null;
     }
 }

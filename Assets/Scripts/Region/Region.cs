@@ -72,6 +72,11 @@ namespace Region
         
         public List<Sector> GetSectors() => _sectors;
 
+        public void InitializeNewSectorsList()
+        {
+            _sectors = new List<Sector>();
+        }
+
         public override List<Bounds> GetAllBounds()
         {
             List <Bounds> collectedLocationBounds = new();
