@@ -1,0 +1,26 @@
+{
+  "SceneConfig": [
+    {
+      "SceneName": "MainMenu",
+      "SceneIndex": 0,
+      "PrefabCanvasScreensPath": [
+        "Prefabs/UI/ScreenLayersPrefab/MainMenuCanvas"
+      ],
+      "CameraPath": "Cameras/MainMenuCamera"
+    },
+    {
+      "SceneName": "DevOnlyScene",
+      "SceneIndex": 1,
+      "PrefabCanvasScreensPath": [
+      ],
+      "CameraPath": "Cameras/GameplayCameraController"
+    },
+    {
+      "SceneName": "TestRegion",
+      "SceneIndex": 2,
+      "PrefabCanvasScreensPath": [
+      ],
+      "CameraPath": "Cameras/GameplayCameraController"
+    }
+  ]
+}

@@ -28,14 +28,7 @@ namespace Core
         public static AsyncOperation SceneLoadOperation { get; private set; }
         public static SceneConfig CurrentSceneConfig 
         {
-            get
-            {
-                if (currentSceneConfig == null)
-                {
-                    currentSceneConfig = LoadSceneConfig(0);
-                }
-                return currentSceneConfig;
-            }
+            get { return currentSceneConfig ??= LoadSceneConfig(0); }
             private set => currentSceneConfig = value; 
         }
         public static TransitionManager.LoadMode CurrentLoadMode;

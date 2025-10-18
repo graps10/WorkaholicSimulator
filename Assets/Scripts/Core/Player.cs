@@ -25,9 +25,7 @@ namespace Core
             get
             {
                 if (_playerEntityGameObject == null)
-                {
-                    // try to find player
-                }
+                    TryFindPlayerEntity();
 
                 return _playerEntityGameObject;
             }

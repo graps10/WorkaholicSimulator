@@ -20,7 +20,7 @@ namespace Transition
 
         public static bool IsTransitioning => _transitionCanvas.enabled;
 
-        private const string TransitionCanvasPath = "Prefabs/SceneTransition";
+        private const string TransitionCanvasPath = "Prefabs/UI/SceneTransition";
 
         public enum LoadMode
         {
@@ -56,9 +56,6 @@ namespace Transition
 
             if (AssetUtils.TryLoadAsset("ScriptableObjects/Transitions/Fade", out transfer))
                 transitions.TryAdd(LoadMode.Fade, transfer);
-
-            if (AssetUtils.TryLoadAsset("ScriptableObjects/Transitions/CircleScale", out transfer))
-                transitions.TryAdd(LoadMode.Scale, transfer);
         }
 
         public static void StartTransition(LoadMode loadMode, Action onEnterTransitionAction, 
@@ -99,18 +96,14 @@ namespace Transition
 
             if (expectSceneLoad)
             {
-                /*AsyncOperation sceneLoadOperation = SceneManager.SceneLoadOperation;
+                AsyncOperation sceneLoadOperation = SceneManager.SceneLoadOperation;
                 if (sceneLoadOperation != null)
                 {
                     while (!sceneLoadOperation.isDone)
-                    {
                         yield return null;
-                    }
                 }
                 else
-                {
                     Debug.LogWarning("SceneLoadOperation is null, but scene load was expected.");
-                }*/
             }
 
             onNewSceneLoaded?.Invoke();
