@@ -4,11 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-
-namespace Entities.Constructors.Editor
+namespace Entities.Constructors
 {
     [ExecuteInEditMode] // Attribute for exicuting in editor mode
     public class EditorEntityConstructor : ObjectConstructor<GameObject, Mold>

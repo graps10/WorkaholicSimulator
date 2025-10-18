@@ -14,7 +14,7 @@ namespace UI
         
         [field: SerializeField] public RectTransform CanvasCommandReceiversLayer { get; private set; }
         [field: SerializeField] public RectTransform DebugCanvas { get; private set; }
-        [field: SerializeField] public RectTransform CarCanvas { get; private set; }
+        [field: SerializeField] public RectTransform EntityCanvas { get; private set; }
         [field: SerializeField] public RectTransform PopupCanvas { get; private set; }
         [field: SerializeField] public  RectTransform CanvasScreensLayer { get; private set; }
         [field: SerializeField] public GameObject LoadingText { get; private set; }

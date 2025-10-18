@@ -4,7 +4,10 @@ using Components;
 using Core.Enums;
 using Core.Interfaces;
 using Core.ObjectPool;
+using Core.SaveSystem;
 using Entities;
+using Entities.Constructors;
+using Entities.Molds;
 using Region;
 using Transition;
 using UnityEngine;
@@ -34,10 +37,11 @@ namespace Core
         public event Action OnUpdateEvent;
         public event Action OnFixedUpdateEvent;
         
+        [SerializeField] private Mold playerMold;
+        private PlayerEntity _playerEntityGameObject;
+        
         private readonly List<IUpdatable> _updatableList = new();
         private readonly List<IFixedUpdatable> _fixedUpdatableList = new();
-        
-        private PlayerEntity _playerEntityGameObject;
 
         private void Awake()
         {
@@ -56,9 +60,7 @@ namespace Core
 
             SceneManager.OnBeforeNewSceneLoaded_ActionList += RemoveAllRegions;
             SceneManager.AlwaysOnBeforeNewSceneLoaded_ActionList += VisibleEntitiesManager.ClearMovingEntitiesDictionary;
-
             SceneManager.AlwaysOnAfterNewSceneLoaded_ActionList += SpawnCamera;
-            
             SceneManager.OnAfterEnterAnimationEnded_ActionList += LoadOnPlayerPosition;
 
             InputManager.InputManager.Initialize();
@@ -98,16 +100,51 @@ namespace Core
             return true;
         }
         
-        private void RemoveAllRegions()
+        public void ApplyLoadedProgress()
         {
-            RegionManager.Regions.Clear();
-        }
+            SaveManager.LoadProgress();
 
+            if (PlayerEntityGameObject == null)
+            {
+                Debug.LogWarning("PlayerEntityGameObject is null, delaying ApplyLoadedProgress until entity is created.");
+                return; 
+            }
+
+            var progress = SaveManager.Progress;
+            var playerEntity = PlayerEntityGameObject.GetComponent<PlayerEntity>();
+            /*if (SaveManager.EnableSaveLoadDebugLogs) Debug.Log($"Progress upgrades before applying: {JsonUtility.ToJson(progress.UpgradeData.UpgradeLevels)}");
+            
+            playerEntity.GetLevelUpgrades().
+                Copy(progress.UpgradeData.UpgradeLevels.ToUpgradeLevelContainer());
+            
+            playerEntity.UpdateUpgrades();
+            if (SaveManager.EnableSaveLoadDebugLogs) 
+                Debug.Log($"CarActor upgrades after applying: {JsonUtility.ToJson(playerEntity.GetLevelUpgrades())}");*/
+        }
+        
+        private void TryFindPlayerEntity()
+        {
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 0 || SceneManager.IsChangingPlaymode)
+                return;
+
+            var playerPosition = GameObject.Find("PlayerEntityPosition");
+            if (playerPosition == null)
+            {
+                Debug.LogError("PlayerEntityPosition not found in scene!");
+                return;
+            }
+
+            EntityConstructor.Instance.LoadImmediately(playerMold, playerPosition.transform, out _playerEntityGameObject);
+            ApplyLoadedProgress();
+        }
+        
         private void LoadOnPlayerPosition()
         {
             if (PlayerEntityGameObject != null) 
                 RegionManager.LoadLocationOnPosition(Instance.PlayerEntityGameObject.transform.position);
         }
+        
+        private void RemoveAllRegions() => RegionManager.Regions.Clear();
 
         #region Update and FixedUpdate
 
