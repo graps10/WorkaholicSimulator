@@ -1,12 +1,13 @@
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEngine;
 
 namespace Region.Editors
 {
-#if UNITY_EDITOR
     [CustomEditor(typeof(Region))]
     [CanEditMultipleObjects]
     public class RegionEditor : SectorEditor
@@ -162,7 +163,7 @@ namespace Region.Editors
                 CheckForOverlappingLocations(region);
         }
 
-        private void CheckForOverlappingSectors(Region region)
+        private static void CheckForOverlappingSectors(Region region)
         {
             bool overlapDetected = false;
 
@@ -185,7 +186,7 @@ namespace Region.Editors
                 Debug.Log("No overlapping sectors found.");
         }
 
-        private void CheckForOverlappingLocations(Region region)
+        private static void CheckForOverlappingLocations(Region region)
         {
             bool overlapDetected = false;
 
@@ -216,9 +217,6 @@ namespace Region.Editors
         {
             // Cast the target as a Region
             Region region = (Region)target;
-
-            // Initialize a new Bounds with zero size
-            Bounds combinedBounds = new Bounds(region.transform.position, Vector3.zero);
             
             if (region.GetSectors().Count == 0)
             {
@@ -240,5 +238,5 @@ namespace Region.Editors
                 CalculateBoundsFromRenderers();
         }
     }
-#endif
 }
+#endif

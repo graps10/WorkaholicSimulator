@@ -66,6 +66,7 @@ namespace Region.Editors
             foreach (var location in sector.GetLocations())
 	            location.ShowLocation = newLocationsToggleState;
         }
+
         private void DrawLocationsList()
 	    {
 		    EditorGUILayout.Space();
@@ -146,6 +147,13 @@ namespace Region.Editors
             EditorSceneManager.MarkSceneDirty(_sector.gameObject.scene);
             Debug.Log("Sector bounds calculated, scale factor updated, and child objects adjusted.");
         }
+	    
+	    protected override void DrawAutomaticallyCalculatedBoundsButton()
+	    {
+		    EditorGUILayout.Space();
+		    if (GUILayout.Button("Calculate Bounds from Locations"))
+			    CalculateBoundsFromRenderers();
+	    }
     }
 }
 #endif

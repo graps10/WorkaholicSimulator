@@ -112,12 +112,12 @@ namespace Region
             
             foreach (var item in locations)
             {
-                /*var mesh = item.GetComponentInChildren<LocationBounds>().GetComponent<MeshFilter>().sharedMesh;
+                var mesh = item.GetComponentInChildren<LocationBounds>().GetComponent<MeshFilter>().sharedMesh;
                 if (mesh != null)
                 {
                     collectedLocationBounds.Add(MeshUtils.TransformBounds(mesh.bounds, item.transform));
                     Debug.Log("location added");
-                }*/
+                }
             }
 
             return collectedLocationBounds;
@@ -135,7 +135,10 @@ namespace Region
             if (locationBounds == null)
                 locationBounds = BoundsSceneElement.Create<SectorBounds>(this, boundsMaterial, transform);
             
-            if (locationBounds == null || environmentParent.childCount == 0 && locations.Count == 0) return;
+            if (locations != null && 
+                (locationBounds == null
+                 || environmentParent.childCount == 0 
+                 && locations.Count == 0)) return;
             
             locationBounds.CreateMeshBounds();
 

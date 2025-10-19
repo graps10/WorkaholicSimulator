@@ -12,15 +12,14 @@ namespace Region.BoundsInEditor
         [SerializeField] protected Location myLocation;
 
         [SerializeField] protected MeshFilter myMeshFilter;
-
-        private MeshRenderer _myMeshRenderer;
+        [SerializeField] protected MeshRenderer myMeshRenderer;
 
         public bool IsVisibleBounds
         {
             get
             {
-                if (_myMeshRenderer != null) 
-                    return _myMeshRenderer.enabled;
+                if (myMeshRenderer != null) 
+                    return myMeshRenderer.enabled;
             
                 Debug.LogWarning("MyMeshRenderer is null so return false");
                 return false;
@@ -37,16 +36,16 @@ namespace Region.BoundsInEditor
 
         public void SwitchVisible(bool value)
         {
-            if (_myMeshRenderer == null)
-                _myMeshRenderer = GetComponent<MeshRenderer>();
+            if (myMeshRenderer == null)
+                myMeshRenderer = GetComponent<MeshRenderer>();
 
-            if (_myMeshRenderer == null)
+            if (myMeshRenderer == null)
             {
                 Debug.LogWarning(gameObject.name + " have no MeshRenderer");
                 return;
             }
 
-            _myMeshRenderer.enabled = value;
+            myMeshRenderer.enabled = value;
         }
 #endif
 
@@ -71,6 +70,6 @@ namespace Region.BoundsInEditor
         }
         
         public MeshFilter GetMeshFilter() => myMeshFilter;
-        public MeshRenderer GetMeshRenderer() => _myMeshRenderer;
+        public MeshRenderer GetMeshRenderer() => myMeshRenderer;
     }
 }

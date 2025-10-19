@@ -32,7 +32,7 @@ namespace Region.Editors
 
             _previousColor = location.GetBoundsColor();
             
-            DrawCustomFields("actorPresets", "boundsColor", "boundsMaterial");
+            DrawCustomFields("entityPresets", "boundsColor", "boundsMaterial");
             DrawCustomSettings();
             DrawUnityEvents();
             

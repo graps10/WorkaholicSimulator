@@ -18,9 +18,7 @@ namespace Entities.EditorSceneElements
         {
             // If object move, keep him back on last position
             if (transform.localPosition != _initialPosition)
-            {
                 transform.localPosition = _initialPosition;
-            }
         }
 #endif
     }
