@@ -5,34 +5,37 @@ namespace Region.BoundsInEditor
 {
     public class LocationBounds : BoundsSceneElement
     {
-        [SerializeField] private bool isMovingInEditor;
-        [SerializeField] private Vector3 scaleBounds = Vector3.one;
-        [SerializeField] private Vector3 offsetPosition = Vector3.zero;
+        private static Vector3 meshDefaultScaleBounds = Vector3.zero;
+        private static Vector3 meshDefaultOffsetBounds = Vector3.zero;
+        
+        [SerializeField] protected bool isMovingInEditor;
         
         public override void CreateMeshBounds()
         {
 #if UNITY_EDITOR
             myMeshFilter.mesh = MeshUtils.CreateOneBigCubeCollider(
                 myLocation.GetAllBounds(), 
-                scaleBounds, 
-                offsetPosition, 
+                meshDefaultScaleBounds, 
+                meshDefaultOffsetBounds, 
                 transform
             );
 #endif
         }
 
 #if UNITY_EDITOR
-        [ContextMenu("CreateFirstBounds")]
-        private void CreateFirstBoundsContextMenu()
-        {
-            CreateMeshBounds();
-        }
-
+        
         protected override void Update()
         {
             if (!isMovingInEditor)
                 base.Update();
         }
+        
+        [ContextMenu("CreateFirstBounds")]
+        protected void CreateFirstBoundsContextMenu()
+        {
+            CreateMeshBounds();
+        }
+        
 #endif
     }
 }

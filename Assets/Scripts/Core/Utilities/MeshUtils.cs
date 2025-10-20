@@ -107,9 +107,11 @@ namespace Core.Utilities
                 maxZ.Add(item.max.z);
             }
 
-            Vector3 minVector = new Vector3(MathUtils.FindBiggestValue(minX.ToArray()), MathUtils.FindBiggestValue(minY.ToArray()), MathUtils.FindBiggestValue(minZ.ToArray()));
+            Vector3 minVector = new Vector3(MathUtils.FindBiggestValue(minX.ToArray()), 
+                MathUtils.FindBiggestValue(minY.ToArray()), MathUtils.FindBiggestValue(minZ.ToArray()));
 
-            Vector3 maxVector = new Vector3(MathUtils.FindSmallestValue(maxX.ToArray()), MathUtils.FindSmallestValue(maxY.ToArray()), MathUtils.FindSmallestValue(maxZ.ToArray()));
+            Vector3 maxVector = new Vector3(MathUtils.FindSmallestValue(maxX.ToArray()), 
+                MathUtils.FindSmallestValue(maxY.ToArray()), MathUtils.FindSmallestValue(maxZ.ToArray()));
 
             Vector3[] boundsVertices = GetVerticesFromBounds(minVector, maxVector, parent);
 
@@ -119,12 +121,12 @@ namespace Core.Utilities
             {
                 vertices[vertexOffset + i] = boundsVertices[i];
             }
+            
             for (int i = 0; i < boundsTriangles.Length; i++)
             {
                 triangles[triangleOffset + i] = boundsTriangles[i];
             }
-
-
+            
             combinedMesh.vertices = vertices;
             combinedMesh.triangles = triangles;
             combinedMesh.RecalculateNormals();
@@ -167,9 +169,11 @@ namespace Core.Utilities
                 maxZ.Add(item.max.z);
             }
 
-            Vector3 minVector = new Vector3(MathUtils.FindBiggestValue(minX.ToArray()), MathUtils.FindBiggestValue(minY.ToArray()), MathUtils.FindBiggestValue(minZ.ToArray()));
+            Vector3 minVector = new Vector3(MathUtils.FindBiggestValue(minX.ToArray()), 
+                MathUtils.FindBiggestValue(minY.ToArray()), MathUtils.FindBiggestValue(minZ.ToArray()));
 
-            Vector3 maxVector = new Vector3(MathUtils.FindSmallestValue(maxX.ToArray()), MathUtils.FindSmallestValue(maxY.ToArray()), MathUtils.FindSmallestValue(maxZ.ToArray()));
+            Vector3 maxVector = new Vector3(MathUtils.FindSmallestValue(maxX.ToArray()), 
+                MathUtils.FindSmallestValue(maxY.ToArray()), MathUtils.FindSmallestValue(maxZ.ToArray()));
 
             minVector -= parent.position;
             maxVector -= parent.position;
@@ -199,12 +203,12 @@ namespace Core.Utilities
             {
                 vertices[vertexOffset + i] = boundsVertices[i];
             }
+            
             for (int i = 0; i < boundsTriangles.Length; i++)
             {
                 triangles[triangleOffset + i] = boundsTriangles[i];
             }
-
-
+            
             combinedMesh.vertices = vertices;
             combinedMesh.triangles = triangles;
             combinedMesh.RecalculateNormals();
@@ -268,8 +272,6 @@ namespace Core.Utilities
                 vertexMin.z -= minimalVertexSize / 2;
                 vertexMax.z += minimalVertexSize / 2;
             }
-
-
         }
         
         private static int[] GetTrianglesForBox(int vertexOffset)

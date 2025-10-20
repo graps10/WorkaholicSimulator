@@ -140,6 +140,11 @@ namespace Region
 
 #if UNITY_EDITOR
         
+        private void Reset()
+        {
+            ReloadForEditor();
+        }
+        
         protected virtual void ReloadForEditor()
         {
             CreateEntitiesParent();
