@@ -117,7 +117,7 @@ namespace Core
             
             playerEntity.UpdateUpgrades();
             if (SaveManager.EnableSaveLoadDebugLogs) 
-                Debug.Log($"CarActor upgrades after applying: {JsonUtility.ToJson(playerEntity.GetLevelUpgrades())}");*/
+                Debug.Log($"PlayerActor upgrades after applying: {JsonUtility.ToJson(playerEntity.GetLevelUpgrades())}");*/
         }
         
         private void TryFindPlayerEntity()

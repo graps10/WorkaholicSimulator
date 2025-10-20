@@ -5,6 +5,7 @@ using System.Linq;
 using Core.Extensions;
 using Core.Utilities;
 using Entities;
+using Entities.Constructors;
 using QuestSystem.Base;
 using Region.BoundsInEditor;
 using UnityEngine;
@@ -192,14 +193,14 @@ namespace Region
             if (!isNeedRefresh)
                 return;
 
-            //EditorEntityConstructor.Instance.RefreshLocation(this, entityPresets);
+            EditorEntityConstructor.Instance.RefreshLocation(this, entityPresets);
 
             CopyLastEntitiesTransformsAndMolds();
         }
 
         public void ForceRefreshEditorEntities()
         {
-            //EditorEntityConstructor.Instance.RefreshLocation(this, entityPresets);
+            EditorEntityConstructor.Instance.RefreshLocation(this, entityPresets);
             CopyLastEntitiesTransformsAndMolds();
         }
 

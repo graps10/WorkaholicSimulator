@@ -23,7 +23,7 @@ namespace Entities.EditorSceneElements
                 return;
             }
             
-            EditorEntityConstructor.Instance.AddExistingElement(entityLocation, gameObject);
+            EditorEntityConstructor.AddExistingElement(entityLocation, gameObject);
 
             StartCoroutine(CheckLocation());
 #else
