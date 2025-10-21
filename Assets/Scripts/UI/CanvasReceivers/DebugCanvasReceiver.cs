@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UI.DebugUI
+namespace UI.CanvasReceivers
 {
     public sealed class DebugCanvasReceiver : CanvasReceiver
     {

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using Core;
 using Transition;
-using UI.Canvas;
+using UI.CanvasCommands;
+using UI.CanvasScreens;
 using UnityEngine;
 
 namespace UI

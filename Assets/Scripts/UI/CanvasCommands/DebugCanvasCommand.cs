@@ -1,20 +1,21 @@
 ﻿using System;
 using TMPro;
+using UI.CanvasReceivers;
 
-namespace UI.DebugUI
+namespace UI.CanvasCommands
 {
     public class DebugCanvasCommand : CanvasCommand
     {
         public override string CanvasCommandPath => "ScriptableObjects/ObjectPool/UI/CanvasCommands/DebugCanvasCommandPoolInfo";
         
-        private Func<string> ValueGetter;
+        private Func<string> _valueGetter;
         
         private TextMeshProUGUI _text;
         private float _defaultFontSize;
 
         public void Setup(Func<string> valueGetter)
         {
-            ValueGetter = valueGetter;
+            _valueGetter = valueGetter;
         }
 
         public override void Initialize(CanvasReceiver receiver)
@@ -24,7 +25,7 @@ namespace UI.DebugUI
             _text = GetComponent<TextMeshProUGUI>();
         }
 
-        public override void OnUpdate() => _text.text = ValueGetter?.Invoke();
+        public override void OnUpdate() => _text.text = _valueGetter?.Invoke();
 
         public void SetTextFontSize(float updatedFontSize)
         {

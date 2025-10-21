@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using UI.CanvasCommands;
 using UnityEngine;
 
-namespace UI
+namespace UI.CanvasReceivers
 {
     public abstract class CanvasReceiver : System.IDisposable
     {

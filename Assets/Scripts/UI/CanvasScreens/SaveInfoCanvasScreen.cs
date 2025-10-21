@@ -2,7 +2,7 @@ using System.Collections;
 using Core.SaveSystem;
 using UnityEngine;
 
-namespace UI.Canvas
+namespace UI.CanvasScreens
 {
     public class SaveInfoCanvasScreen : CanvasScreen
     {

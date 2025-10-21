@@ -4,7 +4,7 @@ using Core;
 using Transition;
 using UnityEngine;
 
-namespace UI.Canvas
+namespace UI.CanvasScreens
 {
     public abstract class CanvasScreen : MonoBehaviour, IDisposable
     {

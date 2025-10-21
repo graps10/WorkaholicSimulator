@@ -1,9 +1,10 @@
 ﻿using Core;
 using Core.Interfaces;
 using Core.ObjectPool;
+using UI.CanvasReceivers;
 using UnityEngine;
 
-namespace UI
+namespace UI.CanvasCommands
 {
     public abstract class CanvasCommand : PooledGameObject, IUpdatable
     {

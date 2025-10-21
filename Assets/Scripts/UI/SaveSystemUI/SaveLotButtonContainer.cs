@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace UI.Canvas.SaveSystemUI
+namespace UI.SaveSystemUI
 {
     public class SaveLotButtonContainer : MonoBehaviour
     {

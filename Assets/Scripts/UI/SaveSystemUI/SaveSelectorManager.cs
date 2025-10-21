@@ -1,14 +1,15 @@
-using Core;
-using Core.SaveSystem;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Core;
+using Core.SaveSystem;
 using TMPro;
+using UI.CanvasScreens;
 using UnityEngine;
 using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
 
-namespace UI.Canvas.SaveSystemUI
+namespace UI.SaveSystemUI
 {
     public class SaveSelectorManager : CanvasScreen
     {
