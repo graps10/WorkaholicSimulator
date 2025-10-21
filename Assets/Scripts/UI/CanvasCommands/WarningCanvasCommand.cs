@@ -7,7 +7,8 @@ namespace UI.CanvasCommands
 {
     public class WarningCanvasCommand : CanvasCommand
     {
-        public override string CanvasCommandPath => "ScriptableObjects/ObjectPool/UI/CanvasCommands/WarningCanvasCommandPoolInfo";
+        public const string Path = "ScriptableObjects/ObjectPool/UI/CanvasCommands/WarningCanvasCommandPoolInfo";
+        public override string CanvasCommandPath => Path;
 
         [SerializeField] private TextMeshProUGUI warningText;
         [SerializeField] private TextMeshProUGUI warningTimerText;

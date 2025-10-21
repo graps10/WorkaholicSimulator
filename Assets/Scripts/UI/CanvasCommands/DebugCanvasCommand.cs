@@ -6,22 +6,19 @@ namespace UI.CanvasCommands
 {
     public class DebugCanvasCommand : CanvasCommand
     {
-        public override string CanvasCommandPath => "ScriptableObjects/ObjectPool/UI/CanvasCommands/DebugCanvasCommandPoolInfo";
+        public const string Path = "ScriptableObjects/ObjectPool/UI/CanvasCommands/DebugCanvasCommandPoolInfo";
+        public override string CanvasCommandPath => Path;
         
         private Func<string> _valueGetter;
         
         private TextMeshProUGUI _text;
         private float _defaultFontSize;
 
-        public void Setup(Func<string> valueGetter)
-        {
-            _valueGetter = valueGetter;
-        }
+        public void Setup(Func<string> valueGetter) => _valueGetter = valueGetter;
 
         public override void Initialize(CanvasReceiver receiver)
         {
             base.Initialize(receiver);
-            
             _text = GetComponent<TextMeshProUGUI>();
         }
 

@@ -6,7 +6,8 @@ namespace UI.CanvasCommands
 {
     public class CompassArrowCanvasCommand : CanvasCommand
     {
-        public override string CanvasCommandPath => "ScriptableObjects/ObjectPool/UI/CanvasCommands/CompassArrow";
+        public const string Path = "ScriptableObjects/ObjectPool/UI/CanvasCommands/CompassArrow";
+        public override string CanvasCommandPath => Path;
         
         private const float MaxAngleForFullResponse = 30f;
         
