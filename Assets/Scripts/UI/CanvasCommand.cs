@@ -7,10 +7,10 @@ namespace UI
 {
     public abstract class CanvasCommand : PooledGameObject, IUpdatable
     {
-        public static string CanvasCommandPath { get;  private set; } 
+        public abstract string CanvasCommandPath { get; } 
         protected CanvasReceiver Receiver { get; private set; }
 
-        public bool IsDisposed { private set; get; } = false;
+        public bool IsDisposed { private set; get; }
         public virtual bool DisposeBetweenScenes => true;
 
         public virtual void Initialize(CanvasReceiver receiver)
@@ -41,5 +41,4 @@ namespace UI
             ObjectPooler.ReturnPooledObject(this);
         }
     }
-
 }
