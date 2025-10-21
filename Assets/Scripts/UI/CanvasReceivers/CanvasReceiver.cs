@@ -8,7 +8,7 @@ namespace UI.CanvasReceivers
     {
         public abstract GameObject Canvas { get; }
 
-        private readonly List<CanvasCommand> _commands = new List<CanvasCommand>();
+        private readonly List<CanvasCommand> _commands = new();
 
         public void RegisterCanvasCommand(CanvasCommand command)
         {
@@ -30,5 +30,4 @@ namespace UI.CanvasReceivers
 
         public virtual void Dispose() { }
     }
-
 }

@@ -2,12 +2,12 @@
 
 namespace UI.CanvasReceivers
 {
-    public class WarningCanvasReceiver : CanvasReceiver
+    public sealed class PlayerCanvasReceiver : CanvasReceiver
     {
-        public static WarningCanvasReceiver Instance => instance ??= new WarningCanvasReceiver();
+        public static PlayerCanvasReceiver Instance => instance ??= new PlayerCanvasReceiver();
         public override GameObject Canvas => CanvasManager.Instance?.CanvasCommandReceiversLayer?.gameObject;
         
-        private static WarningCanvasReceiver instance;
+        private static PlayerCanvasReceiver instance;
 
         public override void Dispose()
         {
