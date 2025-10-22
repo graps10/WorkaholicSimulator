@@ -32,6 +32,8 @@ namespace Core
             private set => _playerEntityGameObject = value;
         }
         
+        public bool EntityGameObjectIsNull => _playerEntityGameObject == null;
+        
         public event Action OnUpdateEvent;
         public event Action OnFixedUpdateEvent;
         
@@ -81,7 +83,7 @@ namespace Core
             }
         }
 
-        private void SpawnCamera() 
+        private static void SpawnCamera() 
             => CameraManager.SetCameraBySceneIndex(GameObject.Find("Cameras").transform);
         
         private bool InitializeGameObject()
@@ -102,7 +104,7 @@ namespace Core
         {
             SaveManager.LoadProgress();
 
-            if (PlayerEntityGameObject == null)
+            if (EntityGameObjectIsNull)
             {
                 Debug.LogWarning("PlayerEntityGameObject is null, delaying ApplyLoadedProgress until entity is created.");
                 return; 
@@ -138,7 +140,7 @@ namespace Core
         
         private void LoadOnPlayerPosition()
         {
-            if (PlayerEntityGameObject != null) 
+            if (!EntityGameObjectIsNull) 
                 RegionManager.LoadLocationOnPosition(Instance.PlayerEntityGameObject.transform.position);
         }
         

@@ -3,7 +3,7 @@
     public enum UnityScenes
     {
         mainMenu = 0,
-        testRegion = 1,
-        developerOnlyScene = 2
+        developerOnlyScene = 1,
+        testRegion = 2
     }
 }

@@ -10,7 +10,7 @@ namespace UI.Popup
 {
     public class ChoicePopup : PopupController, IPopupWithBgPanel, IPopupWithMainText, IPopupWithCloseButton
     {
-        protected override string ScriptablePoolInfoPath => "ScriptableObjects/ObjectPool/UI/ChoicePopupPoolInfo";
+        private const string Scriptable_Pool_Info_Path = "ScriptableObjects/ObjectPool/UI/ChoicePopupPoolInfo";
         
         [SerializeField] private Transform buttonsContainerTransform;
         [SerializeField] private PrefabPoolInfo buttonPrefabPoolInfo;
@@ -20,12 +20,11 @@ namespace UI.Popup
         public CustomButtonController CloseButton {get; set;}
         
         private List<CustomButtonController> myButtons = new();
-
         
-        public void Create(string text, CustomButtonController.ButtonMold[] buttonMolds, Vector2Int? overrideSize = null, Transform parent = null)
+        public static void Create(string text, CustomButtonController.ButtonMold[] buttonMolds, Vector2Int? overrideSize = null, Transform parent = null)
         {
-            AssetUtils.TryLoadAsset(ScriptablePoolInfoPath, out popupPrefabPoolInfo);
-            var popup = ObjectPooler.TakePooledGameObject(popupPrefabPoolInfo, parent).GetComponent<ChoicePopup>();
+            AssetUtils.TryLoadAsset(Scriptable_Pool_Info_Path, out PopupPrefabPoolInfo);
+            var popup = ObjectPooler.TakePooledGameObject(PopupPrefabPoolInfo, parent).GetComponent<ChoicePopup>();
             
             var popupRect = popup.transform as RectTransform;
             if (popupRect == null)

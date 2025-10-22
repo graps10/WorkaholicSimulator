@@ -6,9 +6,7 @@ namespace UI.Popup
 {
     public abstract class PopupController : PooledGameObject
     {
-        protected abstract string ScriptablePoolInfoPath { get; }
-        
-        protected static PrefabPoolInfo popupPrefabPoolInfo;
+        protected static PrefabPoolInfo PopupPrefabPoolInfo;
             
         [SerializeField] protected Vector2Int defaultPopupSize;
         

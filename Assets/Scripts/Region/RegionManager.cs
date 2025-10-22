@@ -79,7 +79,7 @@ namespace Region
 
         public static void UpdatePlayerPositionWithRepositionDelay()
         {
-            if (Player.Instance.PlayerEntityGameObject == null)
+            if (Player.Instance.EntityGameObjectIsNull)
                 return;
 
             var playerPosition = Player.Instance.PlayerEntityGameObject.transform.position;

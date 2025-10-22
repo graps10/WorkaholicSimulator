@@ -12,4 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0662f1fff191d644dbe6bb9c5c5a0e4a, type: 3}
   m_Name: SoundCollection
   m_EditorClassIdentifier: 
-  sounds: []
+  sounds:
+  - tag: buttonClick
+    clips:
+    - {fileID: 8300000, guid: 79dc6fe80fe35a74789799442f8905c6, type: 3}
+    compressionPreset: 0
+    forceToMono: 0
+    isPitchShiftEnabled: 0

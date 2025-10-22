@@ -12,31 +12,27 @@ namespace UI.Popup
 {
     public class InfoPopup : PopupController, IPopupWithBgPanel, IPopupWithMainText, IPopupWithCloseButton
     {
-        protected override string ScriptablePoolInfoPath => "ScriptableObjects/ObjectPool/UI/InfoPopupPoolInfo";
+        private const string ScriptablePoolInfoPath = "ScriptableObjects/ObjectPool/UI/InfoPopupPoolInfo";
         
         public Image PanelBg { get;  set; }
         public TextMeshProUGUI MainText { get; set; }
         public CustomButtonController CloseButton {get; set;}
 
-        private void OnEnable()
-        {
-            SceneManager.OnAfterEnterAnimationEnded_ActionList += ReturnToPool;
-        }
+        private void OnEnable() 
+            => SceneManager.OnAfterEnterAnimationEnded_ActionList += ReturnToPool;
 
-        private void OnDisable()
-        {
-            SceneManager.OnAfterEnterAnimationEnded_ActionList -= ReturnToPool;
-        }
+        private void OnDisable() 
+            => SceneManager.OnAfterEnterAnimationEnded_ActionList -= ReturnToPool;
 
-        public InfoPopup Create(string text, Action onClose = null, Vector2Int? overrideSize = null, 
+        public static InfoPopup Create(string text, Action onClose = null, Vector2Int? overrideSize = null, 
             PopupAnchor anchor = PopupAnchor.TopRight, float displayTime = 6, float offset = 50)
         {
             if (CanvasManager.Instance == null)
                 return null;
             
             var parent = CanvasManager.Instance.PopupCanvas;
-            AssetUtils.TryLoadAsset(ScriptablePoolInfoPath, out popupPrefabPoolInfo);
-            var popup = ObjectPooler.TakePooledGameObject(popupPrefabPoolInfo, parent).GetComponent<InfoPopup>();
+            AssetUtils.TryLoadAsset(ScriptablePoolInfoPath, out PopupPrefabPoolInfo);
+            var popup = ObjectPooler.TakePooledGameObject(PopupPrefabPoolInfo, parent).GetComponent<InfoPopup>();
             
             var popupRect = popup.transform as RectTransform;
             if (popupRect == null)

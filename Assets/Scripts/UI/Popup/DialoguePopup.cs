@@ -11,7 +11,7 @@ namespace UI.Popup
 {
     public class DialoguePopup : PopupController, IPopupWithBgPanel, IPopupWithMainText
     {
-        protected override string ScriptablePoolInfoPath => "ScriptableObjects/ObjectPool/UI/DialoguePopupPoolInfo";
+        private const string Scriptable_Pool_Info_Path = "ScriptableObjects/ObjectPool/UI/DialoguePopupPoolInfo";
 
         [SerializeField] private Button yesButton, noButton;
         
@@ -21,12 +21,11 @@ namespace UI.Popup
         private Action _cancelAction;
         private Action _confirmAction;
         
-        
-        public void Create(string text = "Are you sure?", Action confirmAction = null, Action cancelAction = null, 
+        public static void Create(string text = "Are you sure?", Action confirmAction = null, Action cancelAction = null, 
             Vector2Int? overrideSize = null, Transform parent = null)
         {
-            AssetUtils.TryLoadAsset(ScriptablePoolInfoPath, out popupPrefabPoolInfo);
-            var popup = ObjectPooler.TakePooledGameObject(popupPrefabPoolInfo, parent).GetComponent<DialoguePopup>();
+            AssetUtils.TryLoadAsset(Scriptable_Pool_Info_Path, out PopupPrefabPoolInfo);
+            var popup = ObjectPooler.TakePooledGameObject(PopupPrefabPoolInfo, parent).GetComponent<DialoguePopup>();
             
             var popupRect = popup.transform as RectTransform;
             if (popupRect == null)

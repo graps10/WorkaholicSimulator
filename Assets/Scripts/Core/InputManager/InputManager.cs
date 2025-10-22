@@ -58,7 +58,7 @@ namespace Core.InputManager
 	        if(Player.Instance == null || SceneManager.IsChangingPlaymode || !Application.isPlaying)
 		        Dispose();
 	        
-	        if(Player.Instance.PlayerEntityGameObject == null) 
+	        if(Player.Instance.EntityGameObjectIsNull) 
 		        return;
 
             VerticalAxis();

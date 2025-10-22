@@ -11,7 +11,7 @@ namespace Region
         {
             get
             {
-                if (Player.Instance == null || Player.Instance.PlayerEntityGameObject) 
+                if (Player.Instance == null || Player.Instance.EntityGameObjectIsNull) 
                     return Vector3.zero;
                 
                 return Player.Instance.PlayerEntityGameObject.transform.position;
@@ -20,7 +20,7 @@ namespace Region
 
         public static void FindCurrentPlayerLocation()
         {
-            if(Player.Instance == null || Player.Instance.PlayerEntityGameObject)
+            if(Player.Instance == null || Player.Instance.EntityGameObjectIsNull)
                 return;
             
             RegionManager.UpdateVisibleLocations(GetVisibleLocations());
