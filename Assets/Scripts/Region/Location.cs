@@ -311,13 +311,14 @@ namespace Region
         
         private void LoadEntitiesFromPresets()
         {
-            /*foreach (var entityPreset in entityPresets)
+            foreach (var entityPreset in entityPresets)
             {
-                entityPreset.SetSpawnOptions(true);
+                entityPreset.SetSpawnOptions();
                 this.CreateEntitiesAsync(entityPreset);
             }
 
-            AddSectorSwitchLogicEvent(SwitchLogic);*/
+            Debug.Log("LoadEntities from presets");
+            AddSectorSwitchLogicEvent(SwitchLogic);
         }
 
         private void AddSectorSwitchLogicEvent(Action<bool> action)

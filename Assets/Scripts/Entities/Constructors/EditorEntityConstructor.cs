@@ -159,7 +159,6 @@ namespace Entities.Constructors
             {
                 editorGameObjects = new();
                 _createdElements.Add(location, editorGameObjects);
-                Debug.Log(_createdElements.Count);
             }
 
             if (!editorGameObjects.Contains(gameObject))
