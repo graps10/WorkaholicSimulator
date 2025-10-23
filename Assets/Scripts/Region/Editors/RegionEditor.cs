@@ -99,7 +99,7 @@ namespace Region.Editors
             if(region.GetSectors() == null)
                 region.InitializeNewSectorsList();
             
-            region.GetSectors().Add(sector);
+            region.AddSector(sector);
             sector.CalculateBounds();
         }
 

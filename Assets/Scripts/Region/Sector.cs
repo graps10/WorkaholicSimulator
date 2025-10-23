@@ -12,6 +12,7 @@ namespace Region
         [HideInInspector][SerializeField] internal UnityEvent onEnter;
         [HideInInspector][SerializeField] internal UnityEvent onExit;
         [HideInInspector] [SerializeField] private bool showSector;
+        [HideInInspector] [SerializeField] protected List<Location> locations;
         
         public bool ShowSector 
         { 
@@ -19,15 +20,13 @@ namespace Region
             set 
             { 
                 showSector = value; 
-                #if UNITY_EDITOR
+#if UNITY_EDITOR
                 ToggleDisplayBounds(value); 
-                #endif
+#endif
             } 
         }
 
         public Region MyRegion { get; private set; }
-        
-        protected List<Location> locations;
         
         protected override string MaterialPath => "Assets/Materials/EditorLocationBounds/SectorMaterial.mat";
         
@@ -62,11 +61,9 @@ namespace Region
         }
         
         public List<Location> GetLocations() => locations;
+        public void AddLocation(Location location) => locations.Add(location);
 
-        public void InitializeNewLocationsList()
-        {
-            locations = new List<Location>();
-        }
+        public void InitializeNewLocationsList() => locations ??= new List<Location>();
 
         protected internal override void Load()
         {
@@ -157,15 +154,12 @@ namespace Region
         }
         
 #if UNITY_EDITOR
-        
         protected override void ReloadForEditor()
         {
             CreateEnvironmentParent();
-            
-            locations ??= new List<Location>();
+            InitializeNewLocationsList();
             CalculateBounds();
         }
-        
 #endif
     }
 }

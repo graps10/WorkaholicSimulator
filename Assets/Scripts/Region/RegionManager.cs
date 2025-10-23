@@ -91,7 +91,6 @@ namespace Region
             UpdateCurrentLocation(currentSectors,newSectors);
             UpdateCurrentLocation(currentLocations, newLocations);
 
-
             timeSinceLastPlayerPositionSave += Time.deltaTime;
 
             if (timeSinceLastPlayerPositionSave < TimeForReposition)
@@ -124,15 +123,10 @@ namespace Region
                 currentSector.SwitchGraphics(true);
             }
             else
-            {
-                Debug.LogWarning("Sector not found");
-            }
+            	Debug.LogWarning("Sector not found");
         }
 
-        public static bool IsPlayerInLocation(Location location)
-        {
-            return currentLocations.Contains(location);
-        }
+        public static bool IsPlayerInLocation(Location location) => currentLocations.Contains(location);
 
         public static void DebugPlayerPosition() => Debug.Log($"Region: {currentRegion}, Sector: {currentSectors[0]}");
     }

@@ -105,7 +105,7 @@ namespace Region.Editors
 	    
 	    private void AddNewLocation()
 	    {
-		    GameObject newLocationObject = new GameObject("New Location " + (_sector.GetLocations() == null ? 0 :_sector.GetLocations().Count + 1));
+		    GameObject newLocationObject = new GameObject("New Location " + (_sector.GetLocations() == null ? 0 : _sector.GetLocations().Count + 1));
 		    Undo.RegisterCreatedObjectUndo(newLocationObject, "Add New Location");
 		    newLocationObject.transform.SetParent(_sector.transform);
 			Location newLocation = newLocationObject.AddComponent<Location>();
@@ -114,7 +114,7 @@ namespace Region.Editors
 			if(_sector.GetLocations() == null)
 				_sector.InitializeNewLocationsList();
 		    
-		    _sector.GetLocations().Add(newLocation);
+		    _sector.AddLocation(newLocation);
 		    
 		    newLocation.CalculateBounds();
 	    }

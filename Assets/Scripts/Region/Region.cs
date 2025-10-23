@@ -9,8 +9,9 @@ namespace Region
     public class Region : Sector
     {
         [HideInInspector] [SerializeField] private bool showRegion;
+        [HideInInspector] [SerializeField] private List <Sector> sectors;
+        
         [field: SerializeField] public int Level { get; private set; }
-
         public bool ShowRegion
         { 
             get => showRegion;
@@ -22,8 +23,6 @@ namespace Region
 #endif
             }
         }
-        
-        private List <Sector> _sectors;
 
         private void AddToRegionManager() => RegionManager.AddToRegions(this);
 
@@ -55,7 +54,7 @@ namespace Region
 
             Bounds = MeshUtils.TransformBounds(locationBounds.GetMeshFilter().sharedMesh.bounds, transform);
 
-            foreach (var sector in _sectors)
+            foreach (var sector in sectors)
             {
                 sector.SetRegion(this);
                 sector.Initialize();
@@ -64,26 +63,24 @@ namespace Region
 
         public override void Exit()
         {
-            foreach (var sector in _sectors)
+            foreach (var sector in sectors)
                 sector.Dispose();
             
             onExit?.Invoke();
         }
         
-        public List<Sector> GetSectors() => _sectors;
+        public List<Sector> GetSectors() => sectors;
+        public void AddSector(Sector sector) => sectors.Add(sector);
 
-        public void InitializeNewSectorsList()
-        {
-            _sectors = new List<Sector>();
-        }
+        public void InitializeNewSectorsList() => sectors ??= new List<Sector>();
 
         public override List<Bounds> GetAllBounds()
         {
             List <Bounds> collectedLocationBounds = new();
             
-            if (_sectors == null) return collectedLocationBounds;
+            if (sectors == null) return collectedLocationBounds;
             
-            foreach (var item in _sectors)
+            foreach (var item in sectors)
                 collectedLocationBounds.Add(item.Bounds);
 
             return collectedLocationBounds;
@@ -91,8 +88,8 @@ namespace Region
 
         public override void CalculateBounds(bool displayBounds = true)
         {
-            if (_sectors != null)
-                foreach (Sector sector in _sectors)
+            if (sectors != null)
+                foreach (Sector sector in sectors)
                     sector.CalculateBounds(displayBounds);
 
 #if UNITY_EDITOR
@@ -105,6 +102,7 @@ namespace Region
             locationBounds.CreateMeshBounds();
 
             Bounds = MeshUtils.TransformBounds(locationBounds.GetMeshFilter().sharedMesh.bounds, transform);
+
 #if UNITY_EDITOR
             ToggleDisplayBounds(displayBounds);
 #endif
@@ -115,8 +113,7 @@ namespace Region
         protected override void ReloadForEditor()
         {
             CreateEnvironmentParent();
-            
-            _sectors ??= new List <Sector>();
+            InitializeNewSectorsList();
             CalculateBounds();
         }
 #endif

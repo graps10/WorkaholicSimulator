@@ -165,7 +165,8 @@ namespace Core
             if (cameraAndCanvasInitialized) return;
             canvasManager = FindObjectOfType<CanvasManager>();
 
-            if (canvasManager == null) Debug.LogError("CanvasManager not found in the scene. Please add it to the scene.");
+            if (canvasManager == null) 
+                Debug.LogError("CanvasManager not found in the scene. Please add it to the scene.");
 
             OnSceneChangeTriggered_BeforeAnimation_Event += CameraManager.Initialize;
             cameraAndCanvasInitialized = true;
