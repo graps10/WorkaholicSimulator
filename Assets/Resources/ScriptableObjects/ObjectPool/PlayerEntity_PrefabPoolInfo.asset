@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: PlayerEntity_PrefabPoolInfo
   m_EditorClassIdentifier: 
   <PoolName>k__BackingField: PlayerEntity
-  <ObjectPath>k__BackingField: Prefabs/Player
+  <ObjectPath>k__BackingField: Prefabs/Entities/PlayerEntity
   <DefaultAmount>k__BackingField: 2
   <MaxAmountMultiplier>k__BackingField: 4

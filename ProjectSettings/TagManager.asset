@@ -8,17 +8,17 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Environment
   - Water
   - UI
-  - 
-  - Environment
-  - 
-  - 
-  - 
-  - 
-  - 
   - Bounds
+  - PlayerTrigger
+  - EntityPlayer
+  - EntityNeutral
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 
