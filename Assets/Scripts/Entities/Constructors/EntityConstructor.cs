@@ -14,6 +14,9 @@ namespace Entities.Constructors
 
             switch (entityMold)
             {
+                case PlayerMold playerMold:
+                    pooledObject = LoadPlayer(playerMold, parentToSet);
+                    break;
                 default:
                     pooledObject = LoadEntity(entityMold, parentToSet);
                     break;
@@ -31,11 +34,21 @@ namespace Entities.Constructors
         public Entity LoadEntity(Mold mold, Transform parentToSet)
         {
             var pooledObject = TakeFromPool(mold.PrefabPoolInfo, parentToSet);
-            var artor = pooledObject.GetComponent<Entity>();
+            var entity = pooledObject.GetComponent<Entity>();
 
-            artor.LoadEntity(mold);
+            entity.LoadEntity(mold);
 
-            return artor;
+            return entity;
+        }
+        
+        public Entity LoadPlayer(PlayerMold mold, Transform parentToSet)
+        {
+            var pooledObject = TakeFromPool(mold.PrefabPoolInfo, parentToSet);
+            var playerEntity = pooledObject.GetComponent<PlayerEntity>();
+
+            playerEntity.LoadEntity(mold);
+
+            return playerEntity;
         }
     }
 }

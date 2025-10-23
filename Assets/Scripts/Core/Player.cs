@@ -144,14 +144,14 @@ namespace Core
                 RegionManager.LoadLocationOnPosition(Instance.PlayerEntityGameObject.transform.position);
         }
         
-        private void RemoveAllRegions() => RegionManager.Regions.Clear();
+        private static void RemoveAllRegions() => RegionManager.Regions.Clear();
 
         #region Update and FixedUpdate
 
         private void Update()
         {
             OnUpdateEvent?.Invoke();
-
+            
             foreach (var updatable in _updatableList)
                 updatable.OnUpdate();
         }

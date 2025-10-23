@@ -6,6 +6,9 @@ namespace Region
 {
     public static class RegionManager
     {
+        private const float TimeForReposition = 3f;
+        private const float LocationHidingDelay = 8f;
+        
         public static List<Region> Regions { get; private set; } = new();
         
         private static Region currentRegion;
@@ -13,9 +16,6 @@ namespace Region
         private static List<Location> currentLocations = new();
         private static List<Location> visibleLocations = new();
         
-        private const float TimeForReposition = 3f;
-        private const float LocationHidingDelay = 8f;
-
         private static Vector3 lastSavedSafePlayerPosition;
         private static float timeSinceLastPlayerPositionSave;
         
@@ -97,9 +97,7 @@ namespace Region
                 return;
 
             if (currentSectors.Count > 0)
-            {
                 lastSavedSafePlayerPosition = playerPosition;
-            }
             else
             {
                 Player.Instance.PlayerEntityGameObject.transform.position = lastSavedSafePlayerPosition;
