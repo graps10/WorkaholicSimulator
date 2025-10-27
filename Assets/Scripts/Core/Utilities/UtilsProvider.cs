@@ -7,6 +7,7 @@ using Object = UnityEngine.Object;
 using System.Text;
 using Core.Enums;
 using Entities;
+using MelenitasDev.SoundsGood;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -245,6 +246,14 @@ namespace Core.Utilities
             } while (searchComponent == null || currentDepth == depth);
 
             return searchComponent;
+        }
+        
+        public static void PlayFromCamera(this Sound sound)
+        {
+            if (Camera.main == null) return;
+
+            sound.SetPosition(Camera.main.transform.position + Camera.main.transform.forward);
+            sound.Play();
         }
     }
 

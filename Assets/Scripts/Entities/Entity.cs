@@ -13,6 +13,7 @@ namespace Entities
         [SerializeField] protected UnityEvent OnEnableLogic;
         [SerializeField] protected UnityEvent OnDisableLogic;
         [SerializeField] protected Renderer[] renderers;
+        [SerializeField] protected Rigidbody controllerRigidBody;
 
         public UnityEvent OnExternalActivation;
         public UnityEvent OnExternalDeactivation;
@@ -49,6 +50,8 @@ namespace Entities
             foreach (var rendererComponent in renderers)
                 rendererComponent.enabled = stateToSet;
         }
+        
+        public Rigidbody GetRigidbody() => controllerRigidBody;
         
         public override void ReturnToPool() // Unload entity into basic assets
         {
