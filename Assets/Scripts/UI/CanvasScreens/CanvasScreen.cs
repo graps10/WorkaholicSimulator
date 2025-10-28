@@ -13,7 +13,7 @@ namespace UI.CanvasScreens
         
         private static List<CanvasScreen> existingCanvasScreens = new();
         
-        [SerializeField] protected UnityEngine.Canvas canvasReference;
+        [SerializeField] protected Canvas canvasReference;
         
         protected bool IsInitialized;
         

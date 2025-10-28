@@ -1,10 +1,8 @@
 ﻿using System;
 using Core;
 using Core.Enums;
-using Core.SaveSystem;
 using Transition;
 using UI.Popup;
-using UI.SaveSystemUI;
 using UnityEngine;
 
 namespace UI.CanvasScreens
@@ -70,9 +68,9 @@ namespace UI.CanvasScreens
 #else
             playDevSceneButton.gameObject.SetActive(false);
 #endif
-            
-            /*if(settingsButton != null)
-                settingsButton.onClick.AddListener(() =>TrySwitchActiveScreenByType<MainSettingsCanvasScreen>());*/
+
+            if (settingsButton != null)
+                settingsButton.onClick.AddListener(() => TrySwitchActiveScreenByType<MainSettingsCanvasScreen>());
             
             if(exitButton != null)
                 exitButton.onClick.AddListener(CreateExitPopup);
@@ -88,7 +86,6 @@ namespace UI.CanvasScreens
             
             if(testRegionButton != null)
                 testRegionButton.onClick.RemoveAllListeners();
-            
             
             if(settingsButton != null)
                 settingsButton.onClick.RemoveAllListeners();
