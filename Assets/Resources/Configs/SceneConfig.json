@@ -4,7 +4,10 @@
       "SceneName": "MainMenu",
       "SceneIndex": 0,
       "PrefabCanvasScreensPath": [
-        "Prefabs/UI/ScreenLayersPrefab/MainMenuCanvas"
+        "Prefabs/UI/ScreenLayersPrefab/MainMenuCanvas",
+        "Prefabs/UI/ScreenLayersPrefab/MainSettingsCanvas",
+        "Prefabs/UI/SaveSystemUI/SaveSelectorManager",
+        "Prefabs/UI/SaveSystemUI/SaveInfoCanvasScreen"
       ],
       "CameraPath": "Cameras/MainMenuCamera"
     },
