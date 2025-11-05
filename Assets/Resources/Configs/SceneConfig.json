@@ -15,6 +15,7 @@
       "SceneName": "DevOnlyScene",
       "SceneIndex": 1,
       "PrefabCanvasScreensPath": [
+        "Prefabs/UI/SaveSystemUI/SaveInfoCanvasScreen"
       ],
       "CameraPath": "Cameras/GameplayCameraController"
     },
@@ -22,6 +23,7 @@
       "SceneName": "TestRegion",
       "SceneIndex": 2,
       "PrefabCanvasScreensPath": [
+        "Prefabs/UI/SaveSystemUI/SaveInfoCanvasScreen"
       ],
       "CameraPath": "Cameras/GameplayCameraController"
     }

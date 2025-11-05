@@ -61,14 +61,14 @@ namespace Core.InputManager
 	        if(Player.Instance.EntityGameObjectIsNull) 
 		        return;
 
-            VerticalAxis();
+            /*VerticalAxis();
             HorizontalAxis();
 
 			if (stopAlternativeUse.IsPressed())
 				OnStopOrAlternativeUse?.Invoke();
 
 			if (useStop.IsPressed())
-				OnUseStop?.Invoke();
+				OnUseStop?.Invoke();*/
 		}
         
 		private static void HorizontalAxis()

@@ -122,6 +122,7 @@ namespace Core
                 Debug.Log($"PlayerActor upgrades after applying: {JsonUtility.ToJson(playerEntity.GetLevelUpgrades())}");*/
         }
         
+        [ContextMenu("Try find player")]
         private void TryFindPlayerEntity()
         {
             if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 0 || SceneManager.IsChangingPlaymode)
