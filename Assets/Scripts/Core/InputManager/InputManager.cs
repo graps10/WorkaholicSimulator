@@ -21,7 +21,7 @@ namespace Core.InputManager
         public static event ButtonDelegate OnStopOrAlternativeUse, OnUseStop;
         public static event AxisDelegate OnHorizontalAxis, OnVerticalAxis;
 		
-		private static float mouseSensitivity = 1;
+		private static float mouseSensitivity = 1f;
 		private static bool isControledByMouse;
 		
 		public static event Action<InputDeviceType> OnInputDeviceChanged;
@@ -30,8 +30,12 @@ namespace Core.InputManager
         {
             inputActions = new();
             inputActions.Enable();
+            ChangeControlsToMain();
 
 			Player.Instance.OnUpdateEvent += OnUpdate;
+			
+			horizontalAxis.performed += CheckDevice;
+			verticalAxis.performed += CheckDevice;
         }
 
         private static void CheckDevice(InputAction.CallbackContext context)
@@ -40,7 +44,6 @@ namespace Core.InputManager
 	        var newDevice = currentDevice switch
             {
 	            Keyboard or Mouse => InputDeviceType.Keyboard,
-	            Touchscreen => InputDeviceType.Gamepad,//ToDo: work with touch screens
 	            _ => InputDeviceType.Gamepad
             };
 
@@ -61,14 +64,8 @@ namespace Core.InputManager
 	        if(Player.Instance.EntityGameObjectIsNull) 
 		        return;
 
-            /*VerticalAxis();
+            VerticalAxis();
             HorizontalAxis();
-
-			if (stopAlternativeUse.IsPressed())
-				OnStopOrAlternativeUse?.Invoke();
-
-			if (useStop.IsPressed())
-				OnUseStop?.Invoke();*/
 		}
         
 		private static void HorizontalAxis()
@@ -83,9 +80,11 @@ namespace Core.InputManager
 				// Extra check for better safety
 				horizontalInput = Mathf.Clamp(horizontalInput, -1f, 1f);
 			}
-			
+
+			Debug.Log(horizontalInput);
             OnHorizontalAxis?.Invoke(horizontalInput);
         }
+		
 		private static void VerticalAxis()
 		{
 			float verticalInput = 0f;
@@ -94,8 +93,16 @@ namespace Core.InputManager
 				verticalInput = verticalAxis.ReadValue<float>();
 
 			verticalInput = Mathf.Clamp(verticalInput, -1f, 1f);
+			Debug.Log(verticalInput);
 			OnVerticalAxis?.Invoke(verticalInput);
         }
+		
+		private static void ChangeControlsToMain()
+		{
+			horizontalAxis = inputActions.MainControls.MovementHorizontal;
+			verticalAxis = inputActions.MainControls.MovementVertical;
+			pauseCancel = inputActions.MainControls.Pause;
+		}
 
 		private static void Dispose()
         {
