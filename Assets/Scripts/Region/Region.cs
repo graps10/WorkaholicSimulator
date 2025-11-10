@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Core;
+using Core.PlayerSystem;
 using Core.Utilities;
 using Region.BoundsInEditor;
 using UnityEngine;

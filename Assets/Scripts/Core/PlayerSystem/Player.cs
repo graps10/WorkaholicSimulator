@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Components;
 using Core.Enums;
+using Core.InputSystem;
 using Core.Interfaces;
 using Core.ObjectPool;
 using Core.SaveSystem;
@@ -12,7 +13,7 @@ using Region;
 using Transition;
 using UnityEngine;
 
-namespace Core
+namespace Core.PlayerSystem
 {
     public sealed class Player : MonoBehaviour
     {
@@ -63,7 +64,7 @@ namespace Core
             SceneManager.AlwaysOnAfterNewSceneLoaded_ActionList += SpawnCamera;
             SceneManager.OnAfterEnterAnimationEnded_ActionList += LoadOnPlayerPosition;
 
-            InputManager.InputManager.Initialize();
+            InputManager.Initialize();
 
             OnUpdateEvent += RegionCoordinator.FindCurrentPlayerLocation;
             OnUpdateEvent += RegionManager.UpdatePlayerPositionWithRepositionDelay;

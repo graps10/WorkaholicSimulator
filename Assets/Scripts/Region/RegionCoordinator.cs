@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Components;
 using Core;
+using Core.PlayerSystem;
 using UnityEngine;
 
 namespace Region

@@ -1,7 +1,8 @@
 ﻿using System;
 using Core;
-using Core.InputManager;
+using Core.InputSystem;
 using Core.Interfaces;
+using Core.PlayerSystem;
 using Core.Utilities;
 using DG.Tweening;
 using UnityEngine;

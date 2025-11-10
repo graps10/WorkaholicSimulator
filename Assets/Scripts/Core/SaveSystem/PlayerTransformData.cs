@@ -1,6 +1,7 @@
 ﻿using Core.Extensions;
 using System;
 using System.Collections.Generic;
+using Core.PlayerSystem;
 using UnityEngine;
 
 namespace Core.SaveSystem

@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Entities
 {
-    public class GrabbableEntity: Entity, IGrabbable
+    public class GrabbableEntity: RigidbodyEntity, IGrabbable
     {
         protected const float TORQUE_FOR_PLACEMENT_IN_SOCKET = 0.5f;
         
@@ -111,7 +111,7 @@ namespace Entities
         {
             EnablePhysics(false);
 
-            Entity entity = socket.GetComponentInParent<Entity>();
+            RigidbodyEntity entity = socket.GetComponentInParent<RigidbodyEntity>();
 
             if (entity == null)
                 return;

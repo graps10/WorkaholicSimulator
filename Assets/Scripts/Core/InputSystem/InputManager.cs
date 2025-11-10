@@ -1,8 +1,9 @@
 ﻿using System;
+using Core.PlayerSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Core.InputManager
+namespace Core.InputSystem
 {
     public enum InputDeviceType { Keyboard, Gamepad }
 
@@ -71,17 +72,11 @@ namespace Core.InputManager
 		private static void HorizontalAxis()
 		{
 			float horizontalInput = 0f;
-			var mouseDeltaX = Mouse.current.delta.x.ReadValue();
-			if (Mathf.Abs(mouseDeltaX) > 0.1f)
-			{
-				// We scale down the delta to fit into range of -1 to 1
-				horizontalInput = (2f / Mathf.PI) * Mathf.Atan(mouseDeltaX) * mouseSensitivity;
 
-				// Extra check for better safety
-				horizontalInput = Mathf.Clamp(horizontalInput, -1f, 1f);
-			}
-
-			Debug.Log(horizontalInput);
+			if (horizontalAxis.ReadValue<float>() != 0)
+				horizontalInput = horizontalAxis.ReadValue<float>();
+			
+			horizontalInput = Mathf.Clamp(horizontalInput, -1f, 1f);
             OnHorizontalAxis?.Invoke(horizontalInput);
         }
 		
@@ -93,7 +88,6 @@ namespace Core.InputManager
 				verticalInput = verticalAxis.ReadValue<float>();
 
 			verticalInput = Mathf.Clamp(verticalInput, -1f, 1f);
-			Debug.Log(verticalInput);
 			OnVerticalAxis?.Invoke(verticalInput);
         }
 		
