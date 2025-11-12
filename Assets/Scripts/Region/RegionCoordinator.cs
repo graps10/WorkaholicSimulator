@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using Components;
-using Core;
+using Components.CameraSystem;
 using Core.PlayerSystem;
 using UnityEngine;
 

@@ -1,7 +1,7 @@
 ﻿using Core.Utilities;
 using System;
 using System.Collections.Generic;
-using Components;
+using Components.CameraSystem;
 using Core.SaveSystem;
 using Entities.Constructors;
 using Transition;
@@ -11,7 +11,6 @@ using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-
 
 namespace Core
 {

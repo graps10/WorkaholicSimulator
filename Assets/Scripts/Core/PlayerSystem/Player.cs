@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Components;
+using Components.CameraSystem;
 using Core.Enums;
 using Core.InputSystem;
 using Core.Interfaces;

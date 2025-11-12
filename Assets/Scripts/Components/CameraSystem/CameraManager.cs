@@ -2,11 +2,11 @@
 using Core.Utilities;
 using UnityEngine;
 
-namespace Components
+namespace Components.CameraSystem
 {
     public static class CameraManager
     {
-        private static Camera mainCamera;
+        private static UnityEngine.Camera mainCamera;
         private static string currentCameraPath;
 
         private static SceneConfig currentSceneConfig;
@@ -65,7 +65,7 @@ namespace Components
         private static void DestroyAllChildCameras(Transform transform)
         {
             foreach (Transform child in transform)
-                if (child.GetComponent<Camera>() != null)
+                if (child.GetComponent<UnityEngine.Camera>() != null)
                     Object.Destroy(child.gameObject);
             
             mainCamera = null;
@@ -73,7 +73,7 @@ namespace Components
 
 
         private static void SpawnCameraByPath(string path, Transform transform) 
-            => mainCamera = UtilsProvider.SearchComponentInObject<Camera>(
+            => mainCamera = UtilsProvider.SearchComponentInObject<UnityEngine.Camera>(
                 UtilsProvider.LoadAndInstantiate(path, transform.position, null, transform)
             );
     }
