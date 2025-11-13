@@ -5,64 +5,61 @@ namespace Components.CameraSystem
 {
     public class GameplayCameraController : MonoBehaviour
     {
-        [Header("Global Position")]
+        private const float Set_Target_Delay = 1f;
+            
+        [Header("Position")]
         [SerializeField] private Transform cameraPositionParent;
         [SerializeField] private CameraPositionSettings positionSettings;
 
-        [Header("Height")]
-        [SerializeField] private Transform heightParent;
-        [SerializeField] private CameraHeightSettings heightSettings;
-
-        [Header("Tilt")]
-        [SerializeField] private Transform xRotationParent;
-        [SerializeField] private Transform yRotationParent;
-        [SerializeField] private Transform zRotationParent;
-        [SerializeField] private CameraTiltSettings tiltSettings;
+        [Header("Rotation")]
+        [SerializeField] private Transform cameraRotationParent;
+        [SerializeField] private CameraRotationSettings rotationSettings;
 
         [Space]
         [Header("Camera Reference")]
-        [SerializeField] private UnityEngine.Camera mainCamera;
-
+        [SerializeField] private Camera mainCamera;
         [SerializeField] private Transform targetEntity;
         
         private CameraPosition _position;
-        private CameraHeight _height;
-        private CameraTilt _tilt;
+        private CameraRotation _rotation;
 
         private void Start()
         {
             _position = new CameraPosition();
-            _height = new CameraHeight();
-            _tilt = new CameraTilt();
+            _rotation = new CameraRotation();
             
             _position.Initialize(cameraPositionParent, positionSettings);
-            _height.Initialize(heightParent, heightSettings);
-            _tilt.Initialize(xRotationParent, yRotationParent, zRotationParent, tiltSettings);
+            _rotation.Initialize(cameraRotationParent, rotationSettings);
 
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            
             Core.Utilities.UtilsProvider.WaitAndRun(() =>
             {
                 SetTarget(Player.Instance.PlayerEntityGameObject.transform);
-            }, true, 0.1f);
+            }, true, Set_Target_Delay);
         }
 
         private void LateUpdate()
         {
             if (targetEntity == null) return;
 
-            UpdatePosition();
+            _position.OnLateUpdate();
+            _rotation.OnLateUpdate();
         }
 
         public void SetTarget(Transform targetToSet)
         {
             targetEntity = targetToSet;
+            
             _position.SetTarget(targetToSet);
-        }
-        
-        private void UpdatePosition()
-        {
-            _position.SetCameraPosition();
-            _height.SetCameraPosition();
-            _tilt.SetCameraPosition();
+            _rotation.SetTarget(targetToSet);
+            
+            var inputHandler = targetToSet.GetComponent<PlayerInputHandler>();
+            if (inputHandler != null)
+                _rotation.SetInputGetter(() => inputHandler.LookInput);
+            else
+                Debug.LogWarning($"PlayerInputHandler not found on target {targetToSet.name}");
         }
     }
 }

@@ -12,18 +12,12 @@ namespace Components.CameraSystem
     
     public class CameraPosition : CameraModule<CameraPositionSettings>
     {
-        private Transform _targetTransform;
-        
-        public void SetTarget(Transform targetTransform)
+        public override void OnLateUpdate()
         {
-            _targetTransform = targetTransform;
-        }
-
-        public override void SetCameraPosition()
-        {
-            if (!isEnabled || _targetTransform == null) return;
+            if(!isEnabled || targetTransform == null)
+                return;
             
-            cameraTransform.position = _targetTransform.position + cameraSettings.Offset;
+            cameraTransform.position = targetTransform.position + cameraSettings.Offset;
         }
     }
 }

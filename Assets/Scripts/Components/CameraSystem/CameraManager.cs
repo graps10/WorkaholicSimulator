@@ -6,7 +6,7 @@ namespace Components.CameraSystem
 {
     public static class CameraManager
     {
-        private static UnityEngine.Camera mainCamera;
+        private static Camera mainCamera;
         private static string currentCameraPath;
 
         private static SceneConfig currentSceneConfig;

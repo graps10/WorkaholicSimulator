@@ -7,6 +7,8 @@ namespace Components.CameraSystem
         protected Transform cameraTransform;
         protected TCamSettings cameraSettings;
         
+        protected Transform targetTransform;
+        
         protected bool isEnabled;
 
         public virtual void Initialize(Transform controlledTransform, TCamSettings settings)
@@ -17,6 +19,11 @@ namespace Components.CameraSystem
             isEnabled = true;
         }
 
-        public abstract void SetCameraPosition();
+        public abstract void OnLateUpdate();
+        
+        public virtual void SetTarget(Transform transform)
+        {
+            targetTransform = transform;
+        }
     }
 }
