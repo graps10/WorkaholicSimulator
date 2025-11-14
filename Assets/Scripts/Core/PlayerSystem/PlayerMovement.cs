@@ -7,8 +7,6 @@ namespace Core.PlayerSystem
     [RequireComponent(typeof(CharacterController))]
     public class PlayerMovement: MonoBehaviour, IUpdatable
     {
-        private const float Input_Threshold = 0.001f;
-        
         [Header("References")]
         [SerializeField] private PlayerInputHandler inputHandler;
         [SerializeField] private CharacterController characterController;
@@ -51,7 +49,7 @@ namespace Core.PlayerSystem
         {
             float mouseX = inputHandler.LookInput.x;
             
-            if (Mathf.Abs(mouseX) < Input_Threshold) 
+            if (Mathf.Abs(mouseX) == 0f) 
                 return;
             
             float rotationAmount = mouseX * lookSensitivity;
@@ -61,8 +59,8 @@ namespace Core.PlayerSystem
         private void HandleMovement()
         {
             Vector2 input = inputHandler.MoveInput;
-
-            if (input.sqrMagnitude < Input_Threshold) 
+            
+            if (input == Vector2.zero) 
                 return;
             
             Vector3 moveDirection = (transform.right * input.x) + (transform.forward * input.y);

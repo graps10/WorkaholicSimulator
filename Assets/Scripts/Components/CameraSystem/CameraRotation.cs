@@ -19,8 +19,6 @@ namespace Components.CameraSystem
 
     public class CameraRotation : CameraModule<CameraRotationSettings>
     {
-        private const float Input_Threshold = 0.001f;
-        
         private float _xRotation;
         private float _yRotation;
         private float _zRotation;
@@ -48,8 +46,9 @@ namespace Components.CameraSystem
             if (!isEnabled || _inputGetter == null) return;
             
             Vector2 input = _inputGetter();
-            if (input.sqrMagnitude < Input_Threshold) return;
-
+            if (input == Vector2.zero) 
+                return;
+            
             HandleRotation(input);
         }
 

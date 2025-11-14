@@ -7,6 +7,9 @@ namespace Core.PlayerSystem
 {
     public sealed class PlayerInputHandler : MonoBehaviour, IUpdatable
     {
+        private const float Input_Deadzone = 0.01f;
+        private const float Input_Deadzone_Sqr = Input_Deadzone * Input_Deadzone;
+        
         private const float Max_Length_Magnitude = 1.0f;
         
         public Vector2 MoveInput { get; private set; }
@@ -33,11 +36,16 @@ namespace Core.PlayerSystem
         
         public void OnUpdate()
         {
-            Vector2 rawInput = new Vector2(_horizontal, _vertical);
-            Vector2 mouseInput = Mouse.current.delta.ReadValue();
+            Vector2 rawMoveInput = new Vector2(_horizontal, _vertical);
+            Vector2 rawMouseInput = Mouse.current.delta.ReadValue();
             
-            MoveInput = Vector2.ClampMagnitude(rawInput, Max_Length_Magnitude);
-            LookInput = mouseInput;
+            MoveInput = rawMoveInput.sqrMagnitude < Input_Deadzone_Sqr
+                ? Vector2.zero
+                : Vector2.ClampMagnitude(rawMoveInput, Max_Length_Magnitude);
+            
+            LookInput = rawMouseInput.sqrMagnitude < Input_Deadzone_Sqr
+                ? Vector2.zero
+                : rawMouseInput;
         }
 
         private void HandleHorizontalAxis(float axisValue) => _horizontal = axisValue;
