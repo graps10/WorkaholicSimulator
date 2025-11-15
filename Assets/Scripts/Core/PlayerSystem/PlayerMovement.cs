@@ -59,10 +59,6 @@ namespace Core.PlayerSystem
         private void HandleMovement()
         {
             Vector2 input = inputHandler.MoveInput;
-            
-            if (input == Vector2.zero) 
-                return;
-            
             Vector3 moveDirection = (transform.right * input.x) + (transform.forward * input.y);
             characterController.Move(moveDirection * (moveSpeed * Time.deltaTime));
         }

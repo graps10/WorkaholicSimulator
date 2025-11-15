@@ -53,6 +53,174 @@ MonoBehaviour:
     InitialTiltAngle: {x: 0, y: 0, z: 0}
     Sensitivity: {x: 0.1, y: 0.1}
     PitchLimits: {x: -65, y: 65}
+  cameraBobbingParent: {fileID: 4425981455206135162}
+  bobbingSettings:
+    Frequency: 0.15
+    BobCurveX:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: -0.006668091
+        value: -1.0024719
+        inSlope: 3.986125
+        outSlope: 3.986125
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.24673542
+        value: 0.007626161
+        inSlope: 5.1861806
+        outSlope: 5.1861806
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.21073931
+        outWeight: 0.18564062
+      - serializedVersion: 3
+        time: 0.50643265
+        value: 0.9960206
+        inSlope: -0.029348755
+        outSlope: -0.029348755
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 1
+        outWeight: 0.39893374
+      - serializedVersion: 3
+        time: 0.75206476
+        value: -0.0054801106
+        inSlope: -4.1878815
+        outSlope: -4.1878815
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.2191764
+        outWeight: 0.22484569
+      - serializedVersion: 3
+        time: 1.0100098
+        value: -0.992321
+        inSlope: -3.8257804
+        outSlope: -3.8257804
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    BobCurveY:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: -9.093304
+        outSlope: -9.093304
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.21989
+        value: -0.9995266
+        inSlope: 0.0034837872
+        outSlope: 0.0034837872
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 1
+      - serializedVersion: 3
+        time: 0.507857
+        value: 1.0002373
+        inSlope: 0.0005483217
+        outSlope: 0.0005483217
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 1
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.65989
+        value: -0.9995266
+        inSlope: 0.0043045525
+        outSlope: 0.0043045525
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 1
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 5.8790584
+        outSlope: 5.8790584
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    AmplitudeX: 0.02
+    AmplitudeY: 0.02
+    BobCurveRotX:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0.003162384
+        value: 0.00045776367
+        inSlope: -0.00013800559
+        outSlope: -0.00013800559
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.9982605
+        value: 0.00032043457
+        inSlope: -0.00013800559
+        outSlope: -0.00013800559
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    BobCurveRotZ:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: -4.038269
+        outSlope: -4.038269
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.4929109
+        value: -0.99050677
+        inSlope: -0.009360449
+        outSlope: -0.009360449
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.4693193
+        outWeight: 0.51693434
+      - serializedVersion: 3
+        time: 0.9986296
+        value: 0.9831884
+        inSlope: 3.9027529
+        outSlope: 3.9027529
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    RotAmplitudeX: 0
+    RotAmplitudeZ: 0.3
+    SpeedThreshold: 2.5
+    BlendSpeed: 5
   mainCamera: {fileID: 4933277997312641529}
   targetEntity: {fileID: 0}
 --- !u!1 &7089523103284088723
@@ -87,7 +255,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1444631695770018882}
+  m_Father: {fileID: 4425981455206135162}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &4933277997312641529
 Camera:
@@ -202,7 +370,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4425981455206135162}
   m_Layer: 0
-  m_Name: Shake
+  m_Name: BobbingParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -220,7 +388,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3244790721646046421}
   m_Father: {fileID: 1444631695770018882}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8982633417711875361
@@ -253,6 +422,5 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4425981455206135162}
-  - {fileID: 3244790721646046421}
   m_Father: {fileID: 5880760441321100389}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

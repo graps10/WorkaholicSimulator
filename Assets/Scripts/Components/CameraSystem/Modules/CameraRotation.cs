@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Components.CameraSystem
+namespace Components.CameraSystem.Modules
 {
     [Serializable]
     public class CameraRotationSettings : CameraSettings
@@ -36,10 +36,7 @@ namespace Components.CameraSystem
             ApplyRotation();
         }
         
-        public void SetInputGetter(Func<Vector2> inputGetter)
-        {
-            _inputGetter = inputGetter;
-        }
+        public void SetInputGetter(Func<Vector2> inputGetter) => _inputGetter = inputGetter;
 
         public override void OnLateUpdate()
         {

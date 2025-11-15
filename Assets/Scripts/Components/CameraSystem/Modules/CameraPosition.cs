@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Components.CameraSystem
+namespace Components.CameraSystem.Modules
 {
     [Serializable]
     public class CameraPositionSettings : CameraSettings

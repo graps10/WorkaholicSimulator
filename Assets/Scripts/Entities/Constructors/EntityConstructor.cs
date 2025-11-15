@@ -22,7 +22,7 @@ namespace Entities.Constructors
                     break;
             }
             
-            if (pooledObject != null)
+            if (pooledObject != null && pooledObject is not PlayerEntity)
             {
                 pooledObject.SwitchGraphics(false); 
                 pooledObject.ToggleLogic(false);  

@@ -28,9 +28,9 @@ namespace Region
 
         public static void UpdateVisibleLocations(List<Location> newVisibleLocations)
         {
-            //if player see new Region. All environments of locations, sectors and regions are loaded first
-            //If see new sector activate logic in entire sector and activate his graphic
-            //If see new location activate his graphic 
+            // if player see new Region. All environments of locations, sectors and regions are loaded first
+            // if see new sector activate logic in entire sector and activate his graphic
+            // if see new location activate his graphic 
 
             foreach (var location in visibleLocations)
                 if (!newVisibleLocations.Contains(location))

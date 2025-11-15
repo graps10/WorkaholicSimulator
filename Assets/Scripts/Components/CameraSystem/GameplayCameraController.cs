@@ -1,3 +1,4 @@
+using Components.CameraSystem.Modules;
 using Core.PlayerSystem;
 using UnityEngine;
 
@@ -15,6 +16,10 @@ namespace Components.CameraSystem
         [SerializeField] private Transform cameraRotationParent;
         [SerializeField] private CameraRotationSettings rotationSettings;
 
+        [Header("Bobbing")]
+        [SerializeField] private Transform cameraBobbingParent;
+        [SerializeField] private CameraBobbingSettings bobbingSettings;
+        
         [Space]
         [Header("Camera Reference")]
         [SerializeField] private Camera mainCamera;
@@ -22,14 +27,17 @@ namespace Components.CameraSystem
         
         private CameraPosition _position;
         private CameraRotation _rotation;
+        private CameraBobbing _bobbing;
 
         private void Start()
         {
             _position = new CameraPosition();
             _rotation = new CameraRotation();
+            _bobbing = new CameraBobbing();
             
             _position.Initialize(cameraPositionParent, positionSettings);
             _rotation.Initialize(cameraRotationParent, rotationSettings);
+            _bobbing.Initialize(cameraBobbingParent, bobbingSettings);
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -46,6 +54,7 @@ namespace Components.CameraSystem
 
             _position.OnLateUpdate();
             _rotation.OnLateUpdate();
+            _bobbing.OnLateUpdate();
         }
 
         public void SetTarget(Transform targetToSet)
@@ -60,6 +69,11 @@ namespace Components.CameraSystem
                 _rotation.SetInputGetter(() => inputHandler.LookInput);
             else
                 Debug.LogWarning($"PlayerInputHandler not found on target {targetToSet.name}");
+            
+            var targetController = targetToSet.GetComponent<CharacterController>();
+            
+            if (targetController != null)
+                _bobbing.SetSpeedGetter(() => targetController.velocity.magnitude);
         }
     }
 }
