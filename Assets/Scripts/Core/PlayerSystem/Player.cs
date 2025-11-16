@@ -66,8 +66,10 @@ namespace Core.PlayerSystem
 
             InputManager.Initialize();
 
-            OnUpdateEvent += RegionCoordinator.FindCurrentPlayerLocation;
-            OnUpdateEvent += RegionManager.UpdatePlayerPositionWithRepositionDelay;
+            // OnUpdateEvent += RegionCoordinator.FindCurrentPlayerLocation; // temporary
+            RegionCoordinator.FindCurrentPlayerLocation();
+            // OnUpdateEvent += RegionManager.UpdatePlayerPositionWithRepositionDelay;  // temporary
+            RegionManager.UpdatePlayerPositionWithRepositionDelay();
         }
         
         private void OnApplicationQuit()
