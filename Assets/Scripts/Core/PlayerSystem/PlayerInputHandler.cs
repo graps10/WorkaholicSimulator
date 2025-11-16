@@ -1,3 +1,4 @@
+using System;
 using Core.InputSystem;
 using Core.Interfaces;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace Core.PlayerSystem
         
         public Vector2 MoveInput { get; private set; }
         public Vector2 LookInput { get; private set; }
+        public bool JumpInput { get; private set; }
         
         private float _horizontal;
         private float _vertical;
@@ -24,6 +26,7 @@ namespace Core.PlayerSystem
             
             InputManager.OnHorizontalAxis += HandleHorizontalAxis;
             InputManager.OnVerticalAxis += HandleVerticalAxis;
+            InputManager.OnJumpPerformed += OnJump;
         }
 
         private void OnDisable()
@@ -32,6 +35,7 @@ namespace Core.PlayerSystem
             
             InputManager.OnHorizontalAxis -= HandleHorizontalAxis;
             InputManager.OnVerticalAxis -= HandleVerticalAxis;
+            InputManager.OnJumpPerformed -= OnJump;
         }
         
         public void OnUpdate()
@@ -48,8 +52,16 @@ namespace Core.PlayerSystem
                 : rawMouseInput;
         }
 
+        private void LateUpdate()
+        {
+            if (JumpInput)
+                JumpInput = false;
+        }
+
         private void HandleHorizontalAxis(float axisValue) => _horizontal = axisValue;
 
         private void HandleVerticalAxis(float axisValue) => _vertical = axisValue;
+        
+        private void OnJump() => JumpInput = true;
     }
 }

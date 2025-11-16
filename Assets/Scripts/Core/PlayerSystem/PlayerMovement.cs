@@ -7,6 +7,8 @@ namespace Core.PlayerSystem
     [RequireComponent(typeof(CharacterController))]
     public class PlayerMovement: MonoBehaviour, IUpdatable
     {
+        private const float Jump_Gravity_Multiplier = -2.0f;
+        
         [Header("References")]
         [SerializeField] private PlayerInputHandler inputHandler;
         [SerializeField] private CharacterController characterController;
@@ -23,6 +25,9 @@ namespace Core.PlayerSystem
         [SerializeField] private float gravity = -9.81f;
         [Tooltip("Small downward force applied when grounded to keep the player stuck to the ground.")]
         [SerializeField] private float groundedResetVelocity = -2.0f;
+        
+        [Header("Jump Settings")]
+        [SerializeField] private float jumpHeight = 1.0f;
 
         /// <summary>
         /// Stores the player's current vertical speed (affected by gravity).
@@ -54,6 +59,7 @@ namespace Core.PlayerSystem
         {
             Vector3 horizontalVelocity = GetHorizontalVelocity();
             
+            HandleJump();
             HandleGravity();
             
             Vector3 finalVelocity = horizontalVelocity + (Vector3.up * _verticalVelocity);
@@ -68,6 +74,12 @@ namespace Core.PlayerSystem
             Vector2 input = inputHandler.MoveInput;
             Vector3 moveDirection = (transform.right * input.x) + (transform.forward * input.y);
             return moveDirection * moveSpeed;
+        }
+        
+        private void HandleJump()
+        {
+            if (inputHandler.JumpInput && characterController.isGrounded)
+                _verticalVelocity = Mathf.Sqrt(jumpHeight * Jump_Gravity_Multiplier * gravity);
         }
         
         private void HandleGravity()

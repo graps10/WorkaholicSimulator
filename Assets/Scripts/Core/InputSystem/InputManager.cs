@@ -11,15 +11,14 @@ namespace Core.InputSystem
     {
         private static GameInput inputActions;
 
-		private static InputAction horizontalAxis, verticalAxis, leftMouseButton,
-			stopAlternativeUse, useStop, pauseCancel;
+		private static InputAction horizontalAxis, verticalAxis, leftMouseButton, jumpAction;
 		
         public static InputDeviceType CurrentInputDevice { get; private set; }
 
         public delegate void ButtonDelegate();
         public delegate void AxisDelegate(float axis);
 
-        public static event ButtonDelegate OnStopOrAlternativeUse, OnUseStop;
+        public static event ButtonDelegate OnJumpPerformed;
         public static event AxisDelegate OnHorizontalAxis, OnVerticalAxis;
 		
 		private static float mouseSensitivity = 1f;
@@ -37,6 +36,7 @@ namespace Core.InputSystem
 			
 			horizontalAxis.performed += CheckDevice;
 			verticalAxis.performed += CheckDevice;
+			jumpAction.performed += CheckDevice;
         }
 
         private static void CheckDevice(InputAction.CallbackContext context)
@@ -91,11 +91,18 @@ namespace Core.InputSystem
 			OnVerticalAxis?.Invoke(verticalInput);
         }
 		
+		private static void OnJumpInput(InputAction.CallbackContext context)
+		{
+			OnJumpPerformed?.Invoke();
+		}
+		
 		private static void ChangeControlsToMain()
 		{
 			horizontalAxis = inputActions.MainControls.MovementHorizontal;
 			verticalAxis = inputActions.MainControls.MovementVertical;
-			pauseCancel = inputActions.MainControls.Pause;
+			
+			jumpAction = inputActions.MainControls.AdditionalUse; 
+			jumpAction.performed += OnJumpInput;
 		}
 
 		private static void Dispose()
@@ -120,6 +127,13 @@ namespace Core.InputSystem
 	        {
 		        verticalAxis.Dispose();
 		        verticalAxis = null;
+	        }
+	        
+	        if (jumpAction != null)
+	        {
+		        jumpAction.performed -= OnJumpInput;
+		        jumpAction.Dispose();
+		        jumpAction = null;
 	        }
         }
 	}
