@@ -18,6 +18,17 @@ namespace Core.PlayerSystem
         [Tooltip("Sensitivity for body rotation (Yaw/Horizontal)")]
         [SerializeField] private float lookSensitivity = 0.1f;
 
+        [Header("Gravity Settings")]
+        [Tooltip("The strength of gravity.")]
+        [SerializeField] private float gravity = -9.81f;
+        [Tooltip("Small downward force applied when grounded to keep the player stuck to the ground.")]
+        [SerializeField] private float groundedResetVelocity = -2.0f;
+
+        /// <summary>
+        /// Stores the player's current vertical speed (affected by gravity).
+        /// </summary>
+        private float _verticalVelocity;
+        
         private void Awake()
         {
             if (inputHandler == null)
@@ -41,8 +52,30 @@ namespace Core.PlayerSystem
 
         public void OnUpdate()
         {
+            Vector3 horizontalVelocity = GetHorizontalVelocity();
+            
+            HandleGravity();
+            
+            Vector3 finalVelocity = horizontalVelocity + (Vector3.up * _verticalVelocity);
+            
+            characterController.Move(finalVelocity * Time.deltaTime);
+            
             HandleRotation();
-            HandleMovement();
+        }
+        
+        private Vector3 GetHorizontalVelocity()
+        {
+            Vector2 input = inputHandler.MoveInput;
+            Vector3 moveDirection = (transform.right * input.x) + (transform.forward * input.y);
+            return moveDirection * moveSpeed;
+        }
+        
+        private void HandleGravity()
+        {
+            if (characterController.isGrounded && _verticalVelocity < 0.0f)
+                _verticalVelocity = groundedResetVelocity;
+            else
+                _verticalVelocity += gravity * Time.deltaTime;
         }
         
         private void HandleRotation()
@@ -54,13 +87,6 @@ namespace Core.PlayerSystem
             
             float rotationAmount = mouseX * lookSensitivity;
             transform.Rotate(Vector3.up * rotationAmount);
-        }
-
-        private void HandleMovement()
-        {
-            Vector2 input = inputHandler.MoveInput;
-            Vector3 moveDirection = (transform.right * input.x) + (transform.forward * input.y);
-            characterController.Move(moveDirection * (moveSpeed * Time.deltaTime));
         }
     }
 }
