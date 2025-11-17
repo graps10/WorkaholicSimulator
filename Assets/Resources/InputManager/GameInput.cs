@@ -46,7 +46,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""AdditionalUse"",
+                    ""name"": ""Jump"",
                     ""type"": ""Button"",
                     ""id"": ""242c9ca2-82f8-41be-9477-a288ffc74069"",
                     ""expectedControlType"": """",
@@ -58,6 +58,15 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""name"": ""Pause"",
                     ""type"": ""Button"",
                     ""id"": ""646c7f24-9209-4e06-a228-27dc5f6116de"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Sprint"",
+                    ""type"": ""Button"",
+                    ""id"": ""3988e6d2-4139-443e-b19e-1242c9e5471a"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -133,45 +142,12 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""93d4f7ba-60d7-4ef6-85f6-11f1e3a980d7"",
-                    ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard"",
-                    ""action"": ""AdditionalUse"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e9c1c052-3308-45fa-bfce-87d78f94751d"",
-                    ""path"": ""<Keyboard>/rightShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard"",
-                    ""action"": ""AdditionalUse"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""3fdda1a9-58d8-43d2-9bbf-86f8a7c4dfdf"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""AdditionalUse"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""9f76e4b9-27e0-453c-a0db-a7331418b98e"",
-                    ""path"": ""<Keyboard>/ctrl"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard"",
-                    ""action"": ""AdditionalUse"",
+                    ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -251,6 +227,17 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""action"": ""MovementVertical"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e29cfe27-0513-4974-9e96-4aead2615b50"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard"",
+                    ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -289,8 +276,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         m_MainControls = asset.FindActionMap("MainControls", throwIfNotFound: true);
         m_MainControls_MovementHorizontal = m_MainControls.FindAction("MovementHorizontal", throwIfNotFound: true);
         m_MainControls_MovementVertical = m_MainControls.FindAction("MovementVertical", throwIfNotFound: true);
-        m_MainControls_AdditionalUse = m_MainControls.FindAction("AdditionalUse", throwIfNotFound: true);
+        m_MainControls_Jump = m_MainControls.FindAction("Jump", throwIfNotFound: true);
         m_MainControls_Pause = m_MainControls.FindAction("Pause", throwIfNotFound: true);
+        m_MainControls_Sprint = m_MainControls.FindAction("Sprint", throwIfNotFound: true);
     }
 
     ~@GameInput()
@@ -359,16 +347,18 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
     private List<IMainControlsActions> m_MainControlsActionsCallbackInterfaces = new List<IMainControlsActions>();
     private readonly InputAction m_MainControls_MovementHorizontal;
     private readonly InputAction m_MainControls_MovementVertical;
-    private readonly InputAction m_MainControls_AdditionalUse;
+    private readonly InputAction m_MainControls_Jump;
     private readonly InputAction m_MainControls_Pause;
+    private readonly InputAction m_MainControls_Sprint;
     public struct MainControlsActions
     {
         private @GameInput m_Wrapper;
         public MainControlsActions(@GameInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @MovementHorizontal => m_Wrapper.m_MainControls_MovementHorizontal;
         public InputAction @MovementVertical => m_Wrapper.m_MainControls_MovementVertical;
-        public InputAction @AdditionalUse => m_Wrapper.m_MainControls_AdditionalUse;
+        public InputAction @Jump => m_Wrapper.m_MainControls_Jump;
         public InputAction @Pause => m_Wrapper.m_MainControls_Pause;
+        public InputAction @Sprint => m_Wrapper.m_MainControls_Sprint;
         public InputActionMap Get() { return m_Wrapper.m_MainControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -384,12 +374,15 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @MovementVertical.started += instance.OnMovementVertical;
             @MovementVertical.performed += instance.OnMovementVertical;
             @MovementVertical.canceled += instance.OnMovementVertical;
-            @AdditionalUse.started += instance.OnAdditionalUse;
-            @AdditionalUse.performed += instance.OnAdditionalUse;
-            @AdditionalUse.canceled += instance.OnAdditionalUse;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @Sprint.started += instance.OnSprint;
+            @Sprint.performed += instance.OnSprint;
+            @Sprint.canceled += instance.OnSprint;
         }
 
         private void UnregisterCallbacks(IMainControlsActions instance)
@@ -400,12 +393,15 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @MovementVertical.started -= instance.OnMovementVertical;
             @MovementVertical.performed -= instance.OnMovementVertical;
             @MovementVertical.canceled -= instance.OnMovementVertical;
-            @AdditionalUse.started -= instance.OnAdditionalUse;
-            @AdditionalUse.performed -= instance.OnAdditionalUse;
-            @AdditionalUse.canceled -= instance.OnAdditionalUse;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @Sprint.started -= instance.OnSprint;
+            @Sprint.performed -= instance.OnSprint;
+            @Sprint.canceled -= instance.OnSprint;
         }
 
         public void RemoveCallbacks(IMainControlsActions instance)
@@ -445,7 +441,8 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
     {
         void OnMovementHorizontal(InputAction.CallbackContext context);
         void OnMovementVertical(InputAction.CallbackContext context);
-        void OnAdditionalUse(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+        void OnSprint(InputAction.CallbackContext context);
     }
 }

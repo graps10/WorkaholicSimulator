@@ -14,7 +14,8 @@ namespace Core.PlayerSystem
         [SerializeField] private CharacterController characterController;
 
         [Header("Settings")]
-        [SerializeField] private float moveSpeed = 5.0f;
+        [SerializeField] private float walkSpeed = 5.0f; 
+        [SerializeField] private float sprintSpeed = 8.0f;
         
         [Header("Rotation Settings")]
         [Tooltip("Sensitivity for body rotation (Yaw/Horizontal)")]
@@ -71,9 +72,12 @@ namespace Core.PlayerSystem
         
         private Vector3 GetHorizontalVelocity()
         {
+            float currentSpeed = inputHandler.SprintInput ? sprintSpeed : walkSpeed;
+            
             Vector2 input = inputHandler.MoveInput;
             Vector3 moveDirection = (transform.right * input.x) + (transform.forward * input.y);
-            return moveDirection * moveSpeed;
+            
+            return moveDirection * currentSpeed;
         }
         
         private void HandleJump()

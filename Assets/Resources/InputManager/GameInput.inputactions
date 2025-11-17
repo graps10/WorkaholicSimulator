@@ -24,7 +24,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "AdditionalUse",
+                    "name": "Jump",
                     "type": "Button",
                     "id": "242c9ca2-82f8-41be-9477-a288ffc74069",
                     "expectedControlType": "",
@@ -36,6 +36,15 @@
                     "name": "Pause",
                     "type": "Button",
                     "id": "646c7f24-9209-4e06-a228-27dc5f6116de",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Sprint",
+                    "type": "Button",
+                    "id": "3988e6d2-4139-443e-b19e-1242c9e5471a",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -111,45 +120,12 @@
                 },
                 {
                     "name": "",
-                    "id": "93d4f7ba-60d7-4ef6-85f6-11f1e3a980d7",
-                    "path": "<Keyboard>/leftShift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard",
-                    "action": "AdditionalUse",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e9c1c052-3308-45fa-bfce-87d78f94751d",
-                    "path": "<Keyboard>/rightShift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard",
-                    "action": "AdditionalUse",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "3fdda1a9-58d8-43d2-9bbf-86f8a7c4dfdf",
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard",
-                    "action": "AdditionalUse",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9f76e4b9-27e0-453c-a0db-a7331418b98e",
-                    "path": "<Keyboard>/ctrl",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard",
-                    "action": "AdditionalUse",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -229,6 +205,17 @@
                     "action": "MovementVertical",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "e29cfe27-0513-4974-9e96-4aead2615b50",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

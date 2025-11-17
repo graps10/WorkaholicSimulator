@@ -11,15 +11,19 @@ namespace Core.InputSystem
     {
         private static GameInput inputActions;
 
-		private static InputAction horizontalAxis, verticalAxis, leftMouseButton, jumpAction;
+		private static InputAction horizontalAxis, verticalAxis, jumpAction, sprintAction;
 		
         public static InputDeviceType CurrentInputDevice { get; private set; }
 
         public delegate void ButtonDelegate();
         public delegate void AxisDelegate(float axis);
-
-        public static event ButtonDelegate OnJumpPerformed;
+        
         public static event AxisDelegate OnHorizontalAxis, OnVerticalAxis;
+        
+        public static event ButtonDelegate OnJumpPerformed;
+        
+        public static event ButtonDelegate OnSprintStarted;
+        public static event ButtonDelegate OnSprintCanceled;
 		
 		private static float mouseSensitivity = 1f;
 		private static bool isControledByMouse;
@@ -37,6 +41,12 @@ namespace Core.InputSystem
 			horizontalAxis.performed += CheckDevice;
 			verticalAxis.performed += CheckDevice;
 			jumpAction.performed += CheckDevice;
+			sprintAction.performed += CheckDevice;
+			
+			jumpAction.performed += OnJumpInput;
+			
+			sprintAction.performed += OnSprintInputStarted;
+			sprintAction.canceled += OnSprintInputCanceled;
         }
 
         private static void CheckDevice(InputAction.CallbackContext context)
@@ -91,18 +101,18 @@ namespace Core.InputSystem
 			OnVerticalAxis?.Invoke(verticalInput);
         }
 		
-		private static void OnJumpInput(InputAction.CallbackContext context)
-		{
-			OnJumpPerformed?.Invoke();
-		}
+		private static void OnJumpInput(InputAction.CallbackContext context) => OnJumpPerformed?.Invoke();
+		
+		private static void OnSprintInputStarted(InputAction.CallbackContext context) => OnSprintStarted?.Invoke();
+		
+		private static void OnSprintInputCanceled(InputAction.CallbackContext context) => OnSprintCanceled?.Invoke();
 		
 		private static void ChangeControlsToMain()
 		{
 			horizontalAxis = inputActions.MainControls.MovementHorizontal;
 			verticalAxis = inputActions.MainControls.MovementVertical;
-			
-			jumpAction = inputActions.MainControls.AdditionalUse; 
-			jumpAction.performed += OnJumpInput;
+			jumpAction = inputActions.MainControls.Jump; 
+			sprintAction = inputActions.MainControls.Sprint;
 		}
 
 		private static void Dispose()
@@ -134,6 +144,14 @@ namespace Core.InputSystem
 		        jumpAction.performed -= OnJumpInput;
 		        jumpAction.Dispose();
 		        jumpAction = null;
+	        }
+	        
+	        if (sprintAction != null)
+	        {
+		        sprintAction.performed -= OnSprintInputStarted;
+		        sprintAction.canceled -= OnSprintInputCanceled;
+		        sprintAction.Dispose();
+		        sprintAction = null;
 	        }
         }
 	}

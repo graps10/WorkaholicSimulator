@@ -16,6 +16,7 @@ namespace Core.PlayerSystem
         public Vector2 MoveInput { get; private set; }
         public Vector2 LookInput { get; private set; }
         public bool JumpInput { get; private set; }
+        public bool SprintInput { get; private set; }
         
         private float _horizontal;
         private float _vertical;
@@ -27,6 +28,8 @@ namespace Core.PlayerSystem
             InputManager.OnHorizontalAxis += HandleHorizontalAxis;
             InputManager.OnVerticalAxis += HandleVerticalAxis;
             InputManager.OnJumpPerformed += OnJump;
+            InputManager.OnSprintStarted += OnSprintStarted;
+            InputManager.OnSprintCanceled += OnSprintCanceled;
         }
 
         private void OnDisable()
@@ -36,6 +39,8 @@ namespace Core.PlayerSystem
             InputManager.OnHorizontalAxis -= HandleHorizontalAxis;
             InputManager.OnVerticalAxis -= HandleVerticalAxis;
             InputManager.OnJumpPerformed -= OnJump;
+            InputManager.OnSprintStarted -= OnSprintStarted;
+            InputManager.OnSprintCanceled -= OnSprintCanceled;
         }
         
         public void OnUpdate()
@@ -63,5 +68,8 @@ namespace Core.PlayerSystem
         private void HandleVerticalAxis(float axisValue) => _vertical = axisValue;
         
         private void OnJump() => JumpInput = true;
+        
+        private void OnSprintStarted() => SprintInput = true;
+        private void OnSprintCanceled() => SprintInput = false;
     }
 }

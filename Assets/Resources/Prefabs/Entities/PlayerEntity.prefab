@@ -220,9 +220,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputHandler: {fileID: 614179321828459472}
   characterController: {fileID: 8406091442298316154}
-  moveSpeed: 3
+  walkSpeed: 3
+  sprintSpeed: 5
   lookSensitivity: 0.1
-  gravity: -9.81
+  gravity: -25
   groundedResetVelocity: -2
   jumpHeight: 1
 --- !u!65 &3153790941397034642
