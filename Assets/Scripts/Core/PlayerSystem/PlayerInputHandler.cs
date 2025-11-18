@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace Core.PlayerSystem
 {
-    public sealed class PlayerInputHandler : MonoBehaviour, IUpdatable
+    public sealed class PlayerInputHandler : MonoBehaviour, IUpdatable, ILateUpdatable
     {
         private const float Input_Deadzone = 0.01f;
         private const float Input_Deadzone_Sqr = Input_Deadzone * Input_Deadzone;
@@ -24,6 +24,7 @@ namespace Core.PlayerSystem
         private void OnEnable()
         {
             Player.Instance.RegisterUpdatable(this);
+            Player.Instance.RegisterLateUpdatable(this);
             
             InputManager.OnHorizontalAxis += HandleHorizontalAxis;
             InputManager.OnVerticalAxis += HandleVerticalAxis;
@@ -35,6 +36,7 @@ namespace Core.PlayerSystem
         private void OnDisable()
         {
             Player.Instance.UnregisterUpdatable(this);
+            Player.Instance.UnregisterLateUpdatable(this);
             
             InputManager.OnHorizontalAxis -= HandleHorizontalAxis;
             InputManager.OnVerticalAxis -= HandleVerticalAxis;
@@ -57,7 +59,7 @@ namespace Core.PlayerSystem
                 : rawMouseInput;
         }
 
-        private void LateUpdate()
+        public void OnLateUpdate()
         {
             if (JumpInput)
                 JumpInput = false;

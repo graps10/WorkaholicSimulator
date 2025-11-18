@@ -1,10 +1,12 @@
+using System;
 using Components.CameraSystem.Modules;
+using Core.Interfaces;
 using Core.PlayerSystem;
 using UnityEngine;
 
 namespace Components.CameraSystem
 {
-    public class GameplayCameraController : MonoBehaviour
+    public class GameplayCameraController : MonoBehaviour, ILateUpdatable
     {
         private const float Set_Target_Delay = 1f;
             
@@ -29,6 +31,16 @@ namespace Components.CameraSystem
         private CameraRotation _rotation;
         private CameraBobbing _bobbing;
 
+        private void OnEnable()
+        {
+            Player.Instance.RegisterLateUpdatable(this);
+        }
+
+        private void OnDisable()
+        {
+            Player.Instance.UnregisterLateUpdatable(this);
+        }
+
         private void Start()
         {
             _position = new CameraPosition();
@@ -48,7 +60,7 @@ namespace Components.CameraSystem
             }, true, Set_Target_Delay);
         }
 
-        private void LateUpdate()
+        public void OnLateUpdate()
         {
             if (targetEntity == null) return;
 

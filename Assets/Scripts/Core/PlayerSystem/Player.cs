@@ -21,6 +21,8 @@ namespace Core.PlayerSystem
         
         private static bool isPlayerLoaded;
         
+        [SerializeField] private Mold playerMold;
+        
         public PlayerEntity PlayerEntityGameObject
         {
             get
@@ -35,14 +37,13 @@ namespace Core.PlayerSystem
         
         public bool EntityGameObjectIsNull => _playerEntityGameObject == null;
         
-        public event Action OnUpdateEvent;
-        public event Action OnFixedUpdateEvent;
+        public event Action OnUpdateEvent, OnFixedUpdateEvent, OnLateUpdateEvent;
         
-        [SerializeField] private Mold playerMold;
         private PlayerEntity _playerEntityGameObject;
         
         private readonly List<IUpdatable> _updatableList = new();
         private readonly List<IFixedUpdatable> _fixedUpdatableList = new();
+        private readonly List<ILateUpdatable> _lateUpdatableList = new();
 
         private void Awake()
         {
@@ -80,6 +81,7 @@ namespace Core.PlayerSystem
                 
                 _updatableList.Clear();
                 _fixedUpdatableList.Clear();
+                _lateUpdatableList.Clear();
                 
                 SceneManager.UninitializeCameraAndCanvas();
                 SceneManager.UnsubscribeAsyncEntityConstructor();
@@ -150,7 +152,7 @@ namespace Core.PlayerSystem
         
         private static void RemoveAllRegions() => RegionManager.Regions.Clear();
 
-        #region Update and FixedUpdate
+        #region Update FixedUpdate LateUpdate
 
         private void Update()
         {
@@ -167,7 +169,15 @@ namespace Core.PlayerSystem
             foreach (var fixedUpdatable in _fixedUpdatableList)
                 fixedUpdatable.OnFixedUpdate();
         }
-        
+
+        private void LateUpdate()
+        {
+            OnLateUpdateEvent?.Invoke();
+            
+            foreach (var lateUpdatable in _lateUpdatableList)
+                lateUpdatable.OnLateUpdate();
+        }
+
         public void RegisterUpdatable(IUpdatable updatable)
         {
             if (!_updatableList.Contains(updatable))
@@ -179,6 +189,12 @@ namespace Core.PlayerSystem
             if (!_fixedUpdatableList.Contains(fixedUpdatable))
                 _fixedUpdatableList.Add(fixedUpdatable);
         }
+        
+        public void RegisterLateUpdatable(ILateUpdatable lateUpdatable)
+        {
+            if (!_lateUpdatableList.Contains(lateUpdatable))
+                _lateUpdatableList.Add(lateUpdatable);
+        }
 
         public void UnregisterUpdatable(IUpdatable updatable) 
             => _updatableList.Remove(updatable);
@@ -186,6 +202,8 @@ namespace Core.PlayerSystem
         public void UnregisterFixedUpdatable(IFixedUpdatable fixedUpdatable) 
             => _fixedUpdatableList.Remove(fixedUpdatable);
 
+        public void UnregisterLateUpdatable(ILateUpdatable lateUpdatable) 
+            => _lateUpdatableList.Remove(lateUpdatable);
         
         #endregion
     }
