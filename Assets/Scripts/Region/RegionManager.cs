@@ -12,6 +12,10 @@ namespace Region
         
         public static List<Region> Regions { get; private set; } = new();
         
+        public static Region CurrentRegion => currentRegion;
+        public static IReadOnlyList<Sector> CurrentSectors => currentSectors;
+        public static IReadOnlyList<Location> CurrentLocations => currentLocations;
+        
         private static Region currentRegion;
         private static List<Sector> currentSectors = new();
         private static List<Location> currentLocations = new();
@@ -86,6 +90,14 @@ namespace Region
             var playerPosition = Player.Instance.PlayerEntityGameObject.transform.position;
 
             var newRegion = RegionCoordinator.GetRegionFromPosition(playerPosition);
+            
+            if (currentRegion != newRegion)
+            {
+                currentRegion?.Exit();
+                currentRegion = newRegion;
+                currentRegion?.Enter();
+            }
+            
             var newSectors = RegionCoordinator.GetSectorsFromPosition(playerPosition,newRegion);  
             var newLocations = RegionCoordinator.GetLocationsFromPosition(playerPosition,newSectors);
 

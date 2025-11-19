@@ -65,32 +65,51 @@ namespace Region
 
         private static List<Location> GetVisibleLocations()
         {
-            var visibleLocation = new List<Location>();
+            var locationsToKeep = new HashSet<Location>();
+            
+            if (RegionManager.CurrentRegion != null)
+                locationsToKeep.Add(RegionManager.CurrentRegion);
+            
+            var currentSectors = RegionManager.CurrentSectors;
+            foreach (var sector in currentSectors)
+                locationsToKeep.Add(sector);
+
+            var currentLocations = RegionManager.CurrentLocations;
+            foreach (var location in currentLocations)
+                locationsToKeep.Add(location);
+
             foreach (var region in RegionManager.Regions)
             {
-                if (!CameraManager.IsBoundsInCameraView(region.Bounds))
+                bool isRegionInside = locationsToKeep.Contains(region);
+                bool isRegionVisible = CameraManager.IsBoundsInCameraView(region.Bounds);
+
+                if (!isRegionInside && !isRegionVisible)
                     continue;
 
-                visibleLocation.Add(region);
+                locationsToKeep.Add(region);
 
                 foreach (var sector in region.GetSectors())
                 {
-                    if (!CameraManager.IsBoundsInCameraView(sector.Bounds))
+                    bool isSectorInside = locationsToKeep.Contains(sector);
+                    bool isSectorVisible = CameraManager.IsBoundsInCameraView(sector.Bounds);
+
+                    if (!isSectorInside && !isSectorVisible)
                         continue;
 
-                    visibleLocation.Add(sector);
+                    locationsToKeep.Add(sector);
 
                     foreach (var location in sector.GetLocations())
                     {
-                        if (!CameraManager.IsBoundsInCameraView(location.Bounds))
+                        if (locationsToKeep.Contains(location)) 
                             continue;
-                        
-                        visibleLocation.Add(location);
+
+                        if (CameraManager.IsBoundsInCameraView(location.Bounds))
+                            locationsToKeep.Add(location);
                     }
                 }
             }
             
-            return visibleLocation;
+            return new List<Location>(locationsToKeep);
         }
     }
 }
