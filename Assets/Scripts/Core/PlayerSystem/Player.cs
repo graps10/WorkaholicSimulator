@@ -205,5 +205,50 @@ namespace Core.PlayerSystem
             => _lateUpdatableList.Remove(lateUpdatable);
         
         #endregion
+        
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        private void OnGUI()
+        {
+            if (Instance == null || EntityGameObjectIsNull) return;
+            
+            var style = new GUIStyle
+            {
+                fontSize = 20,
+                fontStyle = FontStyle.Bold,
+                normal =
+                {
+                    textColor = Color.yellow
+                }
+            };
+
+            var r = RegionManager.CurrentRegion;
+            var s = RegionManager.CurrentSectors;
+            var l = RegionManager.CurrentLocations;
+            
+            var dist = -1f;
+            if (s != null && s.Count > 0 && s[0] != null)
+            {
+                dist = Vector3.Distance(
+                    PlayerEntityGameObject.transform.position, 
+                    s[0].transform.position
+                );
+            }
+            
+            var regionName = r != null ? r.name : "NULL";
+            var sectorInfo = s != null && s.Count > 0 ? $"{s[0].name} (Count: {s.Count})" : "NULL (Using Grace Logic?)";
+            var locNames = l != null ? string.Join(", ", l.Select(x => x.name)) : "None";
+            
+            GUILayout.BeginArea(new Rect(20, 20, 600, 200));
+            GUILayout.Box("--- REGION SYSTEM DEBUG ---");
+            GUILayout.Label($"Region: {regionName}", style);
+            GUILayout.Label($"Sector: {sectorInfo}", style);
+            GUILayout.Label($"Locations: {locNames}", style);
+            
+            style.normal.textColor = dist > 60f ? Color.red : Color.green; 
+            GUILayout.Label($"Distance to Sector Center: {dist:F2}m", style);
+            
+            GUILayout.EndArea();
+        }
+#endif
     }
 }
