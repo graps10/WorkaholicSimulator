@@ -7,8 +7,10 @@ namespace Region
 {
     public static class RegionManager
     {
-        private const float TimeForReposition = 3f;
-        private const float LocationHidingDelay = 8f;
+        private const float Time_For_Reposition = 3f;
+        private const float Location_Hiding_Delay = 8f;
+        
+        private const float Max_Distance_To_Keep_Sector = 75f;
         
         public static List<Region> Regions { get; private set; } = new();
         
@@ -45,7 +47,7 @@ namespace Region
                     if (location is Sector)
                         location.SwitchLogic(false);
 
-                    location.HideGraphicsWithDelay(LocationHidingDelay);
+                    location.HideGraphicsWithDelay(Location_Hiding_Delay);
                 }
 
             foreach (var location in newVisibleLocations)
@@ -90,6 +92,19 @@ namespace Region
             var playerPosition = Player.Instance.PlayerEntityGameObject.transform.position;
 
             var newRegion = RegionCoordinator.GetRegionFromPosition(playerPosition);
+            if (newRegion == null && currentSectors.Count > 0)
+                newRegion = currentRegion; 
+            
+            var newSectors = RegionCoordinator.GetSectorsFromPosition(playerPosition,newRegion); 
+            if (newSectors.Count == 0 && currentSectors.Count > 0)
+            {
+                float distToCurrent = Vector3.Distance(playerPosition, currentSectors[0].transform.position);
+                
+                if (distToCurrent < Max_Distance_To_Keep_Sector)
+                    return; 
+            }
+            
+            var newLocations = RegionCoordinator.GetLocationsFromPosition(playerPosition,newSectors);
             
             if (currentRegion != newRegion)
             {
@@ -98,21 +113,18 @@ namespace Region
                 currentRegion?.Enter();
             }
             
-            var newSectors = RegionCoordinator.GetSectorsFromPosition(playerPosition,newRegion);  
-            var newLocations = RegionCoordinator.GetLocationsFromPosition(playerPosition,newSectors);
-
             UpdateCurrentLocation(currentSectors,newSectors);
             UpdateCurrentLocation(currentLocations, newLocations);
 
             timeSinceLastPlayerPositionSave += Time.deltaTime;
-
-            if (timeSinceLastPlayerPositionSave < TimeForReposition)
+            if (timeSinceLastPlayerPositionSave < Time_For_Reposition)
                 return;
 
             if (currentSectors.Count > 0)
                 lastSavedSafePlayerPosition = playerPosition;
             else
             {
+                Debug.LogWarning("Teleporting Player: No sectors found and distance check failed.");
                 Player.Instance.PlayerEntityGameObject.transform.position = lastSavedSafePlayerPosition;
                 Physics.SyncTransforms();
             }
@@ -138,7 +150,5 @@ namespace Region
         }
 
         public static bool IsPlayerInLocation(Location location) => currentLocations.Contains(location);
-
-        public static void DebugPlayerPosition() => Debug.Log($"Region: {currentRegion}, Sector: {currentSectors[0]}");
     }
 }

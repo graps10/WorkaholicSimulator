@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Components.CameraSystem;
 using Core.Enums;
 using Core.InputSystem;
@@ -67,8 +68,8 @@ namespace Core.PlayerSystem
 
             InputManager.Initialize();
 
-            OnUpdateEvent += RegionCoordinator.FindCurrentPlayerLocation;
             OnUpdateEvent += RegionManager.UpdatePlayerPositionWithRepositionDelay;
+            OnUpdateEvent += RegionCoordinator.FindCurrentPlayerLocation;
         }
         
         private void OnApplicationQuit()
