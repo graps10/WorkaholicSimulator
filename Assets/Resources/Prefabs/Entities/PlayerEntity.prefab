@@ -119,6 +119,7 @@ GameObject:
   - component: {fileID: 614179321828459472}
   - component: {fileID: 3772733052119422582}
   - component: {fileID: 3153790941397034642}
+  - component: {fileID: 1746794609402239233}
   m_Layer: 8
   m_Name: PlayerEntity
   m_TagString: Player
@@ -247,3 +248,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1746794609402239233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1452457197940283318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64f213cecb1b475183d10baec41aef29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionDistance: 2
+  interactableLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  playerCamera: {fileID: 0}
