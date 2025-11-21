@@ -15,7 +15,7 @@ TagManager:
   - PlayerTrigger
   - EntityPlayer
   - EntityNeutral
-  - 
+  - Interactable
   - 
   - 
   - 

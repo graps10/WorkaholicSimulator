@@ -7,5 +7,6 @@
         PlayerTrigger = 1 << 7,
         EntityPlayer = 1 << 8,
         EntityNeutral = 1 << 9,
+        Interactable = 1 << 10,
     }
 }
