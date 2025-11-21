@@ -1481,7 +1481,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 438759766}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1922,7 +1922,8 @@ GameObject:
   - component: {fileID: 640156652}
   - component: {fileID: 640156651}
   - component: {fileID: 640156650}
-  m_Layer: 0
+  - component: {fileID: 640156653}
+  m_Layer: 10
   m_Name: KitCabinet_Lo_CounterBar (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2016,6 +2017,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 640156648}
   m_Mesh: {fileID: 4300000, guid: 20e2c5526dcb7104f896e18910a576ea, type: 3}
+--- !u!114 &640156653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 640156648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4b42c09e6ec4a7791fad7dd783c6403, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &676301939
 GameObject:
   m_ObjectHideFlags: 0
@@ -2073,7 +2086,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 676301939}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2393,7 +2406,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 735335903}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2764,7 +2777,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 838820299}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2925,7 +2938,8 @@ GameObject:
   - component: {fileID: 986705287}
   - component: {fileID: 986705286}
   - component: {fileID: 986705285}
-  m_Layer: 0
+  - component: {fileID: 986705288}
+  m_Layer: 10
   m_Name: KitCabinet_Lo_CounterBar (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3019,6 +3033,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 986705283}
   m_Mesh: {fileID: 4300000, guid: 20e2c5526dcb7104f896e18910a576ea, type: 3}
+--- !u!114 &986705288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 986705283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4b42c09e6ec4a7791fad7dd783c6403, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1010739141
 GameObject:
   m_ObjectHideFlags: 0
@@ -3747,7 +3773,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1161021531}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -4779,7 +4805,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1557917950}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -5040,7 +5066,8 @@ GameObject:
   - component: {fileID: 1673955897}
   - component: {fileID: 1673955896}
   - component: {fileID: 1673955895}
-  m_Layer: 0
+  - component: {fileID: 1673955898}
+  m_Layer: 10
   m_Name: KitCabinet_Lo_CounterBar (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5134,6 +5161,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1673955893}
   m_Mesh: {fileID: 4300000, guid: 20e2c5526dcb7104f896e18910a576ea, type: 3}
+--- !u!114 &1673955898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673955893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4b42c09e6ec4a7791fad7dd783c6403, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &1678426879
 Mesh:
   m_ObjectHideFlags: 0
@@ -5356,7 +5395,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1681576834}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -6234,7 +6273,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1866910394}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -6808,7 +6847,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2005827694}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -7845,7 +7884,8 @@ GameObject:
   - component: {fileID: 5397311878147352821}
   - component: {fileID: 5397311878146366065}
   - component: {fileID: 5397311878142186027}
-  m_Layer: 0
+  - component: {fileID: 5397311878147352822}
+  m_Layer: 10
   m_Name: KitCabinet_Lo_CounterBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7918,6 +7958,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5397311878144397129}
   m_Mesh: {fileID: 4300000, guid: 20e2c5526dcb7104f896e18910a576ea, type: 3}
+--- !u!114 &5397311878147352822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5397311878144397129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4b42c09e6ec4a7791fad7dd783c6403, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5459250283060460768
 GameObject:
   m_ObjectHideFlags: 0
