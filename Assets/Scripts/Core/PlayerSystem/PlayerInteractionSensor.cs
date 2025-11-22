@@ -1,4 +1,6 @@
-﻿using Core.Enums;
+﻿using System;
+using Core.Enums;
+using Core.InputSystem;
 using Core.Interfaces;
 using UnityEngine;
 
@@ -11,6 +13,8 @@ namespace Core.PlayerSystem
         private IInteractable _currentInteractable;
         
         private Camera _playerCamera;
+        
+        public event Action<bool> OnInteractableTargetChanged;
 
         private void Awake() => _playerCamera = Camera.main;
 
@@ -18,15 +22,25 @@ namespace Core.PlayerSystem
         {
             if (Player.Instance != null)
                 Player.Instance.RegisterUpdatable(this);
+            
+            InputManager.OnInteractPerformed += TryInteract;
         }
 
         private void OnDisable()
         {
             if (Player.Instance != null)
                 Player.Instance.UnregisterUpdatable(this);
+            
+            InputManager.OnInteractPerformed -= TryInteract;
         }
 
         public void OnUpdate() => CheckForInteractable();
+        
+        private void TryInteract()
+        {
+            if (_currentInteractable != null)
+                _currentInteractable.Interact();
+        }
 
         private void CheckForInteractable()
         {
@@ -39,18 +53,19 @@ namespace Core.PlayerSystem
                     if (_currentInteractable != interactable)
                     {
                         _currentInteractable = interactable;
-                        Debug.Log(
-                            $"Looking at: {hit.collider.name} | Press E to {_currentInteractable.InteractionPrompt}");
+                        OnInteractableTargetChanged?.Invoke(true); 
+                        Debug.Log($"Can Interact: {hit.collider.name}");
                     }
-
-                    return;
                 }
-            }
-            
-            if (_currentInteractable != null)
-            {
-                Debug.Log("Interaction Lost");
-                _currentInteractable = null;
+                else
+                {
+                    if (_currentInteractable != null)
+                    {
+                        _currentInteractable = null;
+                        OnInteractableTargetChanged?.Invoke(false);
+                        Debug.Log("Interaction Lost");
+                    }
+                }
             }
         }
     }

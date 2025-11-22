@@ -71,6 +71,15 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""b74982bb-a8c6-42a0-96b9-f6a404ee44e8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -238,6 +247,17 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""action"": ""Sprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6a7e8d74-5daa-48c6-905a-83add966c468"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -279,6 +299,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         m_MainControls_Jump = m_MainControls.FindAction("Jump", throwIfNotFound: true);
         m_MainControls_Pause = m_MainControls.FindAction("Pause", throwIfNotFound: true);
         m_MainControls_Sprint = m_MainControls.FindAction("Sprint", throwIfNotFound: true);
+        m_MainControls_Interact = m_MainControls.FindAction("Interact", throwIfNotFound: true);
     }
 
     ~@GameInput()
@@ -350,6 +371,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_MainControls_Jump;
     private readonly InputAction m_MainControls_Pause;
     private readonly InputAction m_MainControls_Sprint;
+    private readonly InputAction m_MainControls_Interact;
     public struct MainControlsActions
     {
         private @GameInput m_Wrapper;
@@ -359,6 +381,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_MainControls_Jump;
         public InputAction @Pause => m_Wrapper.m_MainControls_Pause;
         public InputAction @Sprint => m_Wrapper.m_MainControls_Sprint;
+        public InputAction @Interact => m_Wrapper.m_MainControls_Interact;
         public InputActionMap Get() { return m_Wrapper.m_MainControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -383,6 +406,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
         }
 
         private void UnregisterCallbacks(IMainControlsActions instance)
@@ -402,6 +428,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
         }
 
         public void RemoveCallbacks(IMainControlsActions instance)
@@ -444,5 +473,6 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
 }
