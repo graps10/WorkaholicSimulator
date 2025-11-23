@@ -739,6 +739,7 @@ GameObject:
   - component: {fileID: 2569689720910828004}
   - component: {fileID: 1094976808379741569}
   - component: {fileID: 9041680015329738155}
+  - component: {fileID: 5316039216331622513}
   m_Layer: 5
   m_Name: MainCanvas
   m_TagString: Untagged
@@ -853,3 +854,15 @@ MonoBehaviour:
   <CanvasScreensLayer>k__BackingField: {fileID: 1067945220660580845}
   <LoadingText>k__BackingField: {fileID: 4554970110541158928}
   <Background>k__BackingField: {fileID: 3515900653739075937}
+--- !u!114 &5316039216331622513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8868781740158125665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab5c8cb9bc8d4ceba992c02455040bcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

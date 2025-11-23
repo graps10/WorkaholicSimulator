@@ -14,6 +14,7 @@ namespace Core.PlayerSystem
         
         private Camera _playerCamera;
         
+        public static event Action<bool> OnInteractionAvailabilityChanged;
         public event Action<bool> OnInteractableTargetChanged;
 
         private void Awake() => _playerCamera = Camera.main;
@@ -32,6 +33,7 @@ namespace Core.PlayerSystem
                 Player.Instance.UnregisterUpdatable(this);
             
             InputManager.OnInteractPerformed -= TryInteract;
+            OnInteractionAvailabilityChanged?.Invoke(false);
         }
 
         public void OnUpdate() => CheckForInteractable();
@@ -53,20 +55,30 @@ namespace Core.PlayerSystem
                     if (_currentInteractable != interactable)
                     {
                         _currentInteractable = interactable;
-                        OnInteractableTargetChanged?.Invoke(true); 
+                        OnInteractableTargetChanged?.Invoke(true);
+                        OnInteractionAvailabilityChanged?.Invoke(true);
                         Debug.Log($"Can Interact: {hit.collider.name}");
                     }
                 }
                 else
                 {
                     if (_currentInteractable != null)
-                    {
-                        _currentInteractable = null;
-                        OnInteractableTargetChanged?.Invoke(false);
-                        Debug.Log("Interaction Lost");
-                    }
+                        ClearInteraction();
                 }
             }
+            else
+            {
+                if (_currentInteractable != null)
+                    ClearInteraction();
+            }
+        }
+        
+        private void ClearInteraction()
+        {
+            _currentInteractable = null;
+            OnInteractableTargetChanged?.Invoke(false);
+            OnInteractionAvailabilityChanged?.Invoke(false);
+            Debug.Log("Interaction Lost");
         }
     }
 }

@@ -115,10 +115,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2404941734318201975}
   - component: {fileID: 5515391289899280110}
-  - component: {fileID: 8406091442298316154}
   - component: {fileID: 614179321828459472}
-  - component: {fileID: 3772733052119422582}
+  - component: {fileID: 8406091442298316154}
   - component: {fileID: 3153790941397034642}
+  - component: {fileID: 3772733052119422582}
   - component: {fileID: 1746794609402239233}
   m_Layer: 8
   m_Name: PlayerEntity
@@ -169,6 +169,18 @@ MonoBehaviour:
   OnExternalDeactivation:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &614179321828459472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1452457197940283318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fd0e6772fb4dec44a02f83fa52f4764, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!143 &8406091442298316154
 CharacterController:
   m_ObjectHideFlags: 0
@@ -195,38 +207,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.35, z: 0}
---- !u!114 &614179321828459472
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1452457197940283318}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fd0e6772fb4dec44a02f83fa52f4764, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3772733052119422582
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1452457197940283318}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ab1de7690844fad806f6160f095a86a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputHandler: {fileID: 614179321828459472}
-  characterController: {fileID: 8406091442298316154}
-  walkSpeed: 3
-  sprintSpeed: 5
-  lookSensitivity: 0.1
-  gravity: -25
-  groundedResetVelocity: -2
-  jumpHeight: 1
 --- !u!65 &3153790941397034642
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -248,6 +228,26 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3772733052119422582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1452457197940283318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ab1de7690844fad806f6160f095a86a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputHandler: {fileID: 614179321828459472}
+  characterController: {fileID: 8406091442298316154}
+  walkSpeed: 3
+  sprintSpeed: 5
+  lookSensitivity: 0.1
+  gravity: -25
+  groundedResetVelocity: -2
+  jumpHeight: 1
 --- !u!114 &1746794609402239233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,7 +261,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionDistance: 2
-  interactableLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  playerCamera: {fileID: 0}

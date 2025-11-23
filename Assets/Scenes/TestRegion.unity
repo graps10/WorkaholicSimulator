@@ -14404,6 +14404,7 @@ GameObject:
   - component: {fileID: 2569689720160297558}
   - component: {fileID: 1094976808706606643}
   - component: {fileID: 9041680014860766745}
+  - component: {fileID: 9041680014860766746}
   m_Layer: 5
   m_Name: MainCanvas
   m_TagString: Untagged
@@ -14423,13 +14424,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f97132df7c664afab372cce9c7006ef0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <CanvasCommandReceiversLayer>k__BackingField: {fileID: 554671102692790333}
+  <CanvasCommandReceiversLayer>k__BackingField: {fileID: 3579152422352238821}
   <DebugCanvas>k__BackingField: {fileID: 7200859485056019963}
   <EntityCanvas>k__BackingField: {fileID: 7125610217991607632}
   <PopupCanvas>k__BackingField: {fileID: 6592287474813564133}
   <CanvasScreensLayer>k__BackingField: {fileID: 1067945220742619743}
   <LoadingText>k__BackingField: {fileID: 4554970110211631522}
   <Background>k__BackingField: {fileID: 3515900652860611283}
+--- !u!114 &9041680014860766746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8868781739148113363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab5c8cb9bc8d4ceba992c02455040bcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &9110714391663703874
 CanvasRenderer:
   m_ObjectHideFlags: 0
