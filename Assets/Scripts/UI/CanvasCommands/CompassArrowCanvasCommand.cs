@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace UI.CanvasCommands
 {
-    public class CompassArrowCanvasCommand : CanvasCommand
+    public class CompassArrowCanvasCommand : UpdatableCanvasCommand
     {
         public const string Path = "ScriptableObjects/ObjectPool/UI/CanvasCommands/CompassArrow";
         public override string CanvasCommandPath => Path;

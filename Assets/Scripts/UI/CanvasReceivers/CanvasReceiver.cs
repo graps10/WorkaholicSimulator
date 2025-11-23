@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Core.Interfaces;
 using UI.CanvasCommands;
 using UnityEngine;
 
@@ -25,7 +26,8 @@ namespace UI.CanvasReceivers
         public void ForceUpdateCommands()
         {
             foreach (var command in _commands)
-                command.OnUpdate();
+                if (command is IUpdatable updatableCommand)
+                    updatableCommand.OnUpdate();
         }
 
         public virtual void Dispose() { }

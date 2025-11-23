@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UI.CanvasCommands
 {
-    public class WarningCanvasCommand : CanvasCommand
+    public class WarningCanvasCommand : UpdatableCanvasCommand
     {
         public const string Path = "ScriptableObjects/ObjectPool/UI/CanvasCommands/WarningCanvasCommandPoolInfo";
         public override string CanvasCommandPath => Path;

@@ -6,7 +6,6 @@ namespace UI.CanvasCommands
     public class InteractionCanvasCommand : CanvasCommand
     {
         public const string Path = "ScriptableObjects/ObjectPool/UI/CanvasCommands/InteractionCanvasCommandPoolInfo";
-
         public override string CanvasCommandPath => Path;
 
         [SerializeField] private TextMeshProUGUI interactionText;
@@ -18,8 +17,6 @@ namespace UI.CanvasCommands
 
             if (canvasGroup != null) canvasGroup.alpha = 1f;
         }
-
-        public override void OnUpdate() { }
 
         public void SetText(string text)
         {

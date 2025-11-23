@@ -1,12 +1,10 @@
-﻿using Core.Interfaces;
-using Core.ObjectPool;
-using Core.PlayerSystem;
+﻿using Core.ObjectPool;
 using UI.CanvasReceivers;
 using UnityEngine;
 
 namespace UI.CanvasCommands
 {
-    public abstract class CanvasCommand : PooledGameObject, IUpdatable
+    public abstract class CanvasCommand : PooledGameObject
     {
         public abstract string CanvasCommandPath { get; } 
         protected CanvasReceiver Receiver { get; private set; }
@@ -22,11 +20,8 @@ namespace UI.CanvasCommands
             transform.SetParent(Receiver.Canvas.transform, false);
             transform.localScale = Vector3.one;
             
-            Player.Instance.RegisterUpdatable(this);
             IsDisposed = false;
         }
-
-        public abstract void OnUpdate();
 
         public virtual void Dispose()
         {
@@ -35,9 +30,6 @@ namespace UI.CanvasCommands
 
             Receiver.UnregisterCanvasCommand(this);
             IsDisposed = true;
-            
-            if(Player.Instance != null)
-                Player.Instance.UnregisterUpdatable(this);
             
             ObjectPooler.ReturnPooledObject(this);
         }

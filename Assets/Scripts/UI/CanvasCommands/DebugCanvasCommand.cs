@@ -4,7 +4,7 @@ using UI.CanvasReceivers;
 
 namespace UI.CanvasCommands
 {
-    public class DebugCanvasCommand : CanvasCommand
+    public class DebugCanvasCommand : UpdatableCanvasCommand
     {
         public const string Path = "ScriptableObjects/ObjectPool/UI/CanvasCommands/DebugCanvasCommandPoolInfo";
         public override string CanvasCommandPath => Path;
