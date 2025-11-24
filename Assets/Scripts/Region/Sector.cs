@@ -62,7 +62,7 @@ namespace Region
         
         public List<Location> GetLocations() => locations;
         public void AddLocation(Location location) => locations.Add(location);
-
+        public void ClearLocations() => locations.Clear();
         public void InitializeNewLocationsList() => locations ??= new List<Location>();
 
         protected internal override void Load()
@@ -122,7 +122,6 @@ namespace Region
 
         public override void CalculateBounds(bool displayBounds = true)
         {
-
             if (locations != null)
                 foreach (Location location in locations)
                     location.CalculateBounds(displayBounds);

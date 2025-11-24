@@ -49,12 +49,6 @@ namespace Region.Editors
                 location.RefreshEditorEntities();
             SetCustomIcon();
         }
-
-        private void SetLocationVisibility(bool visible)
-        {
-            location.ToggleDisplayBounds(visible);
-            EditorUtility.SetDirty(location);
-        }
         
         protected void SetCustomIcon()
         { 
@@ -89,21 +83,23 @@ namespace Region.Editors
             DrawAutomaticallyCalculatedBoundsButton();
         }
 
+        protected virtual void CalculateBoundsFromRenderers() { }
+        
 		protected virtual void DrawAutomaticallyCalculatedBoundsButton()
         {
             EditorGUILayout.Space();
-            if (!GUILayout.Button("Calculate Bounds from Renderers")) 
-                return;
-            
-            Undo.RecordObject(_parentSector, "Calculate Bounds from Renderers");
+            if (GUILayout.Button("Calculate Bounds from Renderers"))
+            {
+                Undo.RecordObject(_parentSector, "Calculate Bounds from Renderers");
                 
-            location.CalculateBounds();
+                location.CalculateBounds();
                 
-            if(!_parentSector.GetLocations().Contains(location))
-                _parentSector.GetLocations().Add(location);
+                if(!_parentSector.GetLocations().Contains(location))
+                    _parentSector.AddLocation(location);
                 
-            EditorSceneManager.MarkSceneDirty(location.gameObject.scene);
-            Debug.Log("Location bounds calculated");
+                EditorSceneManager.MarkSceneDirty(location.gameObject.scene);
+                Debug.Log("Location bounds calculated");
+            }
         }
 
         protected void DrawUnityEvents()
@@ -113,32 +109,6 @@ namespace Region.Editors
 
             if (_showUnityEvents)
                 EditorGUILayout.HelpBox("These events are triggered when the _location is entered or exited.", MessageType.Info);
-        }
-
-        protected virtual void CalculateBoundsFromRenderers()
-        {
-            // Check if the location has children
-            if (location.transform.childCount == 0)
-            {
-                Debug.LogWarning("Location has no child objects to calculate bounds from.");
-                return;
-            }
-
-            // Initialize a new Bounds with zero size
-            Bounds combinedBounds = new Bounds(location.transform.position, Vector3.zero);
-            Renderer[] renderers = location.GetComponentsInChildren<Renderer>();
-
-            if (renderers.Length == 0)
-            {
-                Debug.LogWarning("No renderers found in the location's children.");
-                return;
-            }
-
-            // Iterate through each renderer to encapsulate their bounds
-            foreach (Renderer renderer in renderers)
-                combinedBounds.Encapsulate(renderer.bounds);
-
-            Debug.Log("Bounds calculated, scale factor updated, and child objects adjusted.");
         }
     }
 }

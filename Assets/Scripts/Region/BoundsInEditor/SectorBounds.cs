@@ -2,7 +2,7 @@
 
 namespace Region.BoundsInEditor
 {
-    public class SectorBounds: LocationBounds
+    public class SectorBounds: BoundsSceneElement
     {
         public override void CreateMeshBounds()
         {

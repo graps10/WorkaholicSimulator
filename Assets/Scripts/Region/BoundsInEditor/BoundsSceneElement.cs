@@ -50,6 +50,13 @@ namespace Region.BoundsInEditor
 #endif
 
         public abstract void CreateMeshBounds();
+        
+#if UNITY_EDITOR
+        
+        [ContextMenu("CreateFirstBounds")]
+        protected void CreateFirstBoundsContextMenu() => CreateMeshBounds();
+        
+#endif
 
         public static T Create<T>(Location location, Material material = null, Transform parent = null) where T : BoundsSceneElement
         {

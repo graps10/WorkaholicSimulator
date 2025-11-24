@@ -68,7 +68,7 @@ namespace Region
             visibleLocations = newVisibleLocations;
         }
 
-        public static void UpdateCurrentLocation<T>(List<T> currentLocations, List<T> newLocations) where T : Location
+        public static void UpdateCurrentLocations<T>(List<T> currentLocations, List<T> newLocations) where T : Location
         {
             var previousLocations = new List<T>(currentLocations);
 
@@ -93,15 +93,15 @@ namespace Region
 
             var newRegion = RegionCoordinator.GetRegionFromPosition(playerPosition);
             if (newRegion == null && currentSectors.Count > 0)
-                newRegion = currentRegion; 
-            
-            var newSectors = RegionCoordinator.GetSectorsFromPosition(playerPosition,newRegion); 
+                newRegion = currentRegion;
+
+            var newSectors = RegionCoordinator.GetSectorsFromPosition(playerPosition, newRegion);
             if (newSectors.Count == 0 && currentSectors.Count > 0)
             {
                 float distToCurrent = Vector3.Distance(playerPosition, currentSectors[0].transform.position);
                 
                 if (distToCurrent < Max_Distance_To_Keep_Sector)
-                    return; 
+                    return;
             }
             
             var newLocations = RegionCoordinator.GetLocationsFromPosition(playerPosition,newSectors);
@@ -113,8 +113,8 @@ namespace Region
                 currentRegion?.Enter();
             }
             
-            UpdateCurrentLocation(currentSectors,newSectors);
-            UpdateCurrentLocation(currentLocations, newLocations);
+            UpdateCurrentLocations(currentSectors,newSectors);
+            UpdateCurrentLocations(currentLocations, newLocations);
 
             timeSinceLastPlayerPositionSave += Time.deltaTime;
             if (timeSinceLastPlayerPositionSave < Time_For_Reposition)
@@ -134,19 +134,37 @@ namespace Region
 
         public static void LoadLocationOnPosition(Vector3 position)
         {
-            var sectors = RegionCoordinator.GetSectorsFromPosition(position);
-            if (sectors.Count == 0) return;
-            
-            var currentSector = sectors[0];
-
-            if (currentSector != null)
+            var region = RegionCoordinator.GetRegionFromPosition(position);
+            if (region != null)
             {
-                currentSector.MyRegion.Load();
-                currentSector.Load();
-                currentSector.SwitchGraphics(true);
+                currentRegion = region;
+                currentRegion.Enter();
+                currentRegion.Load();
             }
-            else
-            	Debug.LogWarning("Sector not found");
+            
+            var sectors = RegionCoordinator.GetSectorsFromPosition(position);
+            if (sectors.Count == 0) 
+            {
+                Debug.LogWarning("LoadLocationOnPosition: No sectors found!");
+                return;
+            }
+            
+            UpdateCurrentLocations(currentSectors, sectors);
+            
+            foreach (var sector in sectors)
+            {
+                sector.Load();
+                sector.SwitchLogic(true);
+                sector.SwitchGraphics(true);
+            }
+            
+            var locations = RegionCoordinator.GetLocationsFromPosition(position, sectors);
+            UpdateCurrentLocations(currentLocations, locations);
+            
+            foreach (var location in locations)
+                location.SwitchGraphics(true);
+            
+            Debug.Log($"Spawned in: Region [{region?.name}], Sectors [{sectors.Count}], Location [{locations.Count}]");
         }
 
         public static bool IsPlayerInLocation(Location location) => currentLocations.Contains(location);

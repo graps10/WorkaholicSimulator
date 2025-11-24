@@ -61,6 +61,14 @@ namespace Region
             }
         }
 
+        protected internal override void Load()
+        {
+            if (IsLoaded)
+                return;
+
+            IsLoaded = true;
+        }
+        
         public override void Exit()
         {
             foreach (var sector in sectors)
@@ -71,7 +79,7 @@ namespace Region
         
         public List<Sector> GetSectors() => sectors;
         public void AddSector(Sector sector) => sectors.Add(sector);
-
+        public void ClearSectors() => sectors.Clear();
         public void InitializeNewSectorsList() => sectors ??= new List<Sector>();
 
         public override List<Bounds> GetAllBounds()

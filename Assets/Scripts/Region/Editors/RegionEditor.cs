@@ -110,12 +110,12 @@ namespace Region.Editors
             if (region.GetSectors() == null)
                 return;
             
-            region.GetSectors().Clear();
+            region.ClearSectors();
             
             var sectors = region.GetComponentsInChildren<Sector>(false);
             foreach (var sector in sectors)
                 if(!(sector is Region) && !region.GetSectors().Contains(sector))
-                    region.GetSectors().Add(sector);
+                    region.AddSector(sector);
         }
 
         private static void DrawVisibilityCheckbox(Region region)

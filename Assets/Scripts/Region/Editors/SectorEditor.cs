@@ -124,13 +124,13 @@ namespace Region.Editors
 		    if (_sector.GetLocations() == null)
 			     return;
 		    
-		    _sector.GetLocations().Clear();
+		    _sector.ClearLocations();
 		    
 		    var locations = _sector.GetComponentsInChildren<Location>(false);
 		    foreach (var item in locations)
 		    {
 			    if(!(item is Sector) && !_sector.GetLocations().Contains(item))
-				    _sector.GetLocations().Add(item);
+				    _sector.AddLocation(item);
 		    }
 	    }
 
@@ -142,7 +142,7 @@ namespace Region.Editors
             _sector.CalculateBounds();
             
             if(!_parentRegion.GetSectors().Contains(_sector))
-	            _parentRegion.GetSectors().Add(_sector);
+	            _parentRegion.AddSector(_sector);
             
             EditorSceneManager.MarkSceneDirty(_sector.gameObject.scene);
             Debug.Log("Sector bounds calculated, scale factor updated, and child objects adjusted.");

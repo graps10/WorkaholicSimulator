@@ -316,8 +316,7 @@ namespace Region
                 entityPreset.SetSpawnOptions();
                 this.CreateEntitiesAsync(entityPreset);
             }
-
-            Debug.Log("LoadEntities from presets");
+            
             AddSectorSwitchLogicEvent(SwitchLogic);
         }
 
@@ -420,31 +419,6 @@ namespace Region
                 BoundsUtils.DrawBounds(gameObject, 2);
 #endif
             return locationBounds;
-        }
-
-        public bool IsVisibleBounds() => locationBounds.IsVisibleBounds;
-
-        public bool IsLocationBoundsExist() => locationBounds != null;
-
-        public bool HasEmptyReferences()
-        {
-            foreach (var entity in entityPresets)
-            {
-                if (entity.mold == null
-                    || entity.transforms.Length == 0
-                    || entity.transforms.Contains(null))
-                    return true;
-            }
-
-            return false;
-        }
-
-        public Bounds GetUnmodifiedBounds()
-        {
-            var sharedMesh = locationBounds.GetMeshFilter().sharedMesh;
-            if (sharedMesh == null) return default;
-
-            return sharedMesh.bounds;
         }
 
         #endregion

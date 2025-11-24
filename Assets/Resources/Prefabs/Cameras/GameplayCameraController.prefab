@@ -50,7 +50,7 @@ MonoBehaviour:
     Offset: {x: 0, y: 1, z: 0}
   cameraRotationParent: {fileID: 1444631695770018882}
   rotationSettings:
-    InitialTiltAngle: {x: 0, y: 0, z: 0}
+    InitialTiltAngle: {x: -90, y: 0, z: 0}
     Sensitivity: {x: 0.1, y: 0.1}
     PitchLimits: {x: -65, y: 65}
   cameraBobbingParent: {fileID: 4425981455206135162}
@@ -296,7 +296,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 909299
+    m_Bits: 909307
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
