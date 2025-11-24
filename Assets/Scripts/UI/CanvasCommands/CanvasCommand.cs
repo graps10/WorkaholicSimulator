@@ -18,6 +18,8 @@ namespace UI.CanvasCommands
             Receiver.RegisterCanvasCommand(this);
 
             transform.SetParent(Receiver.Canvas.transform, false);
+            
+            transform.localPosition = Vector3.zero;
             transform.localScale = Vector3.one;
             
             IsDisposed = false;
