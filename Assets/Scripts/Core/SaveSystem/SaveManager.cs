@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UI.Popup;
 using UnityEngine;
 
 namespace Core.SaveSystem
@@ -37,7 +38,7 @@ namespace Core.SaveSystem
 
             if (!IsSaveFileValid(saveName))
             {
-                //InfoPopup.Create($"Save file \"{saveName}\" is incompatible.\nIt was created with a different version of the game.");
+                InfoPopup.Create($"Save file \"{saveName}\" is incompatible.\nIt was created with a different version of the game.");
                 return false;
             }
                 
@@ -48,7 +49,7 @@ namespace Core.SaveSystem
                 if (EnableSaveLoadDebugLogs) Debug.Log($"Progress load to: {saveFilePath}");
                 return true;
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 Debug.LogError($"Error load save: {saveName}: {e.Message}");
             }
@@ -66,6 +67,7 @@ namespace Core.SaveSystem
                     if (EnableSaveLoadDebugLogs) Debug.Log("First launch: no conservation.");
                     return false;
                 }
+                
                 Debug.LogWarning("There is no last saved cell or a file is absent!");
                 return false;
             }
@@ -82,9 +84,8 @@ namespace Core.SaveSystem
         private static string GetCurrentSaveSlot()
         {
             if (ES3.FileExists(LAST_SLOT_FILE) && ES3.KeyExists(LAST_SLOT_KEY, LAST_SLOT_FILE))
-            {
                 return ES3.Load<string>(LAST_SLOT_KEY, LAST_SLOT_FILE);
-            }
+            
             return "";
         }
 
@@ -96,9 +97,7 @@ namespace Core.SaveSystem
             foreach (var file in allFiles)
             {
                 if (file.EndsWith(".es3", StringComparison.OrdinalIgnoreCase) && file != LAST_SLOT_FILE)
-                {
                     saveFiles.Add(file);
-                }
             }
             return saveFiles;
         }
@@ -115,10 +114,7 @@ namespace Core.SaveSystem
             if (EnableSaveLoadDebugLogs) Debug.Log($"the current conservation slot is changed to {saveSlotName}");
         }
         
-        public static void ResetProgress()
-        {
-            Progress = new PlayerProgress();
-        }
+        public static void ResetProgress() => Progress = new PlayerProgress();
 
         public static bool IsSaveFileValid(string saveName)
         {

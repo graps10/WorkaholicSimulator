@@ -6,6 +6,8 @@ namespace Components.CameraSystem
 {
     public static class CameraManager
     {
+        private const string Cameras_Parent_Name = "Cameras";
+            
         private static Camera mainCamera;
         private static string currentCameraPath;
 
@@ -23,7 +25,9 @@ namespace Components.CameraSystem
             currentSceneConfig = sceneConfig;
         }
 
-        public static void SetCameraBySceneIndex(Transform transform)
+        public static void SpawnCamera() => SetCameraBySceneIndex(GameObject.Find(Cameras_Parent_Name).transform);
+            
+        private static void SetCameraBySceneIndex(Transform transform)
         {
             if (currentSceneConfig == null)
             {

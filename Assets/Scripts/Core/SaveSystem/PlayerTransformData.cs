@@ -11,10 +11,7 @@ namespace Core.SaveSystem
     {
         private static List<ScenePose> scenePoses;
 
-        public PlayerTransformData()
-        {
-            scenePoses = new List<ScenePose>();
-        }
+        public PlayerTransformData() => scenePoses = new List<ScenePose>();
 
         public void SavePlayerPose(Pose pose)
         {
@@ -26,13 +23,9 @@ namespace Core.SaveSystem
             var scenePose = new ScenePose(currentSceneIndex, pose);
 
             if (listIndex != -1)
-            {
                 scenePoses[listIndex] = scenePose;
-            }
             else
-            {
                 scenePoses.Add(scenePose);
-            }
 
             SaveManager.SaveProgress();
         }
@@ -47,15 +40,13 @@ namespace Core.SaveSystem
                 pose = scenePoses[listIndex];
                 return true;
             }
-            else
-            {
-                var playerTransform = Player.Instance.PlayerEntityGameObject.transform;
-                SavePlayerPose(playerTransform.GetPose());
 
-                pose = Pose.identity;
+            var playerTransform = Player.Instance.PlayerEntityGameObject.transform;
+            SavePlayerPose(playerTransform.GetPose());
 
-                return false;
-            }
+            pose = Pose.identity;
+
+            return false;
         }
 
         [Serializable]

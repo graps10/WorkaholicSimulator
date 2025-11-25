@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections;
-using Core;
 using Core.Extensions;
 using Core.PlayerSystem;
-using Core.Utilities;
 using Entities;
 using Entities.Constructors;
-using QuestSystem.Base;
 using UnityEngine;
 
 namespace Region
@@ -23,7 +20,7 @@ namespace Region
         /// Entities are spawned in sequence with tracking of completion.
         /// </summary>
         public static void CreateEntitiesAsync(this Location location, EntitySpawnPreset entitySpawnPreset,
-            QuestEntitiesList listToPopulate = null, Action<Entity> onEntitySpawned = null, Action onAllPresetEntitiesSpawned = null)
+            LocationEntitiesList listToPopulate = null, Action<Entity> onEntitySpawned = null, Action onAllPresetEntitiesSpawned = null)
         {
             if(Player.Instance != null)
                 Player.Instance.StartCoroutine(CreateEntitiesAsyncRoutine(location, entitySpawnPreset, listToPopulate,
@@ -34,32 +31,26 @@ namespace Region
         /// Creates a single entity asynchronously at the specified transform position.
         /// </summary>
         public static void CreateEntityAsync(this Location location, Transform entityTransform,
-            EntitySpawnPreset preset, QuestEntitiesList listToPopulate = null, Action<Entity> onEntitySpawned = null)
+            EntitySpawnPreset preset, LocationEntitiesList listToPopulate = null, Action<Entity> onEntitySpawned = null)
         {
             if(Player.Instance != null)
                 Player.Instance.StartCoroutine(CreateEntityAsyncRoutine(location, entityTransform, preset, listToPopulate, onEntitySpawned));
         }
         
-        public static void UnloadEntities(this Location location, QuestEntitiesList entitiesToUnload)
+        public static void UnloadEntities(this Location location, LocationEntitiesList entitiesToUnload)
         {
             foreach (var entityToUnload in entitiesToUnload)
-                UnloadEntity(location, entityToUnload);
+                UnloadEntity(entityToUnload);
 
             location.ClearOnSwitchLogicEvent();
         }
 
-        private static void UnloadEntity(this Location location, Entity entityToUnload)
+        private static void UnloadEntity(Entity entityToUnload)
         {
             if (entityToUnload == null)
                 return;
 
-            location.GetEntitiesDictionary().Remove(entityToUnload.transform.parent);
-
-            UtilsProvider.WaitAndRun(() =>
-            {
-                if (entityToUnload != null && entityToUnload.gameObject.activeInHierarchy)
-                    entityToUnload.ReturnToPool();
-            }, true);
+            entityToUnload.ReturnToPool();
         }
 
         #endregion
@@ -70,7 +61,7 @@ namespace Region
         /// Coroutine for asynchronous spawning of multiple entities with completion tracking.
         /// </summary>
         private static IEnumerator CreateEntitiesAsyncRoutine(this Location location, EntitySpawnPreset entitySpawnPreset,
-            QuestEntitiesList listToPopulate = null, Action<Entity> onEntitySpawned = null, Action onAllPresetEntitiesSpawned = null)
+            LocationEntitiesList listToPopulate = null, Action<Entity> onEntitySpawned = null, Action onAllPresetEntitiesSpawned = null)
         {
             int totalEntitiesToSpawn = 0;
             int entitiesSpawnedCount = 0;
@@ -111,17 +102,17 @@ namespace Region
             yield return new WaitUntil(() => entitiesSpawnedCount >= totalEntitiesToSpawn);
             onAllPresetEntitiesSpawned?.Invoke();
         }
-        
+
         /// <summary>
         /// Coroutine for asynchronous spawning of a single entity.
         /// </summary>
         private static IEnumerator CreateEntityAsyncRoutine(this Location location, Transform entityTransform,
-            EntitySpawnPreset preset, QuestEntitiesList listToPopulate = null, Action<Entity> onEntitySpawned = null)
+            EntitySpawnPreset preset, LocationEntitiesList listToPopulate = null, Action<Entity> onEntitySpawned = null)
         {
             if (!preset.AllowMultipleEntitiesInSingleParent &&
-                location.GetEntitiesDictionary().TryGetValue(entityTransform, out var existingEntity))
+                location._entitiesDictionary.TryGetValue(entityTransform, out var existingEntity))
             {
-                SetupEntity(existingEntity, preset, location);
+                SetupEntity(existingEntity, location, entityTransform);
                 listToPopulate?.Add(existingEntity);
                 onEntitySpawned?.Invoke(existingEntity);
                 yield break;
@@ -130,63 +121,52 @@ namespace Region
             bool isEntityCreated = false;
             Action<Entity> completeCallback = (entity) =>
             {
-                FinalizeEntityCreation(location, entity, entityTransform, preset, listToPopulate, onEntitySpawned, ref isEntityCreated);
+                FinalizeEntityCreation(location, entity, entityTransform, preset, listToPopulate, onEntitySpawned,
+                    ref isEntityCreated);
             };
 
             EntityConstructor.Instance.EnqueueEntityLoad(preset.mold, entityTransform,
                 loadCondition: () => location.IsLoaded,
                 onComplete: completeCallback);
-            
+
             yield return new WaitUntil(() => isEntityCreated);
         }
-        
+
         #endregion
         
         #region Utilities
         
-        private static void SetupEntity(Entity entity, EntitySpawnPreset preset, Location location)
+        private static void SetupEntity(Entity entity, Location location, Transform spawnPointKey)
         {
-            if (!preset.IsQuestEntity)
+            var spawnPointDisposeKey = spawnPointKey; 
+            
+            entity.OnDispose += () =>
             {
-                var entityTransformDispose = entity.transform;
-                entity.OnDispose += () =>
+                if (location != null && location._entitiesDictionary != null)
                 {
-                    location.GetEntitiesDictionary()[entityTransformDispose] = null;
-                }; 
-            }
+                    if (location._entitiesDictionary.ContainsKey(spawnPointDisposeKey))
+                        location._entitiesDictionary.Remove(spawnPointDisposeKey);
+                }
+            }; 
         }
         
         private static void FinalizeEntityCreation(this Location location, Entity entity, Transform entityTransform, 
-            EntitySpawnPreset preset, QuestEntitiesList listToPopulate, Action<Entity> onEntitySpawned, ref bool entityCreatedFlag)
+            EntitySpawnPreset preset, LocationEntitiesList listToPopulate, Action<Entity> onEntitySpawned, ref bool entityCreatedFlag)
         {
-            if (!preset.IsQuestEntity)
-                location.GetEntitiesDictionary()[entityTransform] = entity;
-
-            if (location.GetSavedEntityPoses() != null 
-                && location.GetSavedEntityPoses().TryGetValue(entityTransform.name, out var pose))
+            location._entitiesDictionary[entityTransform] = entity;
+            
+            if (location._savedEntityPoses != null 
+                && location._savedEntityPoses.TryGetValue(entityTransform.name, out var pose))
                 entity.transform.ApplyPose(pose);
 
             entity.ToggleLogic(preset.EnableLogic);
             entity.SwitchGraphics(true);
 
-            SetupEntity(entity, preset, location);
+            SetupEntity(entity, location, entityTransform);
             listToPopulate?.Add(entity);
     
             entityCreatedFlag = true;
             onEntitySpawned?.Invoke(entity);
-        }
-
-        public static void RemoveEntityFromList(this Location location, Entity entity)
-        {
-            location.GetEntitiesDictionary().Remove(entity.transform.parent);
-        }
-
-        public static bool IsPlayerInBounds(this Location location)
-        {
-            if(Player.Instance == null || Player.Instance.PlayerEntityGameObject == null) 
-                return false;
-
-            return RegionManager.IsPlayerInLocation(location);
         }
         
         #endregion

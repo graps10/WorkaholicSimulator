@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Entities;
 
-namespace QuestSystem.Base
+namespace Region
 {
-    public class QuestEntitiesList: IList<Entity>
+    public class LocationEntitiesList: IList<Entity>
     {
         private readonly List<Entity> _internalList = new();
         public bool ListHasBeenModified { get; private set; }

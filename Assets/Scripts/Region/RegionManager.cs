@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Core;
 using Core.PlayerSystem;
 using UnityEngine;
 
@@ -164,9 +163,7 @@ namespace Region
             foreach (var location in locations)
                 location.SwitchGraphics(true);
             
-            Debug.Log($"Spawned in: Region [{region?.name}], Sectors [{sectors.Count}], Location [{locations.Count}]");
+            // Debug.Log($"Spawned in: Region [{region?.name}], Sectors [{sectors.Count}], Location [{locations.Count}]");
         }
-
-        public static bool IsPlayerInLocation(Location location) => currentLocations.Contains(location);
     }
 }

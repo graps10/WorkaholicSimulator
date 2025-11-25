@@ -19,6 +19,8 @@ namespace Core.PlayerSystem
 {
     public sealed class Player : MonoBehaviour
     {
+        private const string PlayerEntityPosition = "PlayerEntityPosition";
+        
         public static Player Instance { get; private set; }
         
         private static bool isPlayerLoaded;
@@ -104,12 +106,12 @@ namespace Core.PlayerSystem
             if (!InitializeGameObject())
                 return;
 
-            SpawnCamera();
+            CameraManager.SpawnCamera();
             TransitionManager.Initialize();
 
             SceneManager.OnBeforeNewSceneLoaded_ActionList += RemoveAllRegions;
             SceneManager.AlwaysOnBeforeNewSceneLoaded_ActionList += VisibleEntitiesManager.ClearMovingEntitiesDictionary;
-            SceneManager.AlwaysOnAfterNewSceneLoaded_ActionList += SpawnCamera;
+            SceneManager.AlwaysOnAfterNewSceneLoaded_ActionList += CameraManager.SpawnCamera;
             SceneManager.OnAfterEnterAnimationEnded_ActionList += LoadOnPlayerPosition;
 
             InputManager.Initialize();
@@ -132,9 +134,6 @@ namespace Core.PlayerSystem
                 SceneManager.UnsubscribeAsyncEntityConstructor();
             }
         }
-
-        private static void SpawnCamera() 
-            => CameraManager.SetCameraBySceneIndex(GameObject.Find("Cameras").transform);
         
         private bool InitializeGameObject()
         {
@@ -150,26 +149,15 @@ namespace Core.PlayerSystem
             return true;
         }
         
+        [ContextMenu("Save Progress")]
+        private void SaveProgress() => SaveManager.SaveProgress();
+        
         public void ApplyLoadedProgress()
         {
             SaveManager.LoadProgress();
 
             if (EntityGameObjectIsNull)
-            {
                 Debug.LogWarning("PlayerEntityGameObject is null, delaying ApplyLoadedProgress until entity is created.");
-                return; 
-            }
-
-            var progress = SaveManager.Progress;
-            var playerEntity = PlayerEntityGameObject.GetComponent<PlayerEntity>();
-            /*if (SaveManager.EnableSaveLoadDebugLogs) Debug.Log($"Progress upgrades before applying: {JsonUtility.ToJson(progress.UpgradeData.UpgradeLevels)}");
-            
-            playerEntity.GetLevelUpgrades().
-                Copy(progress.UpgradeData.UpgradeLevels.ToUpgradeLevelContainer());
-            
-            playerEntity.UpdateUpgrades();
-            if (SaveManager.EnableSaveLoadDebugLogs) 
-                Debug.Log($"PlayerActor upgrades after applying: {JsonUtility.ToJson(playerEntity.GetLevelUpgrades())}");*/
         }
         
         [ContextMenu("Try find player")]
@@ -178,7 +166,7 @@ namespace Core.PlayerSystem
             if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 0 || SceneManager.IsChangingPlaymode)
                 return;
 
-            var playerPosition = GameObject.Find("PlayerEntityPosition");
+            var playerPosition = GameObject.Find(PlayerEntityPosition);
             if (playerPosition == null)
             {
                 Debug.LogError("PlayerEntityPosition not found in scene!");

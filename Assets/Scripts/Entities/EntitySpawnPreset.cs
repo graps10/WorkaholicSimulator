@@ -23,22 +23,10 @@ namespace Entities
         /// </summary>
         public bool AllowMultipleEntitiesInSingleParent { get; private set; }
 
-        /// <summary>
-        /// Indicates whether the quest associated with this entity has been completed.
-        /// </summary>
-        public bool FromCompletedQuest { get; private set; }
-
-        /// <summary>
-        /// If true, the entity will not be added to the Location's entity dictionary and will be disposed using quest logic.
-        /// </summary>
-        public bool IsQuestEntity { get; private set; }
-
-        public void SetSpawnOptions(bool enableLogic = true, bool allowMultipleEntitiesInSingleParent = false, bool fromCompletedQuest = false, bool isQuestEntity = false)
+        public void SetSpawnOptions(bool enableLogic = true, bool allowMultipleEntitiesInSingleParent = false)
         {
             EnableLogic = enableLogic;
             AllowMultipleEntitiesInSingleParent = allowMultipleEntitiesInSingleParent;
-            FromCompletedQuest = fromCompletedQuest;
-            IsQuestEntity = isQuestEntity;
         }
         
         public bool Equals(EntitySpawnPreset obj)

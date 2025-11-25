@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Core.Extensions;
+using Core.SaveSystem;
 using Core.Utilities;
 using Entities;
 using Entities.Constructors;
-using QuestSystem.Base;
 using Region.BoundsInEditor;
 using UnityEngine;
 
@@ -14,6 +13,8 @@ namespace Region
 {
     public class Location : MonoBehaviour, IDisposable
     {
+        private const int Location_Path_Depth = 2;
+        
         private const string Entities_Parent_Name = "Entities";
         private const string Environment_Parent_Name = "Environment";
         
@@ -75,8 +76,7 @@ namespace Region
         internal event Action<bool> OnSwitchGraphics;
 
         #endregion
-
-
+        
         private void OnEnable() => CopyLastEntitiesTransformsAndMolds();
 
         private void OnValidate()
@@ -104,10 +104,11 @@ namespace Region
             
             foreach (var item in entityPresets)
             {
-                var copiedEntityPreset = new EntitySpawnPreset();
-
-                copiedEntityPreset.mold = item.mold;
-                copiedEntityPreset.transforms = new Transform[item.transforms.Length];
+                var copiedEntityPreset = new EntitySpawnPreset
+                {
+                    mold = item.mold,
+                    transforms = new Transform[item.transforms.Length]
+                };
 
                 for (int i = 0; i < item.transforms.Length; i++)
                     copiedEntityPreset.transforms[i] = item.transforms[i];
@@ -134,9 +135,9 @@ namespace Region
             SwitchLogic(false);
 
             MySector = sector;
-            _locationPath = UtilsProvider.GetGameObjectPath(gameObject, 2);
+            _locationPath = UtilsProvider.GetGameObjectPath(gameObject, Location_Path_Depth);
 
-            //SaveManager.Progress.TryGetLocationObjectPoses(_locationPath, out _savedEntityPoses);
+            SaveManager.Progress.TryGetLocationObjectPoses(_locationPath, out _savedEntityPoses);
         }
 
 #if UNITY_EDITOR
@@ -198,12 +199,6 @@ namespace Region
             CopyLastEntitiesTransformsAndMolds();
         }
 
-        public void ForceRefreshEditorEntities()
-        {
-            EditorEntityConstructor.Instance.RefreshLocation(this, entityPresets);
-            CopyLastEntitiesTransformsAndMolds();
-        }
-
         public void RefreshBoundsColor()
         {
             if (_lastBoundsColor == boundsColor)
@@ -249,15 +244,28 @@ namespace Region
             LoadEntitiesFromPresets();
             OnLoad?.Invoke();
         }
-
+        
         public virtual void Dispose() // Unload location assets
         {
-            var entitiesList = new QuestEntitiesList();
-            foreach (var entity in _entitiesDictionary.Values)
-                entitiesList.Add(entity);
+            if (!IsLoaded) 
+                return;
             
-            this.UnloadEntities(entitiesList);
+            var entitiesToUnload = new LocationEntitiesList();
+            
+            foreach (var (spawnPoint, entity) in _entitiesDictionary)
+            {
+                if (entity == null) continue;
 
+                entitiesToUnload.Add(entity);
+                
+                SaveObjectPose(spawnPoint.name, entity.transform.GetPose());
+                Debug.Log($"Saved pos for {entity.name} at {spawnPoint.name}");
+            }
+            
+            this.UnloadEntities(entitiesToUnload);
+            
+            _entitiesDictionary.Clear();
+            
             RemoveSectorSwitchLogicEvent(SwitchLogic);
             CancelDelayedHiding();
 
@@ -294,7 +302,10 @@ namespace Region
         {
             yield return new WaitForSeconds(delay);
             if (this != null)
+            {
                 SwitchGraphics(false);
+                Dispose();
+            }
         }
 
         #endregion
@@ -331,35 +342,12 @@ namespace Region
             MySector.OnSwitchLogic -= action;
         }
 
-        public void SaveEntityPose(GameObject entity)
-        {
-            if(entity == null) return;
-            
-            var parentName = entity.transform.parent.name;
-            SaveObjectPose(parentName, entity.transform.GetPose());
-        }
-        
-        public void SaveObjectPose(string objectName, Pose pose)
+        private void SaveObjectPose(string objectName, Pose pose)
         {
             if (_savedEntityPoses == null)
-                //SaveManager.Progress.AddLocationObjectPoses(_locationPath, out _savedEntityPoses);
+                SaveManager.Progress.AddLocationObjectPoses(_locationPath, out _savedEntityPoses);
 
-            if (_savedEntityPoses.ContainsKey(objectName))
-                _savedEntityPoses[objectName] = pose;
-
-            else _savedEntityPoses.Add(objectName, pose);
-        }
-        
-        public bool TryGetObjectPose(string objectName, out Pose pose)
-        {
-            if(_savedEntityPoses != null && _savedEntityPoses.TryGetValue(objectName, out var entityPose))
-            {
-                pose = entityPose;
-                return true;
-            }    
-
-            pose = default;
-            return false;
+            _savedEntityPoses[objectName] = pose;
         }
 
         #endregion
@@ -422,9 +410,6 @@ namespace Region
         }
 
         #endregion
-
-        public Dictionary<Transform, Entity> GetEntitiesDictionary() => _entitiesDictionary;
-        public Dictionary<string, Pose> GetSavedEntityPoses() => _savedEntityPoses;
         
         public Color GetBoundsColor() => boundsColor;
         
