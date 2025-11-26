@@ -127,8 +127,6 @@ namespace Region
                 return;
             }
             
-            isInitialized = true;
-
             Bounds = MeshUtils.TransformBounds(locationBounds.GetMeshFilter().sharedMesh.bounds, transform);
 
             SwitchGraphics(false);
@@ -138,6 +136,8 @@ namespace Region
             _locationPath = UtilsProvider.GetGameObjectPath(gameObject, Location_Path_Depth);
 
             SaveManager.Progress.TryGetLocationObjectPoses(_locationPath, out _savedEntityPoses);
+            
+            isInitialized = true;
         }
 
 #if UNITY_EDITOR

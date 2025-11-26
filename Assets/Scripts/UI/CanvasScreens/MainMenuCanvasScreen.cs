@@ -1,8 +1,10 @@
 ﻿using System;
 using Core;
 using Core.Enums;
+using Core.SaveSystem;
 using Transition;
 using UI.Popup;
+using UI.SaveSystemUI;
 using UnityEngine;
 
 namespace UI.CanvasScreens
@@ -35,12 +37,10 @@ namespace UI.CanvasScreens
         }
         private static void ContinueGame(Action callback)
         {
-            /*if (!SaveManager.ContinueGame())
+            if (!SaveManager.ContinueGame())
                 SaveSelectorManager.Instance.ShowBodySaveSelectorFirstStart(callback);
 
-            else callback?.Invoke();*/
-            
-            callback?.Invoke();
+            else callback?.Invoke();
         }
         
         private static void LoadDevelopersScene() 

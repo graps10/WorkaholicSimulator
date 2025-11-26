@@ -143,7 +143,7 @@ namespace Core
             OnBeforeNewSceneLoaded_ActionList?.Invoke();
             OnBeforeNewSceneLoaded_ActionList = null;
             
-            SaveManager.SaveProgress();
+            //SaveManager.SaveProgress();
 
             IsTransitioning = true;
         }

@@ -182,9 +182,7 @@ namespace UI.SaveSystemUI
             foreach (var file in allFiles)
             {
                 if (file.EndsWith(".es3", StringComparison.OrdinalIgnoreCase) && file != SaveManager.LAST_SLOT_FILE)
-                {
                     saveFiles.Add(file);
-                }
             }
 
             return saveFiles;
@@ -255,7 +253,9 @@ namespace UI.SaveSystemUI
             SaveManager.SetCurrentSaveSlot(saveName);
             SaveManager.ResetProgress();
             SaveManager.SaveProgress();
-            if (SaveManager.EnableSaveLoadDebugLogs)Debug.Log($" Create new save {saveName}");
+            
+            if (SaveManager.EnableSaveLoadDebugLogs)
+                Debug.Log($" Create new save {saveName}");
         }
         
         private void CreateDeletePanel(string saveName)

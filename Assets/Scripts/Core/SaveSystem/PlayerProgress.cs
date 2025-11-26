@@ -7,27 +7,29 @@ namespace Core.SaveSystem
     [Serializable]
     public class PlayerProgress
     {
-        private PlayerTransformData _playerTransformData = new();
-        private Dictionary<string, Dictionary<string, Pose>> _locationObjectsPathAndPose = new();
+        [ES3Serializable] private PlayerTransformData playerTransformData = new();
+        [ES3Serializable] private Dictionary<string, Dictionary<string, Pose>> locationObjectsPathAndPose = new();
         
-        private bool _isFirstLaunch = true;
+        [ES3Serializable] private bool isFirstLaunch = true;
 
         public bool TryGetLocationObjectPoses(string location, out Dictionary<string, Pose> dictionary)
         {
-            if (!_locationObjectsPathAndPose.ContainsKey(location))
+            if (!locationObjectsPathAndPose.ContainsKey(location))
             {
                 dictionary = null;
                 return false;
             }
             
-            dictionary = _locationObjectsPathAndPose[location];
+            dictionary = locationObjectsPathAndPose[location];
             return true;
         }
 
         public void AddLocationObjectPoses(string location, out Dictionary<string, Pose> dictionary)
         {
-            _locationObjectsPathAndPose.Add(location, new Dictionary<string, Pose>());
-            dictionary = _locationObjectsPathAndPose[location];
+            if (!locationObjectsPathAndPose.ContainsKey(location))
+                locationObjectsPathAndPose.Add(location, new Dictionary<string, Pose>());
+            
+            dictionary = locationObjectsPathAndPose[location];
         }
     }
 }
