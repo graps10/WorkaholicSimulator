@@ -257,9 +257,8 @@ namespace Region
                 if (entity == null) continue;
 
                 entitiesToUnload.Add(entity);
-                
                 SaveObjectPose(spawnPoint.name, entity.transform.GetPose());
-                Debug.Log($"Saved pos for {entity.name} at {spawnPoint.name}");
+                // Debug.Log($"Saved pos for {entity.name} at {spawnPoint.name}");
             }
             
             this.UnloadEntities(entitiesToUnload);

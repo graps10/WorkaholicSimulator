@@ -9,7 +9,7 @@ namespace Core.SaveSystem
     [Serializable]
     public class PlayerTransformData
     {
-        private static List<ScenePose> scenePoses;
+        [ES3Serializable] private static List<ScenePose> scenePoses;
 
         public PlayerTransformData() => scenePoses = new List<ScenePose>();
 
@@ -41,8 +41,8 @@ namespace Core.SaveSystem
                 return true;
             }
 
-            var playerTransform = Player.Instance.PlayerEntityGameObject.transform;
-            SavePlayerPose(playerTransform.GetPose());
+            /*var playerTransform = Player.Instance.PlayerEntityGameObject.transform;
+            SavePlayerPose(playerTransform.GetPose());*/
 
             pose = Pose.identity;
 

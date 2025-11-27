@@ -12,6 +12,8 @@ namespace Core.SaveSystem
         
         [ES3Serializable] private bool isFirstLaunch = true;
 
+        public PlayerTransformData PlayerTransformData => playerTransformData;
+        
         public bool TryGetLocationObjectPoses(string location, out Dictionary<string, Pose> dictionary)
         {
             if (!locationObjectsPathAndPose.ContainsKey(location))

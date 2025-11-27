@@ -16,7 +16,7 @@ namespace Core.SaveSystem
 
         public static PlayerProgress Progress = new();
 
-        public static readonly bool EnableSaveLoadDebugLogs = false;
+        public static readonly bool EnableSaveLoadDebugLogs;
 
         public static void SaveProgress()
         {

@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Components.CameraSystem;
 using Core.Enums;
+using Core.Extensions;
 using Core.InputSystem;
 using Core.Interfaces;
 using Core.ObjectPool;
 using Core.SaveSystem;
+using Core.Utilities;
 using Entities;
 using Entities.Constructors;
 using Entities.Molds;
@@ -19,7 +21,7 @@ namespace Core.PlayerSystem
 {
     public sealed class Player : MonoBehaviour
     {
-        private const string PlayerEntityPosition = "PlayerEntityPosition";
+        private const string Player_Entity_Parent_Name = "PlayerEntityPosition";
         
         public static Player Instance { get; private set; }
         
@@ -125,10 +127,16 @@ namespace Core.PlayerSystem
             if (this != null)
             {
                 StopAllCoroutines();
+                SafePoseTracker.StopTracking();
                 
                 _updatableList.Clear();
                 _fixedUpdatableList.Clear();
                 _lateUpdatableList.Clear();
+                
+                SceneManager.OnBeforeNewSceneLoaded_ActionList -= RemoveAllRegions;
+                SceneManager.AlwaysOnBeforeNewSceneLoaded_ActionList -= VisibleEntitiesManager.ClearMovingEntitiesDictionary;
+                SceneManager.AlwaysOnAfterNewSceneLoaded_ActionList -= CameraManager.SpawnCamera;
+                SceneManager.OnAfterEnterAnimationEnded_ActionList -= LoadOnPlayerPosition;
                 
                 SceneManager.UninitializeCameraAndCanvas();
                 SceneManager.UnsubscribeAsyncEntityConstructor();
@@ -149,8 +157,22 @@ namespace Core.PlayerSystem
             return true;
         }
         
-        [ContextMenu("Save Progress")]
-        private void SaveProgress() => SaveManager.SaveProgress();
+        [ContextMenu("Save All Progress")]
+        private void SaveProgress() => SaveManager.SaveProgress(); // temporary
+        
+        [ContextMenu("Save Player Pos")]
+        public void SavePlayerPos() // temporary
+        {
+            if (EntityGameObjectIsNull)
+                return;
+            
+            var safePose = SafePoseTracker.GetSafePose();
+            if (safePose == default) 
+                safePose = PlayerEntityGameObject.transform.GetPose();
+            
+            Debug.Log($"[Player] Saving & Exiting. Pose: {safePose.position}");
+            SaveManager.Progress.PlayerTransformData.SavePlayerPose(safePose);
+        }
         
         public void ApplyLoadedProgress()
         {
@@ -166,7 +188,7 @@ namespace Core.PlayerSystem
             if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex == 0 || SceneManager.IsChangingPlaymode)
                 return;
 
-            var playerPosition = GameObject.Find(PlayerEntityPosition);
+            var playerPosition = GameObject.Find(Player_Entity_Parent_Name);
             if (playerPosition == null)
             {
                 Debug.LogError("PlayerEntityPosition not found in scene!");
