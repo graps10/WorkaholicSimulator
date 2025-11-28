@@ -11,6 +11,8 @@ namespace UI.Popup
         [SerializeField] protected Vector2Int defaultPopupSize;
         
         protected bool isDisposed;
+        
+        protected Action OnShowAction = null;
         protected Action OnCloseAction = null;
         
         protected void InitializeRectTransform(Vector2Int? overrideSize)

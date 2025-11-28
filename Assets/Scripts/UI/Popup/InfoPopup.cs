@@ -12,7 +12,7 @@ namespace UI.Popup
 {
     public class InfoPopup : PopupController, IPopupWithBgPanel, IPopupWithMainText, IPopupWithCloseButton
     {
-        private const string ScriptablePoolInfoPath = "ScriptableObjects/ObjectPool/UI/InfoPopupPoolInfo";
+        private const string Scriptable_Pool_Info_Path = "ScriptableObjects/ObjectPool/UI/InfoPopupPoolInfo";
         
         public Image PanelBg { get;  set; }
         public TextMeshProUGUI MainText { get; set; }
@@ -31,7 +31,7 @@ namespace UI.Popup
                 return null;
             
             var parent = CanvasManager.Instance.PopupCanvas;
-            AssetUtils.TryLoadAsset(ScriptablePoolInfoPath, out PopupPrefabPoolInfo);
+            AssetUtils.TryLoadAsset(Scriptable_Pool_Info_Path, out PopupPrefabPoolInfo);
             var popup = ObjectPooler.TakePooledGameObject(PopupPrefabPoolInfo, parent).GetComponent<InfoPopup>();
             
             var popupRect = popup.transform as RectTransform;
@@ -40,6 +40,7 @@ namespace UI.Popup
                 popup.ReturnToPool();
                 return null;
             }
+            
             popupRect.SetParent(parent, false);
             popupRect.anchoredPosition = Vector2.zero;
             
