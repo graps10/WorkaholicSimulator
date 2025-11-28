@@ -32,7 +32,15 @@ namespace Components.CameraSystem.Modules
             _xRotation = settings.InitialTiltAngle.x;
             _yRotation = settings.InitialTiltAngle.y;
             _zRotation = settings.InitialTiltAngle.z;
-
+        }
+        
+        public override void SetTarget(Transform transform)
+        {
+            base.SetTarget(transform);
+            
+            if (transform != null)
+                _yRotation = transform.eulerAngles.y;
+            
             ApplyRotation();
         }
         
@@ -40,29 +48,24 @@ namespace Components.CameraSystem.Modules
 
         public override void OnLateUpdate()
         {
-            if (!isEnabled || _inputGetter == null) return;
-            
-            Vector2 input = _inputGetter();
-            if (input == Vector2.zero) 
+            if (!isEnabled || _inputGetter == null) 
                 return;
             
-            HandleRotation(input);
+            HandleRotation(_inputGetter());
         }
 
         private void HandleRotation(Vector2 input)
         {
             _xRotation -= input.y * cameraSettings.Sensitivity.y;
             _xRotation = Mathf.Clamp(_xRotation, cameraSettings.PitchLimits.x, cameraSettings.PitchLimits.y);
-
+            
             if (targetTransform != null)
                 _yRotation = targetTransform.eulerAngles.y;
             
             ApplyRotation();
         }
 
-        private void ApplyRotation()
-        {
-            cameraTransform.localRotation = Quaternion.Euler(_xRotation, _yRotation, _zRotation);
-        }
+        private void ApplyRotation() 
+            => cameraTransform.localRotation = Quaternion.Euler(_xRotation, _yRotation, _zRotation);
     }
 }

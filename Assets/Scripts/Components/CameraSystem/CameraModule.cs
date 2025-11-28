@@ -23,7 +23,8 @@ namespace Components.CameraSystem
         
         public virtual void SetTarget(Transform transform)
         {
-            targetTransform = transform;
+            if(transform != null)
+                targetTransform = transform;
         }
     }
 }
