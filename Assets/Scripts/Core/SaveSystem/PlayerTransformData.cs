@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace Core.SaveSystem
 {
-    [Serializable]
     public class PlayerTransformData
     {
         [ES3Serializable] private static List<ScenePose> scenePoses;
@@ -41,11 +40,7 @@ namespace Core.SaveSystem
                 return true;
             }
 
-            /*var playerTransform = Player.Instance.PlayerEntityGameObject.transform;
-            SavePlayerPose(playerTransform.GetPose());*/
-
             pose = Pose.identity;
-
             return false;
         }
 

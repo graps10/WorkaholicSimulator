@@ -5,10 +5,17 @@ namespace Entities.Molds
 {
     public class FurnitureMold : SimpleEntityMold
     {
-        [SerializeField] private PrefabPoolInfo particleOfSocketPlacingPool;
+        [Header("Shop Data")]
+        [SerializeField] private int price;
+        [SerializeField] private Sprite icon;
 
-        public PrefabPoolInfo ParticleOfSocketPlacingPool => particleOfSocketPlacingPool;
-        
+        [Header("Placement Settings")]
+        [SerializeField] private PrefabPoolInfo particleOfSocketPlacingPool;
         public bool CanBeRotatedBeforePlaced;
+
+        // Public Getters
+        public int Price => price;
+        public Sprite Icon => icon;
+        public PrefabPoolInfo ParticleOfSocketPlacingPool => particleOfSocketPlacingPool;
     }
 }
