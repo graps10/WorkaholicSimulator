@@ -21,8 +21,11 @@ namespace UI.Popup
         
         private List<CustomButtonController> myButtons = new();
         
-        public static void Create(string text, CustomButtonController.ButtonMold[] buttonMolds, Vector2Int? overrideSize = null, Transform parent = null)
+        public static void Create(string text, CustomButtonController.ButtonMold[] buttonMolds, Vector2Int? overrideSize = null)
         {
+            if (CanvasManager.Instance == null) return;
+            
+            var parent = CanvasManager.Instance.PopupCanvas;
             AssetUtils.TryLoadAsset(Scriptable_Pool_Info_Path, out PopupPrefabPoolInfo);
             var popup = ObjectPooler.TakePooledGameObject(PopupPrefabPoolInfo, parent).GetComponent<ChoicePopup>();
             

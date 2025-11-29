@@ -15,6 +15,8 @@ using Entities.Constructors;
 using Entities.Molds;
 using Region;
 using Transition;
+using UI.FurnitureShop;
+using UI.Inventory;
 using UnityEngine;
 
 namespace Core.PlayerSystem
@@ -157,11 +159,13 @@ namespace Core.PlayerSystem
             return true;
         }
         
+        #region Temporary Debug Methods
+        
         [ContextMenu("Save All Progress")]
-        private void SaveProgress() => SaveManager.SaveProgress(); // temporary
+        private void SaveProgress() => SaveManager.SaveProgress();
         
         [ContextMenu("Save Player Pos")]
-        public void SavePlayerPos() // temporary
+        private void SavePlayerPos()
         {
             if (EntityGameObjectIsNull)
                 return;
@@ -173,6 +177,14 @@ namespace Core.PlayerSystem
             Debug.Log($"[Player] Saving & Exiting. Pose: {safePose.position}");
             SaveManager.Progress.PlayerTransformData.SavePlayerPose(safePose);
         }
+
+        [ContextMenu("Open Furniture Shop Popup")]
+        private void OpenFurnitureShopPopup() => FurnitureShopPopup.Create();
+        
+        [ContextMenu("Open Inventory Popup")]
+        private void OpenInventoryPopup() => InventoryPopup.Create();
+        
+        #endregion
         
         public void ApplyLoadedProgress()
         {

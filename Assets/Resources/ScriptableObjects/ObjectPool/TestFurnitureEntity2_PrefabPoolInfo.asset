@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f471a99692240588a64faa0248d1d94, type: 3}
-  m_Name: FurnitureShopPopupPoolInfo
+  m_Name: TestFurnitureEntity2_PrefabPoolInfo
   m_EditorClassIdentifier: 
-  <PoolName>k__BackingField: FurnitureShopPopupPoolInfo
-  <ObjectPath>k__BackingField: Prefabs/UI/FurnitureShop/FurnitureShopPopup
-  <DefaultAmount>k__BackingField: 1
-  <MaxAmountMultiplier>k__BackingField: 1
+  <PoolName>k__BackingField: TestFurnitureEntity2
+  <ObjectPath>k__BackingField: Prefabs/Entities/TestFurnitureEntity2
+  <DefaultAmount>k__BackingField: 5
+  <MaxAmountMultiplier>k__BackingField: 10

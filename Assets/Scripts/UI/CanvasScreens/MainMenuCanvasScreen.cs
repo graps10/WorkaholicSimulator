@@ -49,7 +49,7 @@ namespace UI.CanvasScreens
         // private void ShowWelcomePopup() 
 
         private void CreateExitPopup()
-            => DialoguePopup.Create("Do you really want to exit game?", Exit, parent: transform);
+            => DialoguePopup.Create("Do you really want to exit game?", Exit);
 
         private void Exit() 
             => Application.Quit();

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Core.SaveSystem
 {
-    public class InventoryData : MonoBehaviour
+    public class InventoryData
     {
         [ES3Serializable] private Dictionary<string, int> ownedItems = new();
 
@@ -17,8 +17,8 @@ namespace Core.SaveSystem
             else
                 ownedItems.Add(id, quantity);
             
-            SaveManager.SaveProgress();
             OnInventoryUpdated?.Invoke();
+            SaveManager.SaveProgress();
             
             if (SaveManager.EnableSaveLoadDebugLogs)
                 Debug.Log($"Added item {id}. Total: {ownedItems[id]}");
@@ -32,9 +32,9 @@ namespace Core.SaveSystem
             ownedItems[id] -= quantity;
             if (ownedItems[id] <= 0)
                 ownedItems.Remove(id);
-
-            SaveManager.SaveProgress();
+            
             OnInventoryUpdated?.Invoke();
+            SaveManager.SaveProgress();
             return true;
         }
 

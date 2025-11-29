@@ -22,8 +22,11 @@ namespace UI.Popup
         private Action _confirmAction;
         
         public static void Create(string text = "Are you sure?", Action confirmAction = null, Action cancelAction = null, 
-            Vector2Int? overrideSize = null, Transform parent = null)
+            Vector2Int? overrideSize = null)
         {
+            if (CanvasManager.Instance == null) return;
+            
+            var parent = CanvasManager.Instance.PopupCanvas;
             AssetUtils.TryLoadAsset(Scriptable_Pool_Info_Path, out PopupPrefabPoolInfo);
             var popup = ObjectPooler.TakePooledGameObject(PopupPrefabPoolInfo, parent).GetComponent<DialoguePopup>();
             

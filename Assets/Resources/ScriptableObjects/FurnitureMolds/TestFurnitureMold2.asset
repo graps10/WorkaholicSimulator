@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4edca443018e4a149d56b9c12d0590d5, type: 3}
-  m_Name: TestFurnitureMold
+  m_Name: TestFurnitureMold2
   m_EditorClassIdentifier: 
-  prefabPoolInfo: {fileID: 0}
+  prefabPoolInfo: {fileID: 11400000, guid: e59173fb52764704389258b635e76f94, type: 2}
   id: 40804cf4-cc4f-4968-9a21-fb8249f7f7b4
   price: 500
   icon: {fileID: 21300000, guid: 9f65007a86aa0164588c624f671f78eb, type: 3}

@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f352774c69d89f43b10d4c10de6d843, type: 3}
   m_Name: FurnitureDatabase
   m_EditorClassIdentifier: 
-  allFurniture: []
+  allFurniture:
+  - {fileID: 11400000, guid: 6c56396ccba99504f8d1f872c7dbbe81, type: 2}
+  - {fileID: 11400000, guid: c270bd30c1e415b4ca75911164c89837, type: 2}

@@ -1,16 +1,12 @@
-﻿using Core.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Core.PlayerSystem;
 using UnityEngine;
 
 namespace Core.SaveSystem
 {
     public class PlayerTransformData
     {
-        [ES3Serializable] private static List<ScenePose> scenePoses;
-
-        public PlayerTransformData() => scenePoses = new List<ScenePose>();
+        [ES3Serializable] private static List<ScenePose> scenePoses = new();
 
         public void SavePlayerPose(Pose pose)
         {

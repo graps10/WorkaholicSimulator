@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Core.SaveSystem
 {
-    [Serializable]
     public class PlayerProgress
     {
         [ES3Serializable] private PlayerTransformData playerTransformData = new();

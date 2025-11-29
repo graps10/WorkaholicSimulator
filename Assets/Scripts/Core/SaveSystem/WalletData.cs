@@ -42,10 +42,7 @@ namespace Core.SaveSystem
             return false;
         }
 
-        public bool HasEnough(int amount)
-        {
-            return currentMoney >= amount;
-        }
+        public bool HasEnough(int amount) => currentMoney >= amount;
 
         private void NotifyAndSave()
         {

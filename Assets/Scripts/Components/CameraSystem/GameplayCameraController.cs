@@ -51,8 +51,9 @@ namespace Components.CameraSystem
             _rotation.Initialize(cameraRotationParent, rotationSettings);
             _bobbing.Initialize(cameraBobbingParent, bobbingSettings);
 
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            // --- Temporary
+            /*Cursor.lockState = CursorLockMode.Locked; 
+            Cursor.visible = false;*/
             
             Core.Utilities.UtilsProvider.WaitAndRun(() =>
             {

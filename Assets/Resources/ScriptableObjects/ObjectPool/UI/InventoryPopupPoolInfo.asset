@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: InventoryPopupPoolInfo
   m_EditorClassIdentifier: 
   <PoolName>k__BackingField: InventoryPopupPoolInfo
-  <ObjectPath>k__BackingField: Prefabs/UI/Inventory/
+  <ObjectPath>k__BackingField: Prefabs/UI/Inventory/InventoryPopup
   <DefaultAmount>k__BackingField: 1
   <MaxAmountMultiplier>k__BackingField: 1

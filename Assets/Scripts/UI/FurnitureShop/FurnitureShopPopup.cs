@@ -24,8 +24,11 @@ namespace UI.FurnitureShop
         public static FurnitureShopPopup Instance { get; private set; }
         
         public static void Create(Action showAction = null, Action closeAction = null, 
-            Vector2Int? overrideSize = null, Transform parent = null)
+            Vector2Int? overrideSize = null)
         {
+            if (CanvasManager.Instance == null) return;
+            
+            var parent = CanvasManager.Instance.PopupCanvas;
             AssetUtils.TryLoadAsset(Scriptable_Pool_Info_Path, out PopupPrefabPoolInfo);
             var popup = ObjectPooler.TakePooledGameObject(PopupPrefabPoolInfo, parent).GetComponent<FurnitureShopPopup>();
             
@@ -81,7 +84,7 @@ namespace UI.FurnitureShop
             else
             {
                 // PlaySound();
-                InfoPopup.Create("Not enough money!", displayTime: Info_Popup_Display_Time, anchor: InfoPopup.PopupAnchor.Center);
+                InfoPopup.Create("Not enough money!", anchor: InfoPopup.PopupAnchor.Center, displayTime: Info_Popup_Display_Time);
             }
         }
         

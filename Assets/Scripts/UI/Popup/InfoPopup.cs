@@ -24,12 +24,11 @@ namespace UI.Popup
         private void OnDisable() 
             => SceneManager.OnAfterEnterAnimationEnded_ActionList -= ReturnToPool;
 
-        public static InfoPopup Create(string text, Action onClose = null, Vector2Int? overrideSize = null, 
+        public static void Create(string text, Action onClose = null, Vector2Int? overrideSize = null,
             PopupAnchor anchor = PopupAnchor.TopRight, float displayTime = 6, float offset = 50)
         {
-            if (CanvasManager.Instance == null)
-                return null;
-            
+            if (CanvasManager.Instance == null) return;
+
             var parent = CanvasManager.Instance.PopupCanvas;
             AssetUtils.TryLoadAsset(Scriptable_Pool_Info_Path, out PopupPrefabPoolInfo);
             var popup = ObjectPooler.TakePooledGameObject(PopupPrefabPoolInfo, parent).GetComponent<InfoPopup>();
@@ -38,14 +37,13 @@ namespace UI.Popup
             if (popupRect == null)
             {
                 popup.ReturnToPool();
-                return null;
+                return;
             }
             
             popupRect.SetParent(parent, false);
             popupRect.anchoredPosition = Vector2.zero;
             
             popup.Initialize(text, onClose, overrideSize, anchor, displayTime, offset);
-            return popup;
         }
 
         private void Initialize(string text, Action onClose = null, Vector2Int? overrideSize = null, 
