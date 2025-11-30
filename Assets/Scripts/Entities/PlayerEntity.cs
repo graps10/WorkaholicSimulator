@@ -10,15 +10,28 @@ namespace Entities
 {
     public class PlayerEntity : Entity, IUpdatable
     {
+        [SerializeField] private PlayerInputHandler inputHandler;
+        public PlayerInputHandler InputHandler
+        {
+            get
+            {
+                if (inputHandler == null)
+                    inputHandler = GetComponent<PlayerInputHandler>();
+                return inputHandler;
+            }
+        }
+        
         public override void LoadEntity(Mold entityMold)
         {
             base.LoadEntity(entityMold);
-            
              Initialize(entityMold as PlayerMold);
         }
 
         private void Initialize(PlayerMold mold)
         {
+            if (inputHandler == null) 
+                inputHandler = GetComponent<PlayerInputHandler>();
+            
             Player.Instance.RegisterUpdatable(this);
             SafePoseTracker.StartTracking(transform);
             

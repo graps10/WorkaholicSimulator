@@ -5,11 +5,12 @@ using Core.Utilities;
 using Entities.Databases;
 using Entities.Molds;
 using UI.Popup;
+using UI.Popup.Interfaces;
 using UnityEngine;
 
 namespace UI.Inventory
 {
-    public class InventoryPopup : PopupController
+    public class InventoryPopup : PopupController, IPopupWithCloseButton
     {
         private const string Scriptable_Pool_Info_Path = "ScriptableObjects/ObjectPool/UI/InventoryPopupPoolInfo";
         
@@ -17,6 +18,8 @@ namespace UI.Inventory
         [SerializeField] private Transform gridContainer;
         [SerializeField] private InventorySlotView slotPrefab;
         [SerializeField] private FurnitureDatabase database;
+        
+        [field: SerializeField] public CustomButtonController CloseButton { get; private set; }
 
         public static void Create(Action showAction = null, Action closeAction = null, 
             Vector2Int? overrideSize = null)
@@ -47,6 +50,7 @@ namespace UI.Inventory
             OnCloseAction = onClose;
             
             InitializeRectTransform(overrideSize);
+            InitializeCloseButton();
             RefreshInventory();
             
             OnShowAction?.Invoke();
@@ -80,19 +84,24 @@ namespace UI.Inventory
             ReturnToPool();
         }
         
+        public void InitializeCloseButton() => CloseButton.onClick.AddListener(ReturnToPool);
+        
         public override void ReturnToPool()
         {
             if(isDisposed)
                 return;
 
             isDisposed = true;
-            
-            // Callback for when we close popup
+
+            OnShowAction = null;
             if (OnCloseAction != null)
             {
                 OnCloseAction.Invoke();
                 OnCloseAction = null;
             }
+            
+            if (CloseButton != null)
+                CloseButton.onClick.RemoveAllListeners();
             
             base.ReturnToPool();
         }

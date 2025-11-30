@@ -14,12 +14,15 @@ namespace UI.Popup
     {
         private const string Scriptable_Pool_Info_Path = "ScriptableObjects/ObjectPool/UI/InfoPopupPoolInfo";
         
-        public Image PanelBg { get;  set; }
-        public TextMeshProUGUI MainText { get; set; }
-        public CustomButtonController CloseButton {get; set;}
+        [field: SerializeField] public Image PanelBg { get; private set; }
+        [field: SerializeField] public TextMeshProUGUI MainText { get; private set; }
+        [field: SerializeField] public CustomButtonController CloseButton { get; private set; }
 
-        private void OnEnable() 
-            => SceneManager.OnAfterEnterAnimationEnded_ActionList += ReturnToPool;
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            SceneManager.OnAfterEnterAnimationEnded_ActionList += ReturnToPool;
+        }
 
         private void OnDisable() 
             => SceneManager.OnAfterEnterAnimationEnded_ActionList -= ReturnToPool;

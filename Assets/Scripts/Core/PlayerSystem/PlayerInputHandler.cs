@@ -1,4 +1,3 @@
-using System;
 using Core.InputSystem;
 using Core.Interfaces;
 using UnityEngine;
@@ -20,6 +19,8 @@ namespace Core.PlayerSystem
         
         private float _horizontal;
         private float _vertical;
+        
+        private bool _isInputActive = true;
 
         private void OnEnable()
         {
@@ -47,6 +48,9 @@ namespace Core.PlayerSystem
         
         public void OnUpdate()
         {
+            if (!_isInputActive)
+                return;
+            
             Vector2 rawMoveInput = new Vector2(_horizontal, _vertical);
             Vector2 rawMouseInput = Mouse.current.delta.ReadValue();
             
@@ -63,6 +67,21 @@ namespace Core.PlayerSystem
         {
             if (JumpInput)
                 JumpInput = false;
+        }
+        
+        public void SetInputActive(bool isActive)
+        {
+            _isInputActive = isActive;
+
+            if (!isActive)
+            {
+                MoveInput = Vector2.zero;
+                LookInput = Vector2.zero;
+                JumpInput = false;
+                SprintInput = false;
+                _horizontal = 0;
+                _vertical = 0;
+            }
         }
 
         private void HandleHorizontalAxis(float axisValue) => _horizontal = axisValue;

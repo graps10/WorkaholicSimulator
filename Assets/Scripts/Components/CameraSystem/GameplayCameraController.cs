@@ -1,5 +1,6 @@
 using System;
 using Components.CameraSystem.Modules;
+using Core.InputSystem;
 using Core.Interfaces;
 using Core.PlayerSystem;
 using UnityEngine;
@@ -51,9 +52,7 @@ namespace Components.CameraSystem
             _rotation.Initialize(cameraRotationParent, rotationSettings);
             _bobbing.Initialize(cameraBobbingParent, bobbingSettings);
 
-            // --- Temporary
-            /*Cursor.lockState = CursorLockMode.Locked; 
-            Cursor.visible = false;*/
+            CursorController.ToggleCursor(false);
             
             Core.Utilities.UtilsProvider.WaitAndRun(() =>
             {

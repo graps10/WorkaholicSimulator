@@ -6,11 +6,12 @@ using Core.Utilities;
 using Entities.Databases;
 using Entities.Molds;
 using UI.Popup;
+using UI.Popup.Interfaces;
 using UnityEngine;
 
 namespace UI.FurnitureShop
 {
-    public class FurnitureShopPopup : PopupController
+    public class FurnitureShopPopup : PopupController, IPopupWithCloseButton
     {
         private const string Scriptable_Pool_Info_Path = "ScriptableObjects/ObjectPool/UI/FurnitureShopPopupPoolInfo";
         
@@ -20,8 +21,8 @@ namespace UI.FurnitureShop
         [SerializeField] private Transform contentContainer;
         [SerializeField] private ShopItemView itemPrefab;
         [SerializeField] private FurnitureDatabase database;
-
-        public static FurnitureShopPopup Instance { get; private set; }
+        
+        [field: SerializeField] public CustomButtonController CloseButton { get; private set; }
         
         public static void Create(Action showAction = null, Action closeAction = null, 
             Vector2Int? overrideSize = null)
@@ -53,6 +54,7 @@ namespace UI.FurnitureShop
 
             PopulateShop();
             InitializeRectTransform(overrideSize);
+            InitializeCloseButton();
             
             OnShowAction?.Invoke();
         }
@@ -88,6 +90,8 @@ namespace UI.FurnitureShop
             }
         }
         
+        public void InitializeCloseButton() => CloseButton.onClick.AddListener(ReturnToPool);
+        
         public override void ReturnToPool()
         {
             if(isDisposed)
@@ -95,11 +99,15 @@ namespace UI.FurnitureShop
 
             isDisposed = true;
             
+            OnShowAction = null;
             if (OnCloseAction != null)
             {
                 OnCloseAction.Invoke();
                 OnCloseAction = null;
             }
+            
+            if (CloseButton != null)
+                CloseButton.onClick.RemoveAllListeners();
             
             base.ReturnToPool();
         }

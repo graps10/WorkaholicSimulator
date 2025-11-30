@@ -43,6 +43,8 @@ namespace Core.PlayerSystem
             private set => _playerEntityGameObject = value;
         }
         
+        public PlayerInputHandler InputHandler => 
+            PlayerEntityGameObject != null ? PlayerEntityGameObject.InputHandler : null;
         public bool EntityGameObjectIsNull => _playerEntityGameObject == null;
         
         public event Action OnUpdateEvent, OnFixedUpdateEvent, OnLateUpdateEvent;

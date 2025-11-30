@@ -46,9 +46,7 @@ namespace UI
                 _text = _capImage.GetComponentInChildren<TMP_Text>(false);
             
                 if (_text == null && _capImage.transform.childCount > 0)
-                {
-                    _iconImage = _capImage.transform.GetChild(0)?.GetComponent<Image>();
-                }
+                     _iconImage = _capImage.transform.GetChild(0)?.GetComponent<Image>();
             }
         
             _clickSound = new Sound(SFX.buttonClick);

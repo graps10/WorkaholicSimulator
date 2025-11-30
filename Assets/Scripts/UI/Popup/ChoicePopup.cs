@@ -15,9 +15,9 @@ namespace UI.Popup
         [SerializeField] private Transform buttonsContainerTransform;
         [SerializeField] private PrefabPoolInfo buttonPrefabPoolInfo;
         
-        public Image PanelBg { get;  set; }
-        public TextMeshProUGUI MainText { get; set; }
-        public CustomButtonController CloseButton {get; set;}
+        [field: SerializeField] public Image PanelBg { get; private set; }
+        [field: SerializeField] public TextMeshProUGUI MainText { get; private set; }
+        [field: SerializeField] public CustomButtonController CloseButton { get; private set; }
         
         private List<CustomButtonController> myButtons = new();
         
