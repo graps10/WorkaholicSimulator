@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: Placeable Item Tag Settings
   m_EditorClassIdentifier: 
   Tags:
-  - Equipment
-  - RotatingEquipment
+  - Furniture

@@ -32,5 +32,5 @@ MonoBehaviour:
   - ItemTag: Torus
     PosingPrefab: {fileID: 8045553874313078552, guid: 2ba665a813821454b961b1f3caf94db2,
       type: 3}
-  - ItemTag: RotatingEquipment
+  - ItemTag: Furniture
     PosingPrefab: {fileID: 0}
