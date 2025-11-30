@@ -2,7 +2,7 @@
 using UI.CanvasCommands;
 using UnityEngine;
 
-namespace UI.Interaction
+namespace UI.Controllers
 {
     public class InteractionUIController: MonoBehaviour
     {

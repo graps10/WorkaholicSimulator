@@ -491,13 +491,14 @@ GameObject:
   m_Component:
   - component: {fileID: 6592287474477205335}
   - component: {fileID: 3050614904401362517}
+  - component: {fileID: 7501616160323721923}
   m_Layer: 5
   m_Name: PopupCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6592287474477205335
 RectTransform:
   m_ObjectHideFlags: 0
@@ -540,6 +541,23 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &7501616160323721923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4582422888031865755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &4748639156238728271
 GameObject:
   m_ObjectHideFlags: 0
@@ -674,6 +692,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3579152421486906199}
   - component: {fileID: 6274857144857168048}
+  - component: {fileID: 5786395777587972460}
   m_Layer: 5
   m_Name: Canvas-Command Receivers Layer
   m_TagString: Untagged
@@ -726,6 +745,23 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &5786395777587972460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8107638817395758018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &8868781740158125665
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,6 +776,7 @@ GameObject:
   - component: {fileID: 1094976808379741569}
   - component: {fileID: 9041680015329738155}
   - component: {fileID: 5316039216331622513}
+  - component: {fileID: 8761460137684708662}
   m_Layer: 5
   m_Name: MainCanvas
   m_TagString: Untagged
@@ -847,7 +884,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f97132df7c664afab372cce9c7006ef0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <CanvasCommandReceiversLayer>k__BackingField: {fileID: 554671102904886159}
+  <CanvasCommandReceiversLayer>k__BackingField: {fileID: 3579152421486906199}
   <DebugCanvas>k__BackingField: {fileID: 7200859485936049737}
   <EntityCanvas>k__BackingField: {fileID: 7125610217126291170}
   <PopupCanvas>k__BackingField: {fileID: 6592287474477205335}
@@ -864,5 +901,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab5c8cb9bc8d4ceba992c02455040bcf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8761460137684708662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8868781740158125665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 994ff6a2d5994bb8bc0b5469618d819c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

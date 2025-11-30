@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f471a99692240588a64faa0248d1d94, type: 3}
   m_Name: PlayerEntity_PrefabPoolInfo
   m_EditorClassIdentifier: 
-  <PoolName>k__BackingField: PlayerEntity
+  <PoolName>k__BackingField: PlayerEntityPool
   <ObjectPath>k__BackingField: Prefabs/Entities/PlayerEntity
   <DefaultAmount>k__BackingField: 2
   <MaxAmountMultiplier>k__BackingField: 4

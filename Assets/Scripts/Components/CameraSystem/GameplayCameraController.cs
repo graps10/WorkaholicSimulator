@@ -52,7 +52,7 @@ namespace Components.CameraSystem
             _rotation.Initialize(cameraRotationParent, rotationSettings);
             _bobbing.Initialize(cameraBobbingParent, bobbingSettings);
 
-            CursorController.ToggleCursor(false);
+            //CursorController.ToggleCursor(false);
             
             Core.Utilities.UtilsProvider.WaitAndRun(() =>
             {

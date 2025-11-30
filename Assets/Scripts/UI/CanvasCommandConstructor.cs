@@ -17,7 +17,8 @@ namespace UI
             new(typeof(WarningCanvasCommand), WarningCanvasCommand.Path, WarningCanvasReceiver.Instance),
             new(typeof(DebugCanvasCommand), DebugCanvasCommand.Path, DebugCanvasReceiver.Instance),
             new(typeof(CompassArrowCanvasCommand), CompassArrowCanvasCommand.Path, PlayerCanvasReceiver.Instance),
-            new(typeof(InteractionCanvasCommand), InteractionCanvasCommand.Path, PlayerCanvasReceiver.Instance)
+            new(typeof(InteractionCanvasCommand), InteractionCanvasCommand.Path, PlayerCanvasReceiver.Instance),
+            new(typeof(EditModeCanvasCommand), EditModeCanvasCommand.Path, PlayerCanvasReceiver.Instance)
         };
 
         public T Load<T>() where T : CanvasCommand

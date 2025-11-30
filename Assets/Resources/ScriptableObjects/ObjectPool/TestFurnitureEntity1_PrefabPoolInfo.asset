@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f471a99692240588a64faa0248d1d94, type: 3}
   m_Name: TestFurnitureEntity1_PrefabPoolInfo
   m_EditorClassIdentifier: 
-  <PoolName>k__BackingField: TestFurnitureEntity1
+  <PoolName>k__BackingField: TestFurnitureEntity1Pool
   <ObjectPath>k__BackingField: Prefabs/Entities/TestFurnitureEntity1
   <DefaultAmount>k__BackingField: 5
   <MaxAmountMultiplier>k__BackingField: 10
