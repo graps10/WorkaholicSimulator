@@ -13,10 +13,10 @@ TagManager:
   - UI
   - Bounds
   - PlayerTrigger
-  - EntityPlayer
-  - EntityNeutral
+  - PlayerEntity
+  - FurnitureEntity
   - Interactable
-  - 
+  - GhostPlacement
   - 
   - 
   - 

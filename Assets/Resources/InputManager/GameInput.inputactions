@@ -238,6 +238,54 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "MouseControls",
+            "id": "ab67034b-a823-41af-8c1b-ae6f13b188a2",
+            "actions": [
+                {
+                    "name": "LMB",
+                    "type": "Button",
+                    "id": "9d3a97d9-c144-4c7a-b026-832555c118e2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RMB",
+                    "type": "Button",
+                    "id": "d483273b-7522-4a2d-93ea-e4d147fffc23",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "9bdd0860-e630-4c3b-bdfd-014469762e88",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LMB",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2e1943f0-4afd-432e-95d5-64b2c4e2ed35",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RMB",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

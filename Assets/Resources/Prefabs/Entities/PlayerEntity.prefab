@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2898630532972391882}
   - component: {fileID: 4606351976587984263}
   m_Layer: 8
-  m_Name: Visual
+  m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -169,6 +169,7 @@ MonoBehaviour:
   OnExternalDeactivation:
     m_PersistentCalls:
       m_Calls: []
+  inputHandler: {fileID: 0}
 --- !u!114 &614179321828459472
 MonoBehaviour:
   m_ObjectHideFlags: 0

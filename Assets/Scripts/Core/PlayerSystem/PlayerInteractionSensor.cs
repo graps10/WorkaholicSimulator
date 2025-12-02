@@ -57,7 +57,7 @@ namespace Core.PlayerSystem
                         _currentInteractable = interactable;
                         OnInteractableTargetChanged?.Invoke(true);
                         OnInteractionAvailabilityChanged?.Invoke(true);
-                        Debug.Log($"Can Interact: {hit.collider.name}");
+                        //Debug.Log($"Can Interact: {hit.collider.name}");
                     }
                 }
                 else
@@ -78,7 +78,7 @@ namespace Core.PlayerSystem
             _currentInteractable = null;
             OnInteractableTargetChanged?.Invoke(false);
             OnInteractionAvailabilityChanged?.Invoke(false);
-            Debug.Log("Interaction Lost");
+            //Debug.Log("Interaction Lost");
         }
     }
 }

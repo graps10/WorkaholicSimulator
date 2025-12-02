@@ -260,6 +260,54 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""MouseControls"",
+            ""id"": ""ab67034b-a823-41af-8c1b-ae6f13b188a2"",
+            ""actions"": [
+                {
+                    ""name"": ""LMB"",
+                    ""type"": ""Button"",
+                    ""id"": ""9d3a97d9-c144-4c7a-b026-832555c118e2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RMB"",
+                    ""type"": ""Button"",
+                    ""id"": ""d483273b-7522-4a2d-93ea-e4d147fffc23"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""9bdd0860-e630-4c3b-bdfd-014469762e88"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LMB"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2e1943f0-4afd-432e-95d5-64b2c4e2ed35"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RMB"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -300,11 +348,16 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         m_MainControls_Pause = m_MainControls.FindAction("Pause", throwIfNotFound: true);
         m_MainControls_Sprint = m_MainControls.FindAction("Sprint", throwIfNotFound: true);
         m_MainControls_Interact = m_MainControls.FindAction("Interact", throwIfNotFound: true);
+        // MouseControls
+        m_MouseControls = asset.FindActionMap("MouseControls", throwIfNotFound: true);
+        m_MouseControls_LMB = m_MouseControls.FindAction("LMB", throwIfNotFound: true);
+        m_MouseControls_RMB = m_MouseControls.FindAction("RMB", throwIfNotFound: true);
     }
 
     ~@GameInput()
     {
         UnityEngine.Debug.Assert(!m_MainControls.enabled, "This will cause a leak and performance issues, GameInput.MainControls.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_MouseControls.enabled, "This will cause a leak and performance issues, GameInput.MouseControls.Disable() has not been called.");
     }
 
     public void Dispose()
@@ -448,6 +501,60 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         }
     }
     public MainControlsActions @MainControls => new MainControlsActions(this);
+
+    // MouseControls
+    private readonly InputActionMap m_MouseControls;
+    private List<IMouseControlsActions> m_MouseControlsActionsCallbackInterfaces = new List<IMouseControlsActions>();
+    private readonly InputAction m_MouseControls_LMB;
+    private readonly InputAction m_MouseControls_RMB;
+    public struct MouseControlsActions
+    {
+        private @GameInput m_Wrapper;
+        public MouseControlsActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @LMB => m_Wrapper.m_MouseControls_LMB;
+        public InputAction @RMB => m_Wrapper.m_MouseControls_RMB;
+        public InputActionMap Get() { return m_Wrapper.m_MouseControls; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MouseControlsActions set) { return set.Get(); }
+        public void AddCallbacks(IMouseControlsActions instance)
+        {
+            if (instance == null || m_Wrapper.m_MouseControlsActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MouseControlsActionsCallbackInterfaces.Add(instance);
+            @LMB.started += instance.OnLMB;
+            @LMB.performed += instance.OnLMB;
+            @LMB.canceled += instance.OnLMB;
+            @RMB.started += instance.OnRMB;
+            @RMB.performed += instance.OnRMB;
+            @RMB.canceled += instance.OnRMB;
+        }
+
+        private void UnregisterCallbacks(IMouseControlsActions instance)
+        {
+            @LMB.started -= instance.OnLMB;
+            @LMB.performed -= instance.OnLMB;
+            @LMB.canceled -= instance.OnLMB;
+            @RMB.started -= instance.OnRMB;
+            @RMB.performed -= instance.OnRMB;
+            @RMB.canceled -= instance.OnRMB;
+        }
+
+        public void RemoveCallbacks(IMouseControlsActions instance)
+        {
+            if (m_Wrapper.m_MouseControlsActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IMouseControlsActions instance)
+        {
+            foreach (var item in m_Wrapper.m_MouseControlsActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_MouseControlsActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public MouseControlsActions @MouseControls => new MouseControlsActions(this);
     private int m_NewControlSchemeSchemeIndex = -1;
     public InputControlScheme NewControlSchemeScheme
     {
@@ -474,5 +581,10 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         void OnPause(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+    }
+    public interface IMouseControlsActions
+    {
+        void OnLMB(InputAction.CallbackContext context);
+        void OnRMB(InputAction.CallbackContext context);
     }
 }

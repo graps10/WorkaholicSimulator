@@ -50,6 +50,8 @@ namespace Entities
                 rendererComponent.enabled = stateToSet;
         }
         
+        public Renderer[] GetRenderers() => renderers;
+        
         public override void ReturnToPool() // Unload entity into basic assets
         {
             SwitchGraphics(false);

@@ -25,9 +25,9 @@ namespace UI.Popup
         {
             if (requiresInteraction)
             {
-                CursorController.ToggleCursor(true);
+                /*CursorController.ToggleCursor(true);
                 if (Player.Instance != null && Player.Instance.InputHandler != null)
-                    Player.Instance.InputHandler.SetInputActive(false);
+                    Player.Instance.InputHandler.SetInputActive(false);*/
             }
         }
         
@@ -41,9 +41,9 @@ namespace UI.Popup
         {
             if (requiresInteraction)
             {
-                CursorController.ToggleCursor(false);
+                /*CursorController.ToggleCursor(false);
                 if (Player.Instance != null && Player.Instance.InputHandler != null)
-                    Player.Instance.InputHandler.SetInputActive(true);
+                    Player.Instance.InputHandler.SetInputActive(true);*/
             }
             
             base.ReturnToPool();

@@ -15,6 +15,8 @@ namespace Core.InputSystem
 		private static InputAction horizontalAxis, verticalAxis, 
 			jumpAction, sprintAction, interactAction;
 		
+		private static InputAction lmbAction, rmbAction;
+		
         public static InputDeviceType CurrentInputDevice { get; private set; }
 
         public delegate void ButtonDelegate();
@@ -28,6 +30,8 @@ namespace Core.InputSystem
         public static event ButtonDelegate OnSprintStarted, OnSprintCanceled;
         
         // Interaction Events
+        public static event ButtonDelegate OnLMBPerformed;
+        public static event ButtonDelegate OnRMBPerformed;
         public static event ButtonDelegate OnInteractPerformed;
         
         // System Events
@@ -47,6 +51,9 @@ namespace Core.InputSystem
 			Player.Instance.OnUpdateEvent += OnUpdate;
 
 			AddCheckDeviceSubscriptions();
+			
+			lmbAction.performed += OnLMBInput;
+			rmbAction.performed += OnRMBInput;
 			
 			jumpAction.performed += OnJumpInput;
 			
@@ -111,6 +118,9 @@ namespace Core.InputSystem
         #endregion
 		
 		#region Input Callbacks
+
+		private static void OnLMBInput(InputAction.CallbackContext context) => OnLMBPerformed?.Invoke();
+		private static void OnRMBInput(InputAction.CallbackContext context) => OnRMBPerformed?.Invoke();
 		
 		private static void OnJumpInput(InputAction.CallbackContext context) => OnJumpPerformed?.Invoke();
 		private static void OnSprintInputStarted(InputAction.CallbackContext context) => OnSprintStarted?.Invoke();
@@ -124,6 +134,9 @@ namespace Core.InputSystem
 		
 		private static void ChangeControlsToMain()
 		{
+			lmbAction = inputActions.MouseControls.LMB;
+			rmbAction = inputActions.MouseControls.RMB;
+			
 			horizontalAxis = inputActions.MainControls.MovementHorizontal;
 			verticalAxis = inputActions.MainControls.MovementVertical;
 			jumpAction = inputActions.MainControls.Jump; 
@@ -133,6 +146,8 @@ namespace Core.InputSystem
 
 		private static void AddCheckDeviceSubscriptions()
 		{
+			lmbAction.performed += CheckDevice;
+			rmbAction.performed += CheckDevice;
 			horizontalAxis.performed += CheckDevice;
 			verticalAxis.performed += CheckDevice;
 			jumpAction.performed += CheckDevice;
@@ -152,6 +167,21 @@ namespace Core.InputSystem
 		        inputActions = null;
 	        }
 
+	        if (lmbAction != null)
+	        {
+		        lmbAction.performed -= CheckDevice;
+		        lmbAction.performed -= OnLMBInput;
+		        lmbAction.Dispose();
+		        lmbAction = null;
+	        }
+
+	        if (rmbAction != null)
+	        {
+		        rmbAction.performed -= CheckDevice;
+		        rmbAction.performed -= OnRMBInput;
+		        rmbAction.Dispose();
+		        rmbAction = null;
+	        }
 	        if (horizontalAxis != null)
             {
 	            horizontalAxis.performed -= CheckDevice;

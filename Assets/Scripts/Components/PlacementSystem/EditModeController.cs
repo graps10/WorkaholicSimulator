@@ -17,7 +17,7 @@ namespace Components.PlacementSystem
 
         private void Start()
         {
-            _allSockets.AddRange(FindObjectsOfType<Socket>());
+            _allSockets.AddRange(FindObjectsOfType<Socket>()); // temporary
             
             SetEditMode(false);
         }
@@ -26,13 +26,11 @@ namespace Components.PlacementSystem
         {
             foreach (var socket in _allSockets)
             {
-                /*var visuals = socket.transform.Find("Visuals");
+                var visuals = socket.transform.Find("Visuals");
                 if (visuals)
-                {
                     visuals.gameObject.SetActive(isEditMode);
-                }*/
                 
-                socket.enabled = isEditMode; 
+                socket.enabled = isEditMode;
             }
         }
         

@@ -1,39 +1,100 @@
-﻿using Core.Utilities;
+﻿using Core.InputSystem;
+using Core.Interfaces;
+using Core.ObjectPool;
+using Core.PlayerSystem;
+using Entities;
 using Entities.Molds;
 using Hypertonic.Modules.UltimateSockets.PlaceableItems;
+using Hypertonic.Modules.UltimateSockets.Sockets;
 using UnityEngine;
 
 namespace Components.PlacementSystem
 {
-    public class PlacementManager : MonoBehaviour
+    public class PlacementManager : MonoBehaviour, IUpdatable, IFixedUpdatable
     {
+        private const string Ghost_Placement_Layer_Name = "GhostPlacement";
+        public static PlacementManager Instance {get; private set; }
+        
         [Header("Settings")]
         [SerializeField] private LayerMask placementLayer;
+        [SerializeField] private LayerMask ghostLayer;
+        [SerializeField] private Material initialMaterial;
         [SerializeField] private Material ghostMaterial;
-        [SerializeField] private float reachDistance = 10f;
+        
+        [Header("Movement Settings")]
+        [SerializeField] private float maxReachDistance = 10f;
+        [SerializeField] private float minDetectionDistance = 2f;
+        [SerializeField] private float yHeightClampMin = -5f;
+        [SerializeField] private float yHeightClampMax = 5f;
 
-        private GameObject _currentGhostObject;
+        private RigidbodyEntity _currentGhostEntity;
+        private Rigidbody _currentRigidbody;
+        private Renderer[] _currentObjectRenderers;
+        
         private MouseGrabbable _currentGrabbable;
         private PlaceableItem _currentPlaceableItem;
         
         private bool _isPlacingMode;
+        private Vector3 _targetPosition;
+        
+        private int _originalLayer;
 
-        private void Update()
+        private void Awake()
         {
-            if (!_isPlacingMode || _currentGhostObject == null) return;
+            if (Instance == null) Instance = this;
+            else Destroy(gameObject);
+        }
 
-            HandleGhostMovement();
-            HandleInput();
+        private void OnEnable()
+        {
+            if (Player.Instance != null)
+            {
+                Player.Instance.RegisterUpdatable(this);
+                Player.Instance.RegisterFixedUpdatable(this);
+            }
+            
+            InputManager.OnLMBPerformed += HandlePlaceInput;
+            InputManager.OnRMBPerformed += HandleCancelInput;
+        }
+
+        private void OnDisable()
+        {
+            if (Player.Instance != null)
+            {
+                Player.Instance.UnregisterUpdatable(this);
+                Player.Instance.UnregisterFixedUpdatable(this);
+            }
+            
+            InputManager.OnLMBPerformed -= HandlePlaceInput;
+            InputManager.OnRMBPerformed -= HandleCancelInput;
+        }
+
+        public void OnUpdate()
+        {
+            if (!_isPlacingMode || _currentGhostEntity == null) return;
+
+            CalculateTargetPosition();
+        }
+        
+        public void OnFixedUpdate()
+        {
+            if (!_isPlacingMode || _currentGhostEntity == null) return;
+            
+            ApplyMovement();
         }
         
         public void StartPlacement(FurnitureMold mold)
         {
             if (mold == null) return;
             
-            AssetUtils.TryLoadAsset(mold.PrefabPoolInfo.ObjectPath, out _currentGhostObject);
+            _currentGhostEntity = ObjectPooler.TakePooledGameObject(mold.PrefabPoolInfo, transform) as RigidbodyEntity;
+            if (_currentGhostEntity == null) return;
+
+            _currentRigidbody =_currentGhostEntity.GetRigidbody();
+            _currentObjectRenderers = _currentGhostEntity.GetRenderers();
             
-            _currentPlaceableItem = _currentGhostObject.GetComponent<PlaceableItem>();
-            _currentGrabbable = _currentGhostObject.GetComponent<MouseGrabbable>();
+            _currentPlaceableItem = _currentGhostEntity.GetComponentInChildren<PlaceableItem>();
+            _currentGrabbable = _currentGhostEntity.GetComponent<MouseGrabbable>();
 
             if (_currentPlaceableItem == null || _currentGrabbable == null)
             {
@@ -42,80 +103,132 @@ namespace Components.PlacementSystem
                 return;
             }
             
-            SetGhostMaterial(_currentGhostObject, true);
+            _currentPlaceableItem.OnPlaced += OnItemSuccessfullyPlaced;
+            
+            _originalLayer = _currentGhostEntity.gameObject.layer;
+            SetLayer(_currentGhostEntity.gameObject, LayerMask.NameToLayer(Ghost_Placement_Layer_Name));
+            SetGhostMaterial(true);
             
             _currentGrabbable.Grab(); 
             
-            EditModeController.Instance.SetEditMode(true);
-            
             _isPlacingMode = true;
+            EditModeController.Instance.SetEditMode(true);
         }
         
-        private void HandleGhostMovement()
+        private void CalculateTargetPosition()
         {
             if (Camera.main == null) return;
             
-            Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-            
-            if (Physics.Raycast(ray, out RaycastHit hit, reachDistance, placementLayer))
+            Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+            if (Physics.Raycast(ray, out RaycastHit hit, maxReachDistance, placementLayer))
             {
-                var rb = _currentGhostObject.GetComponent<Rigidbody>();
-                if (rb)
-                    rb.MovePosition(hit.point);
+                if (hit.distance < minDetectionDistance)
+                    _targetPosition = ray.GetPoint(minDetectionDistance);
                 else
-                    _currentGhostObject.transform.position = hit.point;
+                    _targetPosition = hit.point;
+            }
+            else
+            {
+                Vector3 defaultPos = ray.GetPoint(maxReachDistance);
+                
+                float clampedY = Mathf.Clamp(defaultPos.y, 
+                    transform.position.y + yHeightClampMin, 
+                    transform.position.y + yHeightClampMax);
+                
+                _targetPosition = new Vector3(defaultPos.x, clampedY, defaultPos.z);
             }
         }
         
-        private void HandleInput()
+        private void ApplyMovement()
         {
-            if (Input.GetMouseButtonDown(0))
-                TryPlaceItem();
-            
-            if (Input.GetKeyDown(KeyCode.Escape))
-                CancelPlacement();
-        }
-
-        private void TryPlaceItem()
-        {
-            _currentGrabbable.Release();
-            
-            if (_currentPlaceableItem.Placed)
-                FinalizePlacement();
+            if (_currentRigidbody)
+                _currentRigidbody.MovePosition(_targetPosition);
             else
-                Debug.Log("Not in socket range!");
+                _currentGhostEntity.transform.position = _targetPosition;
         }
-
-        private void FinalizePlacement()
+        
+        private void HandlePlaceInput()
         {
-            SetGhostMaterial(_currentGhostObject, false);
+            if (!_isPlacingMode) return;
             
-            _currentGhostObject = null;
-            _currentGrabbable = null;
-            _isPlacingMode = false;
-            
-            EditModeController.Instance.SetEditMode(false);
-            
-            // Remove an item from inventory, spend money
-        }
+            var targetSocket = _currentPlaceableItem.ClosestSocket;
 
-        private void CancelPlacement()
-        {
-            if (_currentGhostObject != null) Destroy(_currentGhostObject);
-            _isPlacingMode = false;
-            EditModeController.Instance.SetEditMode(false);
-        }
-
-        private void SetGhostMaterial(GameObject obj, bool isGhost)
-        {
-            var renderers = obj.GetComponentsInChildren<Renderer>();
-            foreach (var r in renderers)
+            if (targetSocket != null)
             {
-                if (isGhost)
-                    r.material = ghostMaterial;
+                if (targetSocket.CanPlace(_currentPlaceableItem))
+                {
+                    _isPlacingMode = false;
+                    _currentGrabbable.Release();
+                }
                 else
-                    r.material = r.sharedMaterial;
+                    Debug.LogWarning($"Cannot place here! Socket '{targetSocket.name}' rejected the item (Occupied?).");
             }
+            else
+                Debug.Log("Cannot place: No socket nearby!");
+        }
+
+        private void HandleCancelInput()
+        {
+            if (!_isPlacingMode) return;
+            CancelPlacement();
+        }
+
+        private void OnItemSuccessfullyPlaced(Socket socket, PlaceableItem placeableItem)
+        {
+            Debug.Log($"Placed successfully {placeableItem.transform.parent.name} in socket: {socket.name}");
+            FinalizePlacementLogic(true);
+        }
+        
+        private void FinalizePlacementLogic(bool success)
+        {
+            if (_currentPlaceableItem != null)
+                _currentPlaceableItem.OnPlaced -= OnItemSuccessfullyPlaced;
+
+            if (success)
+            {
+                SetLayer(_currentGhostEntity.gameObject, _originalLayer);
+                SetGhostMaterial(false);
+            }
+            else
+            {
+                if(_currentGhostEntity != null)
+                    _currentGhostEntity.ReturnToPool();
+            }
+            
+            _currentGhostEntity = null;
+            _currentRigidbody = null;
+            _currentObjectRenderers = null;
+            
+            _currentGrabbable = null;
+            _currentPlaceableItem = null;
+            
+            _isPlacingMode = false;
+            EditModeController.Instance.SetEditMode(false);
+            
+            // TODO: Remove money / Remove from inventory data logic here
+        }
+
+        private void CancelPlacement() => FinalizePlacementLogic(false);
+
+        private void SetGhostMaterial(bool isGhost)
+        {
+            if(_currentObjectRenderers == null) return;
+            
+            foreach (var r in _currentObjectRenderers)
+            {
+                if (r == null) continue;
+                
+                if (isGhost && ghostMaterial != null)
+                    r.material = ghostMaterial;
+                else if (!isGhost && initialMaterial != null)
+                    r.material = initialMaterial;
+            }
+        }
+        
+        private void SetLayer(GameObject obj, int newLayer)
+        {
+            if (obj == null) return;
+            obj.layer = newLayer;
         }
     }
 }
