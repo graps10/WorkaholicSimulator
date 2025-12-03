@@ -1,6 +1,7 @@
 using System;
 using Components.PlacementSystem;
 using Core.ObjectPool;
+using Core.PlayerSystem;
 using Core.SaveSystem;
 using Core.Utilities;
 using Entities.Databases;
@@ -82,6 +83,7 @@ namespace UI.Inventory
         private void OnItemSelected(FurnitureMold mold)
         {
             PlacementManager.Instance.StartPlacement(mold);
+            //SaveManager.Progress.Inventory.TryRemoveItem(mold.ID);
             Debug.Log($"Selected item for placement: {mold.name}");
             ReturnToPool();
         }

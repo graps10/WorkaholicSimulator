@@ -1,4 +1,5 @@
-﻿using Core.InputSystem;
+﻿using System.Collections.Generic;
+using Core.InputSystem;
 using Core.Interfaces;
 using Core.ObjectPool;
 using Core.PlayerSystem;
@@ -13,6 +14,9 @@ namespace Components.PlacementSystem
     public class PlacementManager : MonoBehaviour, IUpdatable, IFixedUpdatable
     {
         private const string Ghost_Placement_Layer_Name = "GhostPlacement";
+
+        private const string Not_Holding_Ignore_Criteria = "NotHoldingItem";
+        
         public static PlacementManager Instance {get; private set; }
         
         [Header("Settings")]
@@ -112,7 +116,7 @@ namespace Components.PlacementSystem
             _currentGrabbable.Grab(); 
             
             _isPlacingMode = true;
-            EditModeController.Instance.SetEditMode(true);
+            ApartmentController.Instance.SetDecorationMode(true);
         }
         
         private void CalculateTargetPosition()
@@ -155,13 +159,15 @@ namespace Components.PlacementSystem
 
             if (targetSocket != null)
             {
-                if (targetSocket.CanPlace(_currentPlaceableItem))
+                var ignoreCriteria = new List<string> { Not_Holding_Ignore_Criteria };
+                if (targetSocket.CanPlace(_currentPlaceableItem, ignoreCriteria))
                 {
+                    Debug.Log("Placed manually");
                     _isPlacingMode = false;
                     _currentGrabbable.Release();
                 }
                 else
-                    Debug.LogWarning($"Cannot place here! Socket '{targetSocket.name}' rejected the item (Occupied?).");
+                    Debug.Log($"Cannot place here! Socket '{targetSocket.name}' rejected the item (Occupied?).");
             }
             else
                 Debug.Log("Cannot place: No socket nearby!");
@@ -203,7 +209,7 @@ namespace Components.PlacementSystem
             _currentPlaceableItem = null;
             
             _isPlacingMode = false;
-            EditModeController.Instance.SetEditMode(false);
+            ApartmentController.Instance.SetDecorationMode(false);
             
             // TODO: Remove money / Remove from inventory data logic here
         }
