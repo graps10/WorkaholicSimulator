@@ -24,7 +24,7 @@ namespace Entities
         public override void LoadEntity(Mold entityMold)
         {
             base.LoadEntity(entityMold);
-             Initialize(entityMold as PlayerMold);
+            Initialize(entityMold as PlayerMold);
         }
 
         private void Initialize(PlayerMold mold)

@@ -1,23 +1,40 @@
 ﻿using System.Collections.Generic;
 using Core.InputSystem;
 using Core.Interfaces;
-using Core.ObjectPool;
 using Core.PlayerSystem;
+using Core.SaveSystem;
 using Entities;
+using Entities.Constructors;
 using Entities.Molds;
 using Hypertonic.Modules.UltimateSockets.PlaceableItems;
 using Hypertonic.Modules.UltimateSockets.Sockets;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Components.PlacementSystem
 {
     public class PlacementManager : MonoBehaviour, IUpdatable, IFixedUpdatable
     {
+        #region Constants
+        
         private const string Ghost_Placement_Layer_Name = "GhostPlacement";
-
         private const string Not_Holding_Ignore_Criteria = "NotHoldingItem";
         
-        public static PlacementManager Instance {get; private set; }
+        #endregion
+        
+        #region Singleton
+        
+        public static PlacementManager Instance { get; private set; }
+
+        private void Awake()
+        {
+            if (Instance == null) Instance = this;
+            else Destroy(gameObject);
+        }
+        
+        #endregion
+        
+        #region Editor Settings
         
         [Header("Settings")]
         [SerializeField] private LayerMask placementLayer;
@@ -30,25 +47,38 @@ namespace Components.PlacementSystem
         [SerializeField] private float minDetectionDistance = 2f;
         [SerializeField] private float yHeightClampMin = -5f;
         [SerializeField] private float yHeightClampMax = 5f;
+        
+        [Header("Rotation Settings")]
+        [SerializeField] private float rotationSpeed = 10f;
 
+        #endregion
+        
+        #region Internal State
+        
+        // Current Object References
         private RigidbodyEntity _currentGhostEntity;
         private Rigidbody _currentRigidbody;
         private Renderer[] _currentObjectRenderers;
+        private FurnitureMold _currentMold;
         
+        // USS References
         private MouseGrabbable _currentGrabbable;
         private PlaceableItem _currentPlaceableItem;
         
-        private bool _isPlacingMode;
-        private Vector3 _targetPosition;
+        // Rotation Mode State
+        private PlaceableItem _itemToRotate;
+        private Quaternion _initialRotation;
         
+        // Logic Flags & Cache
+        private bool _isPlacingMode;
+        private bool _isRotationMode;
+        private Vector3 _targetPosition;
         private int _originalLayer;
+        
+        #endregion
 
-        private void Awake()
-        {
-            if (Instance == null) Instance = this;
-            else Destroy(gameObject);
-        }
-
+        #region Unity Lifecycle
+        
         private void OnEnable()
         {
             if (Player.Instance != null)
@@ -73,8 +103,18 @@ namespace Components.PlacementSystem
             InputManager.OnRMBPerformed -= HandleCancelInput;
         }
 
+        #endregion
+        
+        #region Update Loops (Interfaces)
+        
         public void OnUpdate()
         {
+            if (_isRotationMode)
+            {
+                HandleRotationLogic();
+                return;
+            }
+            
             if (!_isPlacingMode || _currentGhostEntity == null) return;
 
             CalculateTargetPosition();
@@ -87,11 +127,23 @@ namespace Components.PlacementSystem
             ApplyMovement();
         }
         
+        #endregion
+        
+        #region Public API (Interaction Entry Points)
+        
         public void StartPlacement(FurnitureMold mold)
         {
             if (mold == null) return;
+
+            if (SaveManager.Progress.Inventory.GetItemCount(mold.ID) <= 0)
+            {
+                Debug.LogError("Not enough items!");
+                return;
+            }
             
-            _currentGhostEntity = ObjectPooler.TakePooledGameObject(mold.PrefabPoolInfo, transform) as RigidbodyEntity;
+            _currentMold = mold;
+            
+            EntityConstructor.Instance.LoadImmediately(mold, transform, out _currentGhostEntity);
             if (_currentGhostEntity == null) return;
 
             _currentRigidbody =_currentGhostEntity.GetRigidbody();
@@ -118,6 +170,32 @@ namespace Components.PlacementSystem
             _isPlacingMode = true;
             ApartmentController.Instance.SetDecorationMode(true);
         }
+        
+        public void RemoveFromSocket(PlaceableItem item, FurnitureMold mold)
+        {
+            if (item == null) return;
+            item.RemoveFromSocket();
+            
+            RemoveFurniture(item, mold);
+            Debug.Log($"Removed {mold.name} and returned to inventory.");
+        }
+
+        public void StartRotationMode(PlaceableItem item)
+        {
+            if (item == null) return;
+
+            _itemToRotate = item;
+            _initialRotation = item.transform.parent.rotation;
+            _isRotationMode = true;
+            
+            Player.Instance.InputHandler.SetInputActive(false);
+            
+            Debug.Log("Rotation Mode Started. Move mouse left/right.");
+        }
+        
+        #endregion
+        
+        #region Core Placement Logic (Movement & Physics)
         
         private void CalculateTargetPosition()
         {
@@ -151,6 +229,10 @@ namespace Components.PlacementSystem
                 _currentGhostEntity.transform.position = _targetPosition;
         }
         
+        #endregion
+        
+        #region Input Handlers (Placement)
+        
         private void HandlePlaceInput()
         {
             if (!_isPlacingMode) return;
@@ -159,6 +241,7 @@ namespace Components.PlacementSystem
 
             if (targetSocket != null)
             {
+                // Ignore "NotHoldingItem" criteria because we are technically still holding it via script
                 var ignoreCriteria = new List<string> { Not_Holding_Ignore_Criteria };
                 if (targetSocket.CanPlace(_currentPlaceableItem, ignoreCriteria))
                 {
@@ -178,7 +261,55 @@ namespace Components.PlacementSystem
             if (!_isPlacingMode) return;
             CancelPlacement();
         }
+        
+        #endregion
+        
+        #region Rotation Logic /// Temporary
 
+        private float GetRotationInput() => Mouse.current.delta.x.ReadValue(); 
+        
+        private void HandleRotationLogic()
+        {
+            float mouseX = GetRotationInput();
+
+            const float mouseThreshold = 0.1f;
+            if (Mathf.Abs(mouseX) > mouseThreshold)
+                _itemToRotate.transform.parent.Rotate(Vector3.up, -mouseX * rotationSpeed * Time.deltaTime);
+            
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+                ConfirmRotation();
+            
+            if (Mouse.current.rightButton.wasPressedThisFrame)
+                CancelRotation();
+        }
+
+        private void ConfirmRotation()
+        {
+            ExitRotationMode();
+            Debug.Log("Rotation Confirmed.");
+        }
+
+        private void CancelRotation()
+        {
+            if (_itemToRotate != null)
+                _itemToRotate.transform.parent.rotation = _initialRotation;
+            
+            ExitRotationMode();
+            Debug.Log("Rotation Cancelled.");
+        }
+
+        private void ExitRotationMode()
+        {
+            _isRotationMode = false;
+            _itemToRotate = null;
+            
+            Player.Instance.InputHandler.SetInputActive(true);
+        }
+        
+        #endregion
+        
+        #region Completion & Cleanup
+        
         private void OnItemSuccessfullyPlaced(Socket socket, PlaceableItem placeableItem)
         {
             Debug.Log($"Placed successfully {placeableItem.transform.parent.name} in socket: {socket.name}");
@@ -192,30 +323,52 @@ namespace Components.PlacementSystem
 
             if (success)
             {
-                SetLayer(_currentGhostEntity.gameObject, _originalLayer);
-                SetGhostMaterial(false);
+                //SaveManager.Progress.Inventory.TryRemoveItem(_currentMold.ID);
+                //ApartmentController.Instance.SaveApartmentState();
             }
             else
-            {
-                if(_currentGhostEntity != null)
-                    _currentGhostEntity.ReturnToPool();
-            }
+                RemoveFurniture(_currentPlaceableItem, _currentMold);
+
+            SetLayer(_currentGhostEntity.gameObject, _originalLayer);
+            SetGhostMaterial(false);
             
             _currentGhostEntity = null;
             _currentRigidbody = null;
             _currentObjectRenderers = null;
-            
-            _currentGrabbable = null;
             _currentPlaceableItem = null;
+            
+            _currentMold = null;
+            _currentGrabbable = null;
             
             _isPlacingMode = false;
             ApartmentController.Instance.SetDecorationMode(false);
+        }
+        
+        private void RemoveFurniture(PlaceableItem item, FurnitureMold mold)
+        {
+            //SaveManager.Progress.Inventory.AddItem(mold.ID);
+            //ApartmentController.Instance.SaveApartmentState();
             
-            // TODO: Remove money / Remove from inventory data logic here
+            var entity = item.GetComponentInParent<RigidbodyEntity>();
+            if (entity != null)
+            {
+                entity.SwitchGraphics(false);
+                entity.SwitchColliders(false);
+                
+                Core.Utilities.UtilsProvider.WaitAndRun(() => 
+                {
+                    if (entity != null)
+                        entity.ReturnToPool();
+                }, true, 1f);
+            }
         }
 
         private void CancelPlacement() => FinalizePlacementLogic(false);
 
+        #endregion
+        
+        #region Utilities (Visuals & Layers)
+        
         private void SetGhostMaterial(bool isGhost)
         {
             if(_currentObjectRenderers == null) return;
@@ -236,5 +389,7 @@ namespace Components.PlacementSystem
             if (obj == null) return;
             obj.layer = newLayer;
         }
+        
+        #endregion
     }
 }

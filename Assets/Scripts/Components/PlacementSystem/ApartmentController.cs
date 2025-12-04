@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -18,6 +19,8 @@ namespace Components.PlacementSystem
             if (Instance == null) Instance = this;
             else Destroy(gameObject);
         }
+
+        private void Start() => SetDecorationMode(false);
 
         [ContextMenu("Auto Collect Rooms")]
         private void CollectRooms()

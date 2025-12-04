@@ -17,15 +17,18 @@ namespace Entities.Constructors
                 case PlayerMold playerMold:
                     pooledObject = LoadPlayer(playerMold, parentToSet);
                     break;
+                case FurnitureMold furnitureMold:
+                    pooledObject = LoadFurniture(furnitureMold, parentToSet);
+                    break;
                 default:
                     pooledObject = LoadEntity(entityMold, parentToSet);
                     break;
             }
             
-            if (pooledObject != null && pooledObject is not PlayerEntity)
+            if (pooledObject != null) // temporary
             {
-                pooledObject.SwitchGraphics(false); 
-                pooledObject.ToggleLogic(false);  
+                //pooledObject.SwitchGraphics(false); 
+               // pooledObject.ToggleLogic(false);  
             }
 
             result = (T)pooledObject;
@@ -49,6 +52,16 @@ namespace Entities.Constructors
             playerEntity.LoadEntity(mold);
 
             return playerEntity;
+        }
+        
+        public Entity LoadFurniture(FurnitureMold mold, Transform parentToSet)
+        {
+            var pooledObject = TakeFromPool(mold.PrefabPoolInfo, parentToSet);
+            var furnitureEntity = pooledObject.GetComponent<FurnitureEntity>();
+
+            furnitureEntity.LoadEntity(mold);
+
+            return furnitureEntity;
         }
     }
 }

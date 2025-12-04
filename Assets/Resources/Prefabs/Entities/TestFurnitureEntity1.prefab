@@ -96,9 +96,10 @@ GameObject:
   - component: {fileID: 2404941734318201975}
   - component: {fileID: 8273117873180276907}
   - component: {fileID: 7948467459052859449}
-  - component: {fileID: 267915523387033197}
   - component: {fileID: 7668334051150194827}
-  m_Layer: 9
+  - component: {fileID: 693681816231906669}
+  - component: {fileID: 1657076559890108606}
+  m_Layer: 10
   m_Name: TestFurnitureEntity1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -170,7 +171,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &267915523387033197
+--- !u!114 &7668334051150194827
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,7 +180,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1452457197940283318}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1119558dfe343ddbb1bc07867550de5, type: 3}
+  m_Script: {fileID: 11500000, guid: 25059ab03ab94a468a5b49bde459efda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &693681816231906669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1452457197940283318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c83f1702d6064f56be95279d81ca0b86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   OnEnableLogic:
@@ -196,8 +209,9 @@ MonoBehaviour:
   OnExternalDeactivation:
     m_PersistentCalls:
       m_Calls: []
-  controllerRigidbody: {fileID: 7948467459052859449}
---- !u!114 &7668334051150194827
+  controlledRigidbody: {fileID: 0}
+  controlledColliders: []
+--- !u!114 &1657076559890108606
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -206,7 +220,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1452457197940283318}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25059ab03ab94a468a5b49bde459efda, type: 3}
+  m_Script: {fileID: 11500000, guid: 5769e92c7af64908b30347563ef14eed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1703895952899301649
@@ -553,7 +567,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 5, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -707,5 +721,5 @@ MonoBehaviour:
   _placeableItemPreviewController: {fileID: 8342688581107173828}
   _placeableItemGrabbable: {fileID: 5901535412909458209}
   _utilityComponentContainerGameObject: {fileID: 2391053443181686749}
-  _tabIndex: 2
+  _tabIndex: 4
   _previewTransitionSocket: {fileID: 0}

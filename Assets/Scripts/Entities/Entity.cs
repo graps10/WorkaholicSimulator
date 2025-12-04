@@ -8,12 +8,12 @@ namespace Entities
 {
     public class Entity : PooledGameObject
     {
-        protected bool LogicIsEnabled { get; private set; }
-        
         [SerializeField] protected UnityEvent OnEnableLogic;
         [SerializeField] protected UnityEvent OnDisableLogic;
         [SerializeField] protected Renderer[] renderers;
 
+        protected bool LogicIsEnabled { get; private set; }
+        
         public UnityEvent OnExternalActivation;
         public UnityEvent OnExternalDeactivation;
         
@@ -52,6 +52,7 @@ namespace Entities
         
         public Renderer[] GetRenderers() => renderers;
         
+        [ContextMenu("Return To Pool")]
         public override void ReturnToPool() // Unload entity into basic assets
         {
             SwitchGraphics(false);

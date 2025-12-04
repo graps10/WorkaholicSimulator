@@ -38,6 +38,8 @@ namespace Core.SaveSystem
             return true;
         }
 
+        public int GetItemCount(string id) => ownedItems.ContainsKey(id) ? ownedItems[id] : 0;
+
         public Dictionary<string, int> GetOwnedItems() => ownedItems;
     }
 }

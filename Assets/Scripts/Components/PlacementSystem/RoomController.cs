@@ -27,8 +27,6 @@ namespace Components.PlacementSystem
             {
                 if (socket == null) continue;
                 
-                socket.enabled = isVisible;
-                
                 var visual = socket.transform.GetChild(0);
                 if (visual != null)
                     visual.gameObject.SetActive(isVisible);

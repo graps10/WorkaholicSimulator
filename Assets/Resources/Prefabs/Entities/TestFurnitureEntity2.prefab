@@ -75,8 +75,9 @@ GameObject:
   - component: {fileID: 2404941734318201975}
   - component: {fileID: 8273117873180276907}
   - component: {fileID: 2191126171459865107}
-  - component: {fileID: 5415048938711819667}
   - component: {fileID: 2909405925316132757}
+  - component: {fileID: 3863747497510303028}
+  - component: {fileID: 554254890457990332}
   m_Layer: 9
   m_Name: TestFurnitureEntity2
   m_TagString: Untagged
@@ -149,7 +150,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5415048938711819667
+--- !u!114 &2909405925316132757
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,7 +159,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1452457197940283318}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1119558dfe343ddbb1bc07867550de5, type: 3}
+  m_Script: {fileID: 11500000, guid: 25059ab03ab94a468a5b49bde459efda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3863747497510303028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1452457197940283318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c83f1702d6064f56be95279d81ca0b86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   OnEnableLogic:
@@ -176,7 +189,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   controllerRigidbody: {fileID: 2191126171459865107}
---- !u!114 &2909405925316132757
+  controllerColliders:
+  - {fileID: 8273117873180276907}
+--- !u!114 &554254890457990332
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -185,7 +200,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1452457197940283318}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25059ab03ab94a468a5b49bde459efda, type: 3}
+  m_Script: {fileID: 11500000, guid: 5769e92c7af64908b30347563ef14eed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2439554433440499173
@@ -268,7 +283,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 5}
   m_Center: {x: 0, y: 0, z: 0}

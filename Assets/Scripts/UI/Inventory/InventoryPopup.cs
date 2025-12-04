@@ -83,7 +83,6 @@ namespace UI.Inventory
         private void OnItemSelected(FurnitureMold mold)
         {
             PlacementManager.Instance.StartPlacement(mold);
-            //SaveManager.Progress.Inventory.TryRemoveItem(mold.ID);
             Debug.Log($"Selected item for placement: {mold.name}");
             ReturnToPool();
         }

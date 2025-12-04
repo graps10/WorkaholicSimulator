@@ -1,7 +1,7 @@
 ﻿using Core.Interfaces;
 using UnityEngine;
 
-namespace Entities.Interactables
+namespace Entities.Interactable
 {
     public class TestInteractableBox : MonoBehaviour, IInteractable
     {
