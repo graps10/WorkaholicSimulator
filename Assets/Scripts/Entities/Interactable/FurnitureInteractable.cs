@@ -9,13 +9,13 @@ namespace Entities.Interactable
 {
     public class FurnitureInteractable : MonoBehaviour, IInteractable
     {
-        private PlaceableItem _placeableItem;
         private FurnitureEntity _entity;
+        private PlaceableItem _placeableItem;
 
         private void Awake()
         {
-            _placeableItem = GetComponentInChildren<PlaceableItem>();
             _entity = GetComponent<FurnitureEntity>();
+            _placeableItem = GetComponent<PlaceableItem>();
         }
 
         public void Interact()

@@ -9,6 +9,7 @@ namespace Core.SaveSystem
         
         [ES3Serializable] private WalletData wallet = new();
         [ES3Serializable] private InventoryData inventory = new();
+        [ES3Serializable] private ApartmentData apartmentData = new();
         
         [ES3Serializable] private Dictionary<string, Dictionary<string, Pose>> locationObjectsPathAndPose = new();
         
@@ -17,6 +18,7 @@ namespace Core.SaveSystem
         public PlayerTransformData PlayerTransformData => playerTransformData;
         public WalletData Wallet => wallet;
         public InventoryData Inventory => inventory;
+        public ApartmentData ApartmentData => apartmentData;
         
         public bool TryGetLocationObjectPoses(string location, out Dictionary<string, Pose> dictionary)
         {

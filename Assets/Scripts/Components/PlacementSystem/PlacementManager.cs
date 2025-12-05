@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Core.InputSystem;
+﻿using Core.InputSystem;
 using Core.Interfaces;
 using Core.PlayerSystem;
 using Core.SaveSystem;
@@ -149,7 +148,7 @@ namespace Components.PlacementSystem
             _currentRigidbody =_currentGhostEntity.GetRigidbody();
             _currentObjectRenderers = _currentGhostEntity.GetRenderers();
             
-            _currentPlaceableItem = _currentGhostEntity.GetComponentInChildren<PlaceableItem>();
+            _currentPlaceableItem = _currentGhostEntity.GetComponent<PlaceableItem>();
             _currentGrabbable = _currentGhostEntity.GetComponent<MouseGrabbable>();
 
             if (_currentPlaceableItem == null || _currentGrabbable == null)
@@ -174,9 +173,21 @@ namespace Components.PlacementSystem
         public void RemoveFromSocket(PlaceableItem item, FurnitureMold mold)
         {
             if (item == null) return;
-            item.RemoveFromSocket();
             
-            RemoveFurniture(item, mold);
+            var entity = item.GetComponent<RigidbodyEntity>();
+            if (entity == null) return;
+            
+            entity.SwitchGraphics(false);
+            entity.SwitchColliders(false);
+                
+            Core.Utilities.UtilsProvider.WaitAndRun(() => 
+            {
+                if(item.ClosestSocket.PlacedItem != null)
+                    item.RemoveFromSocket();
+                    
+                entity.ReturnToPool();
+            }, true);
+            
             Debug.Log($"Removed {mold.name} and returned to inventory.");
         }
 
@@ -185,7 +196,7 @@ namespace Components.PlacementSystem
             if (item == null) return;
 
             _itemToRotate = item;
-            _initialRotation = item.transform.parent.rotation;
+            _initialRotation = item.transform.rotation;
             _isRotationMode = true;
             
             Player.Instance.InputHandler.SetInputActive(false);
@@ -232,25 +243,20 @@ namespace Components.PlacementSystem
         #endregion
         
         #region Input Handlers (Placement)
-        
+
         private void HandlePlaceInput()
         {
             if (!_isPlacingMode) return;
-            
+
             var targetSocket = _currentPlaceableItem.ClosestSocket;
 
             if (targetSocket != null)
             {
-                // Ignore "NotHoldingItem" criteria because we are technically still holding it via script
-                var ignoreCriteria = new List<string> { Not_Holding_Ignore_Criteria };
-                if (targetSocket.CanPlace(_currentPlaceableItem, ignoreCriteria))
-                {
-                    Debug.Log("Placed manually");
-                    _isPlacingMode = false;
-                    _currentGrabbable.Release();
-                }
-                else
-                    Debug.Log($"Cannot place here! Socket '{targetSocket.name}' rejected the item (Occupied?).");
+                if (targetSocket.PlacedItem != null)
+                    return;
+                
+                _isPlacingMode = false;
+                _currentGrabbable.Release();
             }
             else
                 Debug.Log("Cannot place: No socket nearby!");
@@ -274,7 +280,7 @@ namespace Components.PlacementSystem
 
             const float mouseThreshold = 0.1f;
             if (Mathf.Abs(mouseX) > mouseThreshold)
-                _itemToRotate.transform.parent.Rotate(Vector3.up, -mouseX * rotationSpeed * Time.deltaTime);
+                _itemToRotate.transform.Rotate(Vector3.up, -mouseX * rotationSpeed * Time.deltaTime);
             
             if (Mouse.current.leftButton.wasPressedThisFrame)
                 ConfirmRotation();
@@ -286,13 +292,14 @@ namespace Components.PlacementSystem
         private void ConfirmRotation()
         {
             ExitRotationMode();
+            ApartmentController.Instance.RequestSave();
             Debug.Log("Rotation Confirmed.");
         }
 
         private void CancelRotation()
         {
             if (_itemToRotate != null)
-                _itemToRotate.transform.parent.rotation = _initialRotation;
+                _itemToRotate.transform.rotation = _initialRotation;
             
             ExitRotationMode();
             Debug.Log("Rotation Cancelled.");
@@ -312,7 +319,7 @@ namespace Components.PlacementSystem
         
         private void OnItemSuccessfullyPlaced(Socket socket, PlaceableItem placeableItem)
         {
-            Debug.Log($"Placed successfully {placeableItem.transform.parent.name} in socket: {socket.name}");
+            Debug.Log($"Placed successfully {placeableItem.transform.name} in socket: {socket.name}");
             FinalizePlacementLogic(true);
         }
         
@@ -324,11 +331,13 @@ namespace Components.PlacementSystem
             if (success)
             {
                 //SaveManager.Progress.Inventory.TryRemoveItem(_currentMold.ID);
-                //ApartmentController.Instance.SaveApartmentState();
             }
             else
-                RemoveFurniture(_currentPlaceableItem, _currentMold);
-
+            {
+                //SaveManager.Progress.Inventory.AddItem(mold.ID);
+                RemoveFromSocket(_currentPlaceableItem, _currentMold);
+            }
+            
             SetLayer(_currentGhostEntity.gameObject, _originalLayer);
             SetGhostMaterial(false);
             
@@ -341,26 +350,9 @@ namespace Components.PlacementSystem
             _currentGrabbable = null;
             
             _isPlacingMode = false;
-            ApartmentController.Instance.SetDecorationMode(false);
-        }
-        
-        private void RemoveFurniture(PlaceableItem item, FurnitureMold mold)
-        {
-            //SaveManager.Progress.Inventory.AddItem(mold.ID);
-            //ApartmentController.Instance.SaveApartmentState();
             
-            var entity = item.GetComponentInParent<RigidbodyEntity>();
-            if (entity != null)
-            {
-                entity.SwitchGraphics(false);
-                entity.SwitchColliders(false);
-                
-                Core.Utilities.UtilsProvider.WaitAndRun(() => 
-                {
-                    if (entity != null)
-                        entity.ReturnToPool();
-                }, true, 1f);
-            }
+            ApartmentController.Instance.SetDecorationMode(false);
+            ApartmentController.Instance.RequestSave();
         }
 
         private void CancelPlacement() => FinalizePlacementLogic(false);
