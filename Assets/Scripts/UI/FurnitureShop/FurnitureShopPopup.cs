@@ -55,6 +55,7 @@ namespace UI.FurnitureShop
             PopulateShop();
             InitializeRectTransform(overrideSize);
             InitializeCloseButton();
+            CanvasCommands.MoneyCanvasCommand.SetPermanentMode(true);
             
             OnShowAction?.Invoke();
         }
@@ -109,6 +110,7 @@ namespace UI.FurnitureShop
             if (CloseButton != null)
                 CloseButton.onClick.RemoveAllListeners();
             
+            CanvasCommands.MoneyCanvasCommand.SetPermanentMode(false);
             base.ReturnToPool();
         }
     }
