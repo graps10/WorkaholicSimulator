@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using Core.PlayerSystem;
 using Core.SaveSystem;
 using Entities;
 using Entities.Constructors;
@@ -26,19 +29,48 @@ namespace Components.PlacementSystem
             if (Instance == null) Instance = this;
             else Destroy(gameObject);
         }
+        
+        private void OnEnable()
+        {
+            if (PlacementManager.Instance != null)
+            {
+                PlacementManager.Instance.OnPlacementSuccess += HandlePlacementChange;
+                PlacementManager.Instance.OnFurnitureRemoved += HandlePlacementChange;
+                PlacementManager.Instance.OnExitedRotationMode += RequestSave;
+            }
+            else
+                Player.Instance.StartCoroutine(WaitAndSubscribeToPlacementManager());
+        }
+        
+        private void OnDisable()
+        {
+            if (PlacementManager.Instance != null)
+            {
+                PlacementManager.Instance.OnPlacementSuccess -= HandlePlacementChange;
+                PlacementManager.Instance.OnFurnitureRemoved -= HandlePlacementChange;
+                PlacementManager.Instance.OnExitedRotationMode -= RequestSave;
+            }
+        }
 
         private void Start()
         {
             SetDecorationMode(false);
-            
             LoadApartmentState();
         }
 
-        [ContextMenu("Auto Collect Rooms")]
-        private void CollectRooms()
+        private IEnumerator WaitAndSubscribeToPlacementManager()
         {
-            rooms = GetComponentsInChildren<RoomController>(true).ToList();
+            yield return new WaitUntil(() => PlacementManager.Instance != null);
+
+            PlacementManager.Instance.OnPlacementSuccess += HandlePlacementChange;
+            PlacementManager.Instance.OnFurnitureRemoved += HandlePlacementChange;
+            PlacementManager.Instance.OnExitedRotationMode += RequestSave;
+            
+            //Debug.Log("[ApartmentController] Successfully subscribed to PlacementManager.");
         }
+
+        [ContextMenu("Auto Collect Rooms")]
+        private void CollectRooms() => rooms = GetComponentsInChildren<RoomController>(true).ToList();
         
         public void SetDecorationMode(bool isActive)
         {
@@ -49,6 +81,8 @@ namespace Components.PlacementSystem
         }
         
         public void RequestSave() => Core.Utilities.UtilsProvider.WaitAndRun(SaveApartmentState, true);
+        
+        private void HandlePlacementChange(FurnitureMold mold) => RequestSave();
         
         private void SaveApartmentState()
         {
@@ -85,13 +119,13 @@ namespace Components.PlacementSystem
             }
 
             SaveManager.SaveProgress();
-            Debug.Log("[ApartmentController] Apartment state saved.");
+            //Debug.Log("[ApartmentController] Apartment state saved.");
         }
 
         private void LoadApartmentState()
         {
             var data = SaveManager.Progress.ApartmentData;
-            if (data == null || data.Rooms == null) return;
+            if (data?.Rooms == null) return;
 
             foreach (var room in rooms)
             {
@@ -111,19 +145,17 @@ namespace Components.PlacementSystem
                     }
                 }
             }
-            Debug.Log("[ApartmentController] Apartment state loaded.");
+            
+            //Debug.Log("[ApartmentController] Apartment state loaded.");
         }
 
         private void SpawnAndPlaceFurniture(Socket socket, FurnitureMold mold, Quaternion rotation)
         {
-            EntityConstructor.Instance.LoadImmediately(mold, socket.transform, out Entity entity);
-            
-            var placeableItem = entity.GetComponent<PlaceableItem>();
+            EntityConstructor.Instance.LoadImmediately(mold, socket.transform, out Entity entity);          
+      		var placeableItem = entity.GetComponent<PlaceableItem>();
+
             socket.PlaceItem(placeableItem);
-            
-            placeableItem.transform.localRotation = rotation;
-            
-            // change layer
+            placeableItem.transform.localRotation = rotation;           
         }
     }
 }

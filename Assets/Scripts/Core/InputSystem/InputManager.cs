@@ -13,7 +13,7 @@ namespace Core.InputSystem
 
         // Actions
 		private static InputAction horizontalAxis, verticalAxis, 
-			jumpAction, sprintAction, interactAction;
+			jumpAction, sprintAction, interactAction, lookAction;
 		
 		private static InputAction lmbAction, rmbAction;
 		
@@ -21,6 +21,7 @@ namespace Core.InputSystem
 
         public delegate void ButtonDelegate();
         public delegate void AxisDelegate(float axis);
+        public delegate void Vector2Delegate(Vector2 value);
         
         #region Events
         
@@ -28,6 +29,7 @@ namespace Core.InputSystem
         public static event AxisDelegate OnHorizontalAxis, OnVerticalAxis;
         public static event ButtonDelegate OnJumpPerformed;
         public static event ButtonDelegate OnSprintStarted, OnSprintCanceled;
+        public static event Vector2Delegate OnLookInput;
         
         // Interaction Events
         public static event ButtonDelegate OnLMBPerformed;
@@ -61,6 +63,7 @@ namespace Core.InputSystem
 			sprintAction.canceled += OnSprintInputCanceled;
 			
 			interactAction.performed += OnInteractInput;
+			lookAction.performed += OnLookInputCallback;
         }
 
         private static void CheckDevice(InputAction.CallbackContext context)
@@ -122,6 +125,13 @@ namespace Core.InputSystem
 		private static void OnLMBInput(InputAction.CallbackContext context) => OnLMBPerformed?.Invoke();
 		private static void OnRMBInput(InputAction.CallbackContext context) => OnRMBPerformed?.Invoke();
 		
+		private static void OnLookInputCallback(InputAction.CallbackContext context)
+		{
+			Vector2 delta = context.ReadValue<Vector2>();
+			if(delta != Vector2.zero)
+				OnLookInput?.Invoke(delta);
+		}
+		
 		private static void OnJumpInput(InputAction.CallbackContext context) => OnJumpPerformed?.Invoke();
 		private static void OnSprintInputStarted(InputAction.CallbackContext context) => OnSprintStarted?.Invoke();
 		private static void OnSprintInputCanceled(InputAction.CallbackContext context) => OnSprintCanceled?.Invoke();
@@ -136,6 +146,7 @@ namespace Core.InputSystem
 		{
 			lmbAction = inputActions.MouseControls.LMB;
 			rmbAction = inputActions.MouseControls.RMB;
+			lookAction = inputActions.MouseControls.Look;
 			
 			horizontalAxis = inputActions.MainControls.MovementHorizontal;
 			verticalAxis = inputActions.MainControls.MovementVertical;
@@ -174,7 +185,6 @@ namespace Core.InputSystem
 		        lmbAction.Dispose();
 		        lmbAction = null;
 	        }
-
 	        if (rmbAction != null)
 	        {
 		        rmbAction.performed -= CheckDevice;
@@ -182,6 +192,13 @@ namespace Core.InputSystem
 		        rmbAction.Dispose();
 		        rmbAction = null;
 	        }
+	        if (lookAction != null)
+	        {
+		        lookAction.performed -= OnLookInputCallback;
+		        lookAction.Dispose();
+		        lookAction = null;
+	        }
+	        
 	        if (horizontalAxis != null)
             {
 	            horizontalAxis.performed -= CheckDevice;

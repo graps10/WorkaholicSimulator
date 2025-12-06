@@ -1747,7 +1747,7 @@ GameObject:
   - component: {fileID: 489758392}
   - component: {fileID: 489758390}
   - component: {fileID: 489758391}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Socket | Stackable Item Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2723,7 +2723,7 @@ GameObject:
   m_Component:
   - component: {fileID: 641454604}
   - component: {fileID: 641454605}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Placeable Item Socket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3269,7 +3269,7 @@ GameObject:
   - component: {fileID: 822729476}
   - component: {fileID: 822729477}
   - component: {fileID: 822729478}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Socket | Highlight Area Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3684,7 +3684,7 @@ GameObject:
   m_Component:
   - component: {fileID: 890107937}
   - component: {fileID: 890107938}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Socket | Audio Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4088,6 +4088,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1067482765}
   - component: {fileID: 1067482764}
+  - component: {fileID: 1067482766}
+  - component: {fileID: 1067482767}
   m_Layer: 0
   m_Name: PlacementManager
   m_TagString: Untagged
@@ -4119,7 +4121,6 @@ MonoBehaviour:
   minDetectionDistance: 2
   yHeightClampMin: -1
   yHeightClampMax: 2
-  rotationSpeed: 5
 --- !u!4 &1067482765
 Transform:
   m_ObjectHideFlags: 0
@@ -4135,6 +4136,31 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1067482766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067482763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61ad4e919ce541e7a971bb8dd74cffac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: 5
+--- !u!114 &1067482767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067482763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d4d83270fab464899afb32cb5432740, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1099804565
 GameObject:
   m_ObjectHideFlags: 0
@@ -4920,7 +4946,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1287954532}
   - component: {fileID: 1287954531}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Socket | Placed Transform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5202,7 +5228,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1470487752}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5528,7 +5554,7 @@ GameObject:
   - component: {fileID: 1502993402}
   - component: {fileID: 1502993403}
   - component: {fileID: 1502993404}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Socket | Placeable Area Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7351,7 +7377,7 @@ GameObject:
   - component: {fileID: 1805642236}
   - component: {fileID: 1805642235}
   - component: {fileID: 1805642237}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Socket | Socket Highlighter Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7850,7 +7876,7 @@ GameObject:
   - component: {fileID: 1920639189}
   - component: {fileID: 1920639188}
   - component: {fileID: 1920639190}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Socket | Socket Placement Criteria Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7979,7 +8005,7 @@ GameObject:
   - component: {fileID: 1960439192}
   - component: {fileID: 1960439194}
   - component: {fileID: 1960439193}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

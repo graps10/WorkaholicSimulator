@@ -16,10 +16,7 @@ namespace Components.PlacementSystem
         public string RoomID => roomID;
         
         [ContextMenu("Auto Collect Sockets")]
-        private void CollectSockets()
-        {
-            roomSockets = GetComponentsInChildren<Socket>(true).ToList();
-        }
+        private void CollectSockets() => roomSockets = GetComponentsInChildren<Socket>(true).ToList();
 
         public void SetSocketsVisibility(bool isVisible)
         {

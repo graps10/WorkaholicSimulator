@@ -1,17 +1,18 @@
-﻿using Core.InputSystem;
+﻿using System;
+using Core.InputSystem;
 using Core.Interfaces;
 using Core.PlayerSystem;
-using Core.SaveSystem;
 using Entities;
 using Entities.Constructors;
 using Entities.Molds;
 using Hypertonic.Modules.UltimateSockets.PlaceableItems;
 using Hypertonic.Modules.UltimateSockets.Sockets;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Components.PlacementSystem
 {
+    [RequireComponent(typeof(PlacementInventoryHandler))]
+    [RequireComponent(typeof(ObjectRotator))]
     public class PlacementManager : MonoBehaviour, IUpdatable, IFixedUpdatable
     {
         #region Constants
@@ -29,6 +30,8 @@ namespace Components.PlacementSystem
         {
             if (Instance == null) Instance = this;
             else Destroy(gameObject);
+            
+            _objectRotator = GetComponent<ObjectRotator>();
         }
         
         #endregion
@@ -46,15 +49,13 @@ namespace Components.PlacementSystem
         [SerializeField] private float minDetectionDistance = 2f;
         [SerializeField] private float yHeightClampMin = -5f;
         [SerializeField] private float yHeightClampMax = 5f;
-        
-        [Header("Rotation Settings")]
-        [SerializeField] private float rotationSpeed = 10f;
 
         #endregion
         
         #region Internal State
         
         // Current Object References
+        private ObjectRotator _objectRotator;
         private RigidbodyEntity _currentGhostEntity;
         private Rigidbody _currentRigidbody;
         private Renderer[] _currentObjectRenderers;
@@ -64,18 +65,24 @@ namespace Components.PlacementSystem
         private MouseGrabbable _currentGrabbable;
         private PlaceableItem _currentPlaceableItem;
         
-        // Rotation Mode State
-        private PlaceableItem _itemToRotate;
-        private Quaternion _initialRotation;
-        
         // Logic Flags & Cache
         private bool _isPlacingMode;
         private bool _isRotationMode;
+        
         private Vector3 _targetPosition;
         private int _originalLayer;
         
         #endregion
 
+        #region  Events
+        
+        public event Action<FurnitureMold> OnPlacementSuccess;
+        public event Action<FurnitureMold> OnPlacementCancelled;
+        public event Action<FurnitureMold> OnFurnitureRemoved;
+        public event Action OnExitedRotationMode;
+        
+        #endregion
+        
         #region Unity Lifecycle
         
         private void OnEnable()
@@ -86,8 +93,8 @@ namespace Components.PlacementSystem
                 Player.Instance.RegisterFixedUpdatable(this);
             }
             
-            InputManager.OnLMBPerformed += HandlePlaceInput;
-            InputManager.OnRMBPerformed += HandleCancelInput;
+            InputManager.OnLMBPerformed += HandleLMB;
+            InputManager.OnRMBPerformed += HandleRMB;
         }
 
         private void OnDisable()
@@ -98,8 +105,8 @@ namespace Components.PlacementSystem
                 Player.Instance.UnregisterFixedUpdatable(this);
             }
             
-            InputManager.OnLMBPerformed -= HandlePlaceInput;
-            InputManager.OnRMBPerformed -= HandleCancelInput;
+            InputManager.OnLMBPerformed -= HandleLMB;
+            InputManager.OnRMBPerformed -= HandleRMB;
         }
 
         #endregion
@@ -108,22 +115,14 @@ namespace Components.PlacementSystem
         
         public void OnUpdate()
         {
-            if (_isRotationMode)
-            {
-                HandleRotationLogic();
-                return;
-            }
-            
-            if (!_isPlacingMode || _currentGhostEntity == null) return;
-
-            CalculateTargetPosition();
+            if (_isPlacingMode && _currentGhostEntity != null && !_isRotationMode)
+                CalculateTargetPosition();
         }
         
         public void OnFixedUpdate()
         {
-            if (!_isPlacingMode || _currentGhostEntity == null) return;
-            
-            ApplyMovement();
+            if (_isPlacingMode && _currentGhostEntity != null && !_isRotationMode)
+                ApplyGhostMovement();
         }
         
         #endregion
@@ -133,21 +132,14 @@ namespace Components.PlacementSystem
         public void StartPlacement(FurnitureMold mold)
         {
             if (mold == null) return;
-
-            if (SaveManager.Progress.Inventory.GetItemCount(mold.ID) <= 0)
-            {
-                Debug.LogError("Not enough items!");
-                return;
-            }
-            
             _currentMold = mold;
             
             EntityConstructor.Instance.LoadImmediately(mold, transform, out _currentGhostEntity);
             if (_currentGhostEntity == null) return;
 
-            _currentRigidbody =_currentGhostEntity.GetRigidbody();
+            // Cache Components
+            _currentRigidbody = _currentGhostEntity.GetRigidbody();
             _currentObjectRenderers = _currentGhostEntity.GetRenderers();
-            
             _currentPlaceableItem = _currentGhostEntity.GetComponent<PlaceableItem>();
             _currentGrabbable = _currentGhostEntity.GetComponent<MouseGrabbable>();
 
@@ -161,7 +153,7 @@ namespace Components.PlacementSystem
             _currentPlaceableItem.OnPlaced += OnItemSuccessfullyPlaced;
             
             _originalLayer = _currentGhostEntity.gameObject.layer;
-            SetLayer(_currentGhostEntity.gameObject, LayerMask.NameToLayer(Ghost_Placement_Layer_Name));
+            SetLayerRecursively(_currentGhostEntity.gameObject, LayerMask.NameToLayer(Ghost_Placement_Layer_Name));
             SetGhostMaterial(true);
             
             _currentGrabbable.Grab(); 
@@ -173,35 +165,37 @@ namespace Components.PlacementSystem
         public void RemoveFromSocket(PlaceableItem item, FurnitureMold mold)
         {
             if (item == null) return;
+            var socket = item.ClosestSocket;
+            if (socket == null) return;
             
             var entity = item.GetComponent<RigidbodyEntity>();
             if (entity == null) return;
             
             entity.SwitchGraphics(false);
             entity.SwitchColliders(false);
-                
+            
+            if(item.ClosestSocket.PlacedItem != null)
+                item.RemoveFromSocket();
+            
             Core.Utilities.UtilsProvider.WaitAndRun(() => 
             {
-                if(item.ClosestSocket.PlacedItem != null)
-                    item.RemoveFromSocket();
-                    
-                entity.ReturnToPool();
+                if(entity != null)
+                    entity.ReturnToPool();
             }, true);
             
-            Debug.Log($"Removed {mold.name} and returned to inventory.");
+            OnFurnitureRemoved?.Invoke(mold);
+            //Debug.Log($"Removed {mold.name} and returned to inventory.");
         }
 
         public void StartRotationMode(PlaceableItem item)
         {
             if (item == null) return;
-
-            _itemToRotate = item;
-            _initialRotation = item.transform.rotation;
+            
             _isRotationMode = true;
+            _objectRotator.BeginRotation(item.transform);
             
             Player.Instance.InputHandler.SetInputActive(false);
-            
-            Debug.Log("Rotation Mode Started. Move mouse left/right.");
+            //Debug.Log("Rotation Mode Started. Move mouse left/right.");
         }
         
         #endregion
@@ -232,7 +226,7 @@ namespace Components.PlacementSystem
             }
         }
         
-        private void ApplyMovement()
+        private void ApplyGhostMovement()
         {
             if (_currentRigidbody)
                 _currentRigidbody.MovePosition(_targetPosition);
@@ -243,6 +237,30 @@ namespace Components.PlacementSystem
         #endregion
         
         #region Input Handlers (Placement)
+        
+        private void HandleLMB()
+        {
+            if (_isRotationMode)
+            {
+                ConfirmRotation();
+                return;
+            }
+
+            if (_isPlacingMode)
+                HandlePlaceInput();
+        }
+
+        private void HandleRMB()
+        {
+            if (_isRotationMode)
+            {
+                CancelRotation();
+                return;
+            }
+
+            if (_isPlacingMode)
+                CancelPlacement();
+        }
 
         private void HandlePlaceInput()
         {
@@ -258,59 +276,32 @@ namespace Components.PlacementSystem
                 _isPlacingMode = false;
                 _currentGrabbable.Release();
             }
-            else
-                Debug.Log("Cannot place: No socket nearby!");
-        }
-
-        private void HandleCancelInput()
-        {
-            if (!_isPlacingMode) return;
-            CancelPlacement();
+            /*else
+                Debug.Log("Cannot place: No socket nearby!");*/
         }
         
         #endregion
         
-        #region Rotation Logic /// Temporary
-
-        private float GetRotationInput() => Mouse.current.delta.x.ReadValue(); 
-        
-        private void HandleRotationLogic()
-        {
-            float mouseX = GetRotationInput();
-
-            const float mouseThreshold = 0.1f;
-            if (Mathf.Abs(mouseX) > mouseThreshold)
-                _itemToRotate.transform.Rotate(Vector3.up, -mouseX * rotationSpeed * Time.deltaTime);
-            
-            if (Mouse.current.leftButton.wasPressedThisFrame)
-                ConfirmRotation();
-            
-            if (Mouse.current.rightButton.wasPressedThisFrame)
-                CancelRotation();
-        }
+        #region Rotation Logic
 
         private void ConfirmRotation()
         {
+            _objectRotator.ConfirmRotation();
             ExitRotationMode();
-            ApartmentController.Instance.RequestSave();
-            Debug.Log("Rotation Confirmed.");
         }
 
         private void CancelRotation()
         {
-            if (_itemToRotate != null)
-                _itemToRotate.transform.rotation = _initialRotation;
-            
+            _objectRotator.CancelRotation();
             ExitRotationMode();
-            Debug.Log("Rotation Cancelled.");
         }
 
         private void ExitRotationMode()
         {
             _isRotationMode = false;
-            _itemToRotate = null;
-            
             Player.Instance.InputHandler.SetInputActive(true);
+            
+            OnExitedRotationMode?.Invoke();
         }
         
         #endregion
@@ -319,7 +310,7 @@ namespace Components.PlacementSystem
         
         private void OnItemSuccessfullyPlaced(Socket socket, PlaceableItem placeableItem)
         {
-            Debug.Log($"Placed successfully {placeableItem.transform.name} in socket: {socket.name}");
+            //Debug.Log($"Placed successfully {placeableItem.transform.name} in socket: {socket.name}");
             FinalizePlacementLogic(true);
         }
         
@@ -329,30 +320,27 @@ namespace Components.PlacementSystem
                 _currentPlaceableItem.OnPlaced -= OnItemSuccessfullyPlaced;
 
             if (success)
-            {
-                //SaveManager.Progress.Inventory.TryRemoveItem(_currentMold.ID);
-            }
+                OnPlacementSuccess?.Invoke(_currentMold);
             else
             {
-                //SaveManager.Progress.Inventory.AddItem(mold.ID);
                 RemoveFromSocket(_currentPlaceableItem, _currentMold);
+                OnPlacementCancelled?.Invoke(_currentMold);
             }
             
-            SetLayer(_currentGhostEntity.gameObject, _originalLayer);
+            SetLayerRecursively(_currentGhostEntity.gameObject, _originalLayer);
             SetGhostMaterial(false);
             
+            // Reset
             _currentGhostEntity = null;
             _currentRigidbody = null;
             _currentObjectRenderers = null;
             _currentPlaceableItem = null;
-            
             _currentMold = null;
             _currentGrabbable = null;
             
             _isPlacingMode = false;
             
             ApartmentController.Instance.SetDecorationMode(false);
-            ApartmentController.Instance.RequestSave();
         }
 
         private void CancelPlacement() => FinalizePlacementLogic(false);
@@ -376,10 +364,12 @@ namespace Components.PlacementSystem
             }
         }
         
-        private void SetLayer(GameObject obj, int newLayer)
+        private void SetLayerRecursively(GameObject obj, int newLayer)
         {
             if (obj == null) return;
             obj.layer = newLayer;
+            foreach (Transform child in obj.transform)
+                SetLayerRecursively(child.gameObject, newLayer);
         }
         
         #endregion

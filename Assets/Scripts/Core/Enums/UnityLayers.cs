@@ -9,5 +9,6 @@
         FurnitureEntity = 1 << 9,
         Interactable = 1 << 10,
         GhostPlacement = 1 << 11,
+        Socket = 1 << 12,
     }
 }
