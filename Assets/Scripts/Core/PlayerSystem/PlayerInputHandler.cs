@@ -1,14 +1,16 @@
 using Core.InputSystem;
 using Core.Interfaces;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Core.PlayerSystem
 {
     public sealed class PlayerInputHandler : MonoBehaviour, IUpdatable, ILateUpdatable
     {
-        private const float Input_Deadzone = 0.01f;
-        private const float Input_Deadzone_Sqr = Input_Deadzone * Input_Deadzone;
+        private const float Move_Deadzone = 0.01f;
+        private const float Move_Deadzone_Sqr = Move_Deadzone * Move_Deadzone;
+        
+        private const float Look_Deadzone = 0.01f;
+        private const float Look_Deadzone_Sqr = Look_Deadzone * Look_Deadzone;
         
         private const float Max_Length_Magnitude = 1.0f;
         
@@ -20,6 +22,8 @@ namespace Core.PlayerSystem
         private float _horizontal;
         private float _vertical;
         
+        private Vector2 _rawLookAccumulator;
+        
         private bool _isInputActive = true;
 
         private void OnEnable()
@@ -29,6 +33,8 @@ namespace Core.PlayerSystem
             
             InputManager.OnHorizontalAxis += HandleHorizontalAxis;
             InputManager.OnVerticalAxis += HandleVerticalAxis;
+            InputManager.OnLookInput += HandleLookInput;
+            
             InputManager.OnJumpPerformed += OnJump;
             InputManager.OnSprintStarted += OnSprintStarted;
             InputManager.OnSprintCanceled += OnSprintCanceled;
@@ -41,6 +47,8 @@ namespace Core.PlayerSystem
             
             InputManager.OnHorizontalAxis -= HandleHorizontalAxis;
             InputManager.OnVerticalAxis -= HandleVerticalAxis;
+            InputManager.OnLookInput -= HandleLookInput;
+            
             InputManager.OnJumpPerformed -= OnJump;
             InputManager.OnSprintStarted -= OnSprintStarted;
             InputManager.OnSprintCanceled -= OnSprintCanceled;
@@ -52,21 +60,21 @@ namespace Core.PlayerSystem
                 return;
             
             Vector2 rawMoveInput = new Vector2(_horizontal, _vertical);
-            Vector2 rawMouseInput = Mouse.current.delta.ReadValue();
-            
-            MoveInput = rawMoveInput.sqrMagnitude < Input_Deadzone_Sqr
+            MoveInput = rawMoveInput.sqrMagnitude < Move_Deadzone_Sqr
                 ? Vector2.zero
                 : Vector2.ClampMagnitude(rawMoveInput, Max_Length_Magnitude);
             
-            LookInput = rawMouseInput.sqrMagnitude < Input_Deadzone_Sqr
+            LookInput = _rawLookAccumulator.sqrMagnitude < Look_Deadzone_Sqr
                 ? Vector2.zero
-                : rawMouseInput;
+                : _rawLookAccumulator;
         }
 
         public void OnLateUpdate()
         {
             if (JumpInput)
                 JumpInput = false;
+            
+            _rawLookAccumulator = Vector2.zero;
         }
         
         public void SetInputActive(bool isActive)
@@ -87,6 +95,12 @@ namespace Core.PlayerSystem
         private void HandleHorizontalAxis(float axisValue) => _horizontal = axisValue;
 
         private void HandleVerticalAxis(float axisValue) => _vertical = axisValue;
+        
+        private void HandleLookInput(Vector2 delta)
+        {
+            if (!_isInputActive) return;
+            _rawLookAccumulator += delta;
+        }
         
         private void OnJump() => JumpInput = true;
         

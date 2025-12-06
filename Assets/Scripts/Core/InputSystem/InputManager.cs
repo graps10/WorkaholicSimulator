@@ -128,8 +128,7 @@ namespace Core.InputSystem
 		private static void OnLookInputCallback(InputAction.CallbackContext context)
 		{
 			Vector2 delta = context.ReadValue<Vector2>();
-			if(delta != Vector2.zero)
-				OnLookInput?.Invoke(delta);
+			OnLookInput?.Invoke(delta);
 		}
 		
 		private static void OnJumpInput(InputAction.CallbackContext context) => OnJumpPerformed?.Invoke();

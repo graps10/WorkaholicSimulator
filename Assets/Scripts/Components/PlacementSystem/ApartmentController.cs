@@ -39,7 +39,8 @@ namespace Components.PlacementSystem
                 PlacementManager.Instance.OnExitedRotationMode += RequestSave;
             }
             else
-                Player.Instance.StartCoroutine(WaitAndSubscribeToPlacementManager());
+                if(Player.Instance != null)
+                    Player.Instance.StartCoroutine(WaitAndSubscribeToPlacementManager());
         }
         
         private void OnDisable()

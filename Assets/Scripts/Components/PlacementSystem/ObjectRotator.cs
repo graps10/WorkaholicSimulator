@@ -6,6 +6,7 @@ namespace Components.PlacementSystem
     public class ObjectRotator : MonoBehaviour
     {
         [SerializeField] private float rotationSpeed = 5f;
+        [SerializeField] private float minInputThreshold = 0.5f;
 
         private Transform _targetTransform;
         private Quaternion _initialRotation;
@@ -45,7 +46,7 @@ namespace Components.PlacementSystem
         {
             if (!_isActive || _targetTransform == null) return;
 
-            if (Mathf.Abs(delta.x) > 0.1f)
+            if (Mathf.Abs(delta.x) > minInputThreshold)
                 _targetTransform.Rotate(Vector3.up, -delta.x * rotationSpeed * Time.deltaTime);
         }
     }
