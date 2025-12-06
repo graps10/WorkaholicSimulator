@@ -41,8 +41,7 @@ namespace UI.Popup
             
             popupRect.SetParent(parent, false);
             popupRect.anchoredPosition = Vector2.zero;
-
-            Debug.Log("Create");
+            
             popup.Initialize(item, mold, onRotate, onPickUp);
         }
 

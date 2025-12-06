@@ -275,6 +275,7 @@ namespace Components.PlacementSystem
                 
                 _isPlacingMode = false;
                 _currentGrabbable.Release();
+                targetSocket.PlaceItem(_currentPlaceableItem);
             }
             /*else
                 Debug.Log("Cannot place: No socket nearby!");*/
