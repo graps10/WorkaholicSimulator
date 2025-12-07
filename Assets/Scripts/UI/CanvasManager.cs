@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Core;
+using Core.Enums;
 using Transition;
 using UI.CanvasCommands;
 using UI.CanvasScreens;
@@ -51,6 +52,9 @@ namespace UI
             allCanvasScreensWereLoaded = true;
             SceneConfig sceneConfig = SceneManager.CurrentSceneConfig;
             CanvasScreen.LoadCanvasScreensForCurrentScene(sceneConfig, CanvasScreensLayer);
+            
+            if (sceneConfig.SceneIndex != (int)UnityScenes.mainMenu) 
+                LoadGameplayHUD();
         }
 
         private void ClearCanvasCommands()
@@ -63,9 +67,12 @@ namespace UI
                 if(command.DisposeBetweenScenes) command.Dispose();
         }
 
-        private void ToggleBackground()
+        private void ToggleBackground() => Background.SetActive(SceneManager.CurrentSceneConfig.SceneIndex == 0);
+        
+        private void LoadGameplayHUD()
         {
-            Background.SetActive(SceneManager.CurrentSceneConfig.SceneIndex == 0);
+            CanvasCommandConstructor.Instance.Load<MoneyCanvasCommand>();
+            CanvasCommandConstructor.Instance.Load<CrosshairCanvasCommand>();
         }
     }
 }

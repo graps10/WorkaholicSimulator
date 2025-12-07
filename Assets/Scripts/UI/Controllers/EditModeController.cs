@@ -15,12 +15,6 @@ namespace UI.Controllers
             
             if (CanvasCommandConstructor.Instance != null)
                 _uiCommand = CanvasCommandConstructor.Instance.Load<EditModeCanvasCommand>();
-
-            if (CanvasCommandConstructor.Instance != null) // temporary
-                CanvasCommandConstructor.Instance.Load<MoneyCanvasCommand>();
-
-            if (CanvasCommandConstructor.Instance != null)
-                CanvasCommandConstructor.Instance.Load<CrosshairCanvasCommand>();
         }
 
         [ContextMenu("Hide EditMode Canvas")]
