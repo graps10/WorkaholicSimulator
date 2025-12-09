@@ -1,15 +1,18 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Components.JobSystem
+namespace Components.JobSystem.Configs
 {
-    [CreateAssetMenu(fileName = "NewJobConfig", menuName = "Core/Jobs/Job Config")]
+    [CreateAssetMenu(fileName = "NewJobConfig", menuName = "Core/Jobs/Simple Job Config")]
     public class JobConfig : ScriptableObject
     {
         [Header("General Settings")]
         public string JobID;
         public string JobTitle;
         [TextArea] public string Description;
+        
+        [Header("Location (Teleport Only)")]
+        public Transform JobPosition;
         
         [Header("Economy")]
         public int BaseReward = 100;

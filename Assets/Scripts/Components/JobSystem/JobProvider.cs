@@ -1,4 +1,5 @@
-﻿using Core.Interfaces;
+﻿using Components.JobSystem.Configs;
+using Core.Interfaces;
 using UnityEngine;
 
 namespace Components.JobSystem

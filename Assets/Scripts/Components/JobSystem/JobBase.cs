@@ -1,4 +1,5 @@
 ﻿using System;
+using Components.JobSystem.Configs;
 using UnityEngine;
 
 namespace Components.JobSystem

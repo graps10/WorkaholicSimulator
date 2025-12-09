@@ -1,4 +1,5 @@
 ﻿using System;
+using Components.JobSystem.Configs;
 using Core.Interfaces;
 using Core.PlayerSystem;
 using Core.SaveSystem;
