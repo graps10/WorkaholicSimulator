@@ -48,6 +48,12 @@ namespace Entities
 
         public void OnUpdate() { }
 
+        public void TeleportPlayer(Vector3 teleportPosition, Quaternion teleportRotation = default)
+        {
+            inputHandler.SetInputActive(false);
+            TeleportUtils.TeleportAnimation(transform, teleportPosition, teleportRotation, () => inputHandler.SetInputActive(true));
+        }
+        
         public override void ReturnToPool()
         {
             SafePoseTracker.StopTracking();

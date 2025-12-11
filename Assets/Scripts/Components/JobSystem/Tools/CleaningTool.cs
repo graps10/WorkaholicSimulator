@@ -5,9 +5,8 @@ namespace Components.JobSystem.Tools
 {
     public class CleaningTool : JobTool
     {
-        [Header("Cleaning Settings")] [SerializeField]
-        private float cleaningRate = 50f;
-
+        [Header("Cleaning Settings")] 
+        [SerializeField] private float cleaningRate = 50f;
         [SerializeField] private float reachDistance = 2.5f;
         [SerializeField] private LayerMask dirtLayer;
         [SerializeField] private Transform rayOrigin;

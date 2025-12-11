@@ -12,11 +12,11 @@ namespace Components.JobSystem.Configs
         [TextArea] public string Description;
         
         [Header("Location (Teleport Only)")]
-        public Transform JobPosition;
+        public Transform JobTransform;
         
         [Header("Economy")]
         public int BaseReward = 100;
-        public bool PayPerTask = false;
+        public bool PayPerTask;
         
         [Header("Constraints")]
         public bool HasTimeLimit;

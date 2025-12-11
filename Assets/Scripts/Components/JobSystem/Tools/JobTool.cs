@@ -1,9 +1,11 @@
 ﻿using Core.PlayerSystem;
+using Entities;
+using Entities.Molds;
 using UnityEngine;
 
 namespace Components.JobSystem.Tools
 {
-    public abstract class JobTool : MonoBehaviour
+    public abstract class JobTool : Entity
     {
         [Header("Base Tool Settings")]
         [SerializeField] protected Vector2 swayAmountRange = new(0.02f, 0.06f);
@@ -14,7 +16,13 @@ namespace Components.JobSystem.Tools
         
         private Vector3 _initialLocalPosition;
 
-        public virtual void Initialize()
+        public override void LoadEntity(Mold entityMold)
+        {
+            base.LoadEntity(entityMold);
+            Initialize();
+        }
+
+        protected virtual void Initialize()
         {
             _initialLocalPosition = transform.localPosition;
             
